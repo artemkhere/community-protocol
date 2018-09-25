@@ -62,16 +62,20 @@ contract CommunityCoinV2 is Ownable {
         return userToAdmins[addr];
     }
 
-    function checkOwner() public view returns(address) {
-        return superOwner;
-    }
-
     function getTokenCount() public view returns(uint) {
         return tokenCount;
     }
 
     function getTokenValue() public view returns(uint) {
         return tokenValue;
+    }
+
+    function getContractBalance() public view returns(uint) {
+        return address(this).balance;
+    }
+
+    function getBalance(address addr) public view returns(uint) {
+        return addr.balance;
     }
 
     // Contract Managment
@@ -81,5 +85,11 @@ contract CommunityCoinV2 is Ownable {
 
     function withdraw() external onlyOwner {
         msg.sender.transfer(address(this).balance);
+    }
+
+    event DonationToContract(address addr, uint amount);
+
+    function donateToContract() external payable {
+        emit DonationToContract(msg.sender, msg.value);
     }
 }
