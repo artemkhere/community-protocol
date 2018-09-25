@@ -18,8 +18,6 @@ contract CommunityCoin {
 
     Transaction[] transactions;
 
-    
-
     struct PrivateUser {
         string name;
         uint id;
