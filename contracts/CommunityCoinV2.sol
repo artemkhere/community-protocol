@@ -3,12 +3,14 @@ pragma solidity ^0.4.24;
 import 'openzeppelin-solidity/contracts/ownership/Ownable.sol';
 import 'openzeppelin-solidity/contracts/math/SafeMath.sol';
 
-contract CommunityCoinV2 is Ownable, SafeMath {
+contract CommunityCoinV2 is Ownable {
+    using SafeMath for uint256;
+
     // User Mappings
-	mapping (address => uint) public hollowBalances;
-    mapping (address => uint) public currentSolidBalances;
-    mapping (address => uint) public futureSolidBalances;
-    mapping (address => uint) public lastHarvests;
+	mapping (address => uint256) public hollowBalances;
+    mapping (address => uint256) public currentSolidBalances;
+    mapping (address => uint256) public futureSolidBalances;
+    mapping (address => uint256) public lastHarvests;
     mapping (address => bool) public activeStatus;
 
     // User Rights
@@ -16,16 +18,16 @@ contract CommunityCoinV2 is Ownable, SafeMath {
     address public owner; // equivalent to Super Admin
 
     // Token Mappings
-    uint public tokenCount;
-    uint public tokenValue;
+    uint256 public tokenCount;
+    uint256 public tokenValue;
     // Test implementation doesn't include customization for time formatting
     // and amount of tokens transferred / generated
 
     // Transactions
     struct Transaction {
         address toAddress;
-        uint sentValue;
-        uint timestamp;
+        uint256 sentValue;
+        uint256 timestamp;
     }
 
     mapping (address => Transaction[]) public userToTransactions;
@@ -43,19 +45,19 @@ contract CommunityCoinV2 is Ownable, SafeMath {
         tokenValue = 0;
     }
 
-    function getHollowBalance(address addr) public view returns(uint) {
+    function getHollowBalance(address addr) public view returns(uint256) {
         return hollowBalances[addr];
     }
 
-    function getCurrentSolidBalance(address addr) public view returns(uint) {
+    function getCurrentSolidBalance(address addr) public view returns(uint256) {
         return currentSolidBalances[addr];
     }
 
-    function getFutureSolidBalance(address addr) internal view returns(uint) {
+    function getFutureSolidBalance(address addr) internal view returns(uint256) {
         return futureSolidBalances[addr];
     }
 
-    function getLastHarvest(address addr) public view returns(uint) {
+    function getLastHarvest(address addr) public view returns(uint256) {
         return lastHarvests[addr];
     }
 
@@ -67,19 +69,19 @@ contract CommunityCoinV2 is Ownable, SafeMath {
         return userToAdmins[addr];
     }
 
-    function getTokenCount() public view returns(uint) {
+    function getTokenCount() public view returns(uint256) {
         return tokenCount;
     }
 
-    function getTokenValue() public view returns(uint) {
+    function getTokenValue() public view returns(uint256) {
         return tokenValue;
     }
 
-    function getContractBalance() public view returns(uint) {
+    function getContractBalance() public view returns(uint256) {
         return address(this).balance;
     }
 
-    function getBalance(address addr) public view returns(uint) {
+    function getBalance(address addr) public view returns(uint256) {
         return addr.balance;
     }
 
@@ -92,11 +94,14 @@ contract CommunityCoinV2 is Ownable, SafeMath {
         msg.sender.transfer(address(this).balance);
     }
 
-    event DonationToContract(address addr, uint amount, uint newTokenValue);
+    event DonationToContract(address addr, uint256 amount, uint256 newTokenValue);
 
     function donateToContract() external payable {
-        // !NEEDS TO UPDATE TOKEN VALUE SAFELY
-        tokenValue = mod(address(this).balance, tokenCount);
+        tokenValue = address(this).balance.div(tokenCount);
         emit DonationToContract(msg.sender, msg.value, tokenValue);
+    }
+
+    function burnTokens() external {
+        
     }
 }

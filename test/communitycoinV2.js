@@ -30,7 +30,7 @@ contract('CommunityCoin Tests', function(accounts) {
 
         const tokenValue = await coco.getTokenValue.call();
         console.log(web3.toWei(donation_amount, "ether"))
-        console.log(web3.toWei(tokenValue.toNumber(), "ether"));
+        console.log(tokenValue.toNumber());
     });
 
     // NEED OWNERSHIP TRANSFER AND WITHDRAW TESTS
