@@ -27,6 +27,13 @@ contract('CommunityCoin Tests', function(accounts) {
 
         assert.isAbove(contract_after.toNumber(), contract_before.toNumber(), 'CommunityCoin Contract did not recieve donation');
         assert.isBelow(account_1_after.toNumber(), account_1_before.toNumber(), 'Account 1 did not send the donation');
+
+        const tokenValue = await coco.getTokenValue.call();
+        console.log(web3.toWei(donation_amount, "ether"))
+        console.log(web3.toWei(tokenValue.toNumber(), "ether"));
     });
+
+    // NEED OWNERSHIP TRANSFER AND WITHDRAW TESTS
+    // NEED VARIABLE SETTING TESTS
 
 });

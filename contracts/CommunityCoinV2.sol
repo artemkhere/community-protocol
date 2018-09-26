@@ -1,8 +1,9 @@
 pragma solidity ^0.4.24;
 
 import 'openzeppelin-solidity/contracts/ownership/Ownable.sol';
+import 'openzeppelin-solidity/contracts/math/SafeMath.sol';
 
-contract CommunityCoinV2 is Ownable {
+contract CommunityCoinV2 is Ownable, SafeMath {
     // User Mappings
 	mapping (address => uint) public hollowBalances;
     mapping (address => uint) public currentSolidBalances;
@@ -17,6 +18,8 @@ contract CommunityCoinV2 is Ownable {
     // Token Mappings
     uint public tokenCount;
     uint public tokenValue;
+    // Test implementation doesn't include customization for time formatting
+    // and amount of tokens transferred / generated
 
     // Transactions
     struct Transaction {
@@ -36,6 +39,8 @@ contract CommunityCoinV2 is Ownable {
         hollowBalances[msg.sender] = 60;
         currentSolidBalances[msg.sender] = 15;
         lastHarvests[msg.sender] = now;
+        tokenCount = 75;
+        tokenValue = 0;
     }
 
     function getHollowBalance(address addr) public view returns(uint) {
@@ -87,9 +92,11 @@ contract CommunityCoinV2 is Ownable {
         msg.sender.transfer(address(this).balance);
     }
 
-    event DonationToContract(address addr, uint amount);
+    event DonationToContract(address addr, uint amount, uint newTokenValue);
 
     function donateToContract() external payable {
-        emit DonationToContract(msg.sender, msg.value);
+        // !NEEDS TO UPDATE TOKEN VALUE SAFELY
+        tokenValue = mod(address(this).balance, tokenCount);
+        emit DonationToContract(msg.sender, msg.value, tokenValue);
     }
 }
