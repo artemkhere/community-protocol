@@ -17,7 +17,7 @@ contract CommunityCoinV2 is Ownable {
     mapping (address => bool) public userToAdmins;
     address public owner; // equivalent to Super Admin
 
-    // Token Mappings
+    // Tokens
     uint256 public tokenCount;
     uint256 public tokenValue;
     // Test implementation doesn't include customization for time formatting
@@ -81,27 +81,47 @@ contract CommunityCoinV2 is Ownable {
         return address(this).balance;
     }
 
-    function getBalance(address addr) public view returns(uint256) {
-        return addr.balance;
-    }
-
     // Contract Managment
     function transferOwnership(address _owner) public onlyOwner {
         return super.transferOwnership(_owner);
     }
 
+    event ContractEmptied(uint256 newTokenValue);
+
     function withdraw() external onlyOwner {
+        tokenValue = 0;
         msg.sender.transfer(address(this).balance);
+        emit ContractEmptied(tokenValue);
     }
 
-    event DonationToContract(address addr, uint256 amount, uint256 newTokenValue);
+    event TokenValueUpdated(uint256 newTokenValue);
+
+    function updateTokenValue() internal {
+        tokenValue = address(this).balance.div(tokenCount);
+        emit TokenValueUpdated(tokenValue);
+    }
+
+    event DonationToContract(address addr, uint256 amount);
 
     function donateToContract() external payable {
-        tokenValue = address(this).balance.div(tokenCount);
-        emit DonationToContract(msg.sender, msg.value, tokenValue);
+        updateTokenValue();
+        emit DonationToContract(msg.sender, msg.value);
     }
 
-    function burnTokens() external {
-        
+    event TokensRedeemed(address addr, uint256 amount);
+
+    function redeemTokens() external returns(bool) {
+        uint256 userBalance = currentSolidBalances[msg.sender];
+        require(userBalance > 0);
+
+        currentSolidBalances[msg.sender] = 0;
+        tokenCount -= userBalance;
+
+        msg.sender.transfer(userBalance.mul(tokenValue));
+
+        updateTokenValue();
+
+        emit TokensRedeemed(msg.sender, userBalance);
+        return true;
     }
 }
