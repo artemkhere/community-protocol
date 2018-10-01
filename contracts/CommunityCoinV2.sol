@@ -18,19 +18,17 @@ contract CommunityCoinV2 is Ownable {
     address public owner; // equivalent to Super Admin
 
     // Tokens
-    uint256 public tokenCount;
+    uint256 public tokenCount; // needs to have minimum 1
     uint256 public tokenValue;
     // Test implementation doesn't include customization for time formatting
     // and amount of tokens transferred / generated
 
-    // Transactions
-    struct Transaction {
-        address toAddress;
-        uint256 sentValue;
-        uint256 timestamp;
+    struct Relationship {
+        uint256 maxSendValue;
+        uint256 timestamp; // +1 week
     }
 
-    mapping (address => Transaction[]) public userToTransactions;
+    mapping (address => mapping(address => Relationship[])) public userToRelationships;
 
     constructor() public {
         owner = msg.sender;
@@ -45,6 +43,9 @@ contract CommunityCoinV2 is Ownable {
         tokenValue = 0;
     }
 
+
+
+    // NEEDS TO BE REMOVED SINCE SOLIDITY GENERATES NATURAL ACCESSORS
     function getHollowBalance(address addr) public view returns(uint256) {
         return hollowBalances[addr];
     }
@@ -80,6 +81,9 @@ contract CommunityCoinV2 is Ownable {
     function getContractBalance() public view returns(uint256) {
         return address(this).balance;
     }
+
+
+
 
     // Contract Managment
     function transferOwnership(address _owner) public onlyOwner {
@@ -123,5 +127,49 @@ contract CommunityCoinV2 is Ownable {
 
         emit TokensRedeemed(msg.sender, userBalance);
         return true;
+    }
+
+
+
+
+    // User Transactions
+    function amountAllowedToBeSent(
+        address _sender,
+        address _reciever,
+        uint256 _amount
+    ) private returns(uint256) {
+        Relationship memory relationship = userToRelationships[sender][reciever];
+
+        // First interaction between users or last interaction happened over a week ago
+        if (relationship.timestamp < now) { return 15; }
+
+        // Last interaction happened less than a week ago
+        if (relationship.timestamp >= now) { return relationship.maxSendValue; }
+
+    }
+
+    event Transfer(address indexed _from, address indexed _to, uint256 _amount);
+
+    function sendHollowCoins(address receiver, uint256 amount) public {
+        require (amount <= 15);
+        require (amount > 0);
+        require (hollowBalances[msg.sender] >= amount);
+        require (amountAllowedToBeSent(msg.sender, receiver, amount) > 0);
+
+        Relationship storage relationship = userToRelationships[msg.sender][reciever];
+        relationship.maxSendValue -= amount;
+
+        // Timestamp expired
+        if (relationship.timestamp < now) {
+            relationship.timestamp = now + 604800;
+            relationship.maxSendValue = 15 - amount;
+        }
+
+        if (relationship.timestamp >= now) { relationship.maxSendValue -= amount; }
+
+        hollowBalances[msg.sender] -= amount;
+        solidBalances[receiver] += amount;
+
+        emit Transfer(msg.sender, receiver, amount);
     }
 }
