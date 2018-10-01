@@ -20,12 +20,10 @@ contract CommunityCoinV2 is Ownable {
     // Tokens
     uint256 public tokenCount; // needs to have minimum 1
     uint256 public tokenValue;
-    // Test implementation doesn't include customization for time formatting
-    // and amount of tokens transferred / generated
 
     struct Relationship {
         uint256 maxSendValue;
-        uint256 timestamp; // +1 week
+        uint256 timestamp;
     }
 
     mapping (address => mapping(address => Relationship[])) public userToRelationships;
@@ -45,7 +43,7 @@ contract CommunityCoinV2 is Ownable {
 
 
 
-    // NEEDS TO BE REMOVED SINCE SOLIDITY GENERATES NATURAL ACCESSORS
+    // ACCESSORS
     function getHollowBalance(address addr) public view returns(uint256) {
         return hollowBalances[addr];
     }
@@ -70,6 +68,8 @@ contract CommunityCoinV2 is Ownable {
         return userToAdmins[addr];
     }
 
+
+    // NEEDS TO BE REMOVED SINCE SOLIDITY GENERATES ACCESSORS
     function getTokenCount() public view returns(uint256) {
         return tokenCount;
     }
@@ -85,12 +85,11 @@ contract CommunityCoinV2 is Ownable {
 
 
 
-    // Contract Managment
+    // CONTRACT MANAGMENT
     function transferOwnership(address _owner) public onlyOwner {
         return super.transferOwnership(_owner);
     }
 
-    event ContractEmptied(uint256 newTokenValue);
 
     function withdraw() external onlyOwner {
         tokenValue = 0;
@@ -98,59 +97,41 @@ contract CommunityCoinV2 is Ownable {
         emit ContractEmptied(tokenValue);
     }
 
-    event TokenValueUpdated(uint256 newTokenValue);
+    event ContractEmptied(uint256 newTokenValue);
+
 
     function updateTokenValue() internal {
         tokenValue = address(this).balance.div(tokenCount);
         emit TokenValueUpdated(tokenValue);
     }
 
-    event DonationToContract(address addr, uint256 amount);
+    event TokenValueUpdated(uint256 newTokenValue);
 
     function donateToContract() external payable {
         updateTokenValue();
         emit DonationToContract(msg.sender, msg.value);
     }
 
-    event TokensRedeemed(address addr, uint256 amount);
-
-    function redeemTokens() external returns(bool) {
-        uint256 userBalance = currentSolidBalances[msg.sender];
-        require(userBalance > 0);
-
-        currentSolidBalances[msg.sender] = 0;
-        tokenCount -= userBalance;
-
-        msg.sender.transfer(userBalance.mul(tokenValue));
-
-        updateTokenValue();
-
-        emit TokensRedeemed(msg.sender, userBalance);
-        return true;
-    }
+    event DonationToContract(address addr, uint256 amount);
 
 
-
-
-    // User Transactions
+    // USER TRANSACTIONS
     function amountAllowedToBeSent(
         address _sender,
         address _reciever,
         uint256 _amount
     ) private returns(uint256) {
         Relationship memory relationship = userToRelationships[sender][reciever];
-
         // First interaction between users or last interaction happened over a week ago
         if (relationship.timestamp < now) { return 15; }
-
         // Last interaction happened less than a week ago
         if (relationship.timestamp >= now) { return relationship.maxSendValue; }
 
     }
 
-    event Transfer(address indexed _from, address indexed _to, uint256 _amount);
-
     function sendHollowCoins(address receiver, uint256 amount) public {
+        require (activeStatus[msg.sender]);
+        require (activeStatus[reciever]);
         require (amount <= 15);
         require (amount > 0);
         require (hollowBalances[msg.sender] >= amount);
@@ -172,4 +153,24 @@ contract CommunityCoinV2 is Ownable {
 
         emit Transfer(msg.sender, receiver, amount);
     }
+
+    event Transfer(address indexed _from, address indexed _to, uint256 _amount);
+
+
+    function redeemTokens() external returns(bool) {
+        uint256 userBalance = currentSolidBalances[msg.sender];
+        require(userBalance > 0);
+
+        currentSolidBalances[msg.sender] = 0;
+        tokenCount -= userBalance;
+
+        msg.sender.transfer(userBalance.mul(tokenValue));
+
+        updateTokenValue();
+
+        emit TokensRedeemed(msg.sender, userBalance);
+        return true;
+    }
+
+    event TokensRedeemed(address addr, uint256 amount);
 }
