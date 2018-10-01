@@ -26,7 +26,7 @@ contract CommunityCoinV2 is Ownable {
         uint256 timestamp;
     }
 
-    mapping (address => mapping(address => Relationship[])) public userToRelationships;
+    mapping (address => mapping (address => Relationship)) public userToRelationships;
 
     constructor() public {
         owner = msg.sender;
@@ -116,12 +116,8 @@ contract CommunityCoinV2 is Ownable {
 
 
     // USER TRANSACTIONS
-    function amountAllowedToBeSent(
-        address _sender,
-        address _reciever,
-        uint256 _amount
-    ) private returns(uint256) {
-        Relationship memory relationship = userToRelationships[sender][reciever];
+    function amountAllowedToBeSent(address _sender, address _receiver) private returns(uint256) {
+        Relationship memory relationship = userToRelationships[_sender][_receiver];
         // First interaction between users or last interaction happened over a week ago
         if (relationship.timestamp < now) { return 15; }
         // Last interaction happened less than a week ago
@@ -131,13 +127,13 @@ contract CommunityCoinV2 is Ownable {
 
     function sendHollowCoins(address receiver, uint256 amount) public {
         require (activeStatus[msg.sender]);
-        require (activeStatus[reciever]);
+        require (activeStatus[receiver]);
         require (amount <= 15);
         require (amount > 0);
         require (hollowBalances[msg.sender] >= amount);
-        require (amountAllowedToBeSent(msg.sender, receiver, amount) > 0);
+        require (amountAllowedToBeSent(msg.sender, receiver) > 0);
 
-        Relationship storage relationship = userToRelationships[msg.sender][reciever];
+        Relationship storage relationship = userToRelationships[msg.sender][receiver];
         relationship.maxSendValue -= amount;
 
         // Timestamp expired
@@ -149,12 +145,15 @@ contract CommunityCoinV2 is Ownable {
         if (relationship.timestamp >= now) { relationship.maxSendValue -= amount; }
 
         hollowBalances[msg.sender] -= amount;
-        solidBalances[receiver] += amount;
+        currentSolidBalances[receiver] += amount; // swap for futureSolidBalances
 
         emit Transfer(msg.sender, receiver, amount);
     }
 
     event Transfer(address indexed _from, address indexed _to, uint256 _amount);
+
+
+    function harvestHollowCoins() {}
 
 
     function redeemTokens() external returns(bool) {
