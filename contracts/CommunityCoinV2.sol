@@ -9,7 +9,7 @@ contract CommunityCoinV2 is Ownable {
     // User Mappings
 	mapping (address => uint256) public hollowBalances;
     mapping (address => uint256) public currentSolidBalances;
-    mapping (address => uint256) public futureSolidBalances;
+    mapping (address => uint256) public unresolvedSolidBalances;
     mapping (address => uint256) public lastHarvests;
     mapping (address => bool) public activeStatus;
 
@@ -52,8 +52,8 @@ contract CommunityCoinV2 is Ownable {
         return currentSolidBalances[addr];
     }
 
-    function getFutureSolidBalance(address addr) internal view returns(uint256) {
-        return futureSolidBalances[addr];
+    function getUnresolvedSolidBalance(address addr) internal view returns(uint256) {
+        return unresolvedSolidBalances[addr];
     }
 
     function getLastHarvest(address addr) public view returns(uint256) {
@@ -96,7 +96,6 @@ contract CommunityCoinV2 is Ownable {
         msg.sender.transfer(address(this).balance);
         emit ContractEmptied(tokenValue);
     }
-
     event ContractEmptied(uint256 newTokenValue);
 
 
@@ -104,14 +103,12 @@ contract CommunityCoinV2 is Ownable {
         tokenValue = address(this).balance.div(tokenCount);
         emit TokenValueUpdated(tokenValue);
     }
-
     event TokenValueUpdated(uint256 newTokenValue);
 
     function donateToContract() external payable {
         updateTokenValue();
         emit DonationToContract(msg.sender, msg.value);
     }
-
     event DonationToContract(address addr, uint256 amount);
 
 
@@ -145,15 +142,23 @@ contract CommunityCoinV2 is Ownable {
         if (relationship.timestamp >= now) { relationship.maxSendValue -= amount; }
 
         hollowBalances[msg.sender] -= amount;
-        currentSolidBalances[receiver] += amount; // swap for futureSolidBalances
+        unresolvedSolidBalances[receiver] += amount;
 
         emit Transfer(msg.sender, receiver, amount);
     }
-
     event Transfer(address indexed _from, address indexed _to, uint256 _amount);
 
 
-    function harvestHollowCoins() {}
+    /* function harvestHollowCoins() public {
+        uint lastHarvest = lastHarvests[msg.sender];
+        uint availableCoins = now - lastHarvest;
+        if (availableCoins > 0) {
+            lastHarvests[msg.sender] = now;
+            hollowBalances[msg.sender] += availableCoins;
+            emit Harvest(msg.sender, availableCoins);
+        }
+    }
+    event Harvest(address indexed _addr, uint256 _value); */
 
 
     function redeemTokens() external returns(bool) {
@@ -170,6 +175,46 @@ contract CommunityCoinV2 is Ownable {
         emit TokensRedeemed(msg.sender, userBalance);
         return true;
     }
-
     event TokensRedeemed(address addr, uint256 amount);
+
+
+    // USER MANAGMENT
+    modifier onlyAdmin() {
+        require(userToAdmins[msg.sender]);
+        _;
+    }
+
+
+    function makeAdmin(address newAdmin) external onlyOwner {
+        require(newAdmin != address(0));
+        require(activeStatus[newAdmin]);
+        userToAdmins[newAdmin] = true;
+        emit NewAdmin(newAdmin);
+    }
+    event NewAdmin(address addr);
+
+
+    function revokeAdminRights(address admin) external onlyOwner {
+        require(newAdmin != address(0));
+        userToAdmins[newAdmin] = false;
+        emit AdminRevoked(admin);
+    }
+    event AdminRevoked(address addr);
+
+
+    function activateUser(address user) external onlyAdmin {
+        require(user != address(0));
+        require(!activeStatus[user]);
+        activeStatus[user] = true;
+        emit UserActivated(user);
+    }
+    event UserActivated(address addr);
+
+
+    function deactivateUser(address user) external onlyAdmin {
+        require(activeStatus[user]);
+        activeStatus[user] = false;
+        emit UserDeactivated(user);
+    }
+    event UserDeactivated(address addr);
 }
