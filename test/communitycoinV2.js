@@ -21,6 +21,7 @@ contract('CommunityCoin Tests', function(accounts) {
     const account_5 = accounts[4];
     const donation_amount = 2;
 
+    // CONTRACT DONATIONS
     it(`should donate ${donation_amount} ether from Account 1 to CommunityCoin Contract`, async () => {
         const contract_before = await coco.getContractBalance.call();
         const account_1_before = web3.eth.getBalance(account_1);
@@ -112,7 +113,7 @@ contract('CommunityCoin Tests', function(accounts) {
     });
 
 
-    // USER INTERACTIONS
+    // USER ACTIONS + INTERACTIONS
     it('should redeem solid Community Coins from Account 1', async () => {
         const account_1_before = web3.eth.getBalance(account_1);
         const tx1 = await coco.redeemTokens({ from: account_1 });
@@ -123,7 +124,30 @@ contract('CommunityCoin Tests', function(accounts) {
         assert.equal(solidTokenCount.toNumber(), 0, 'Account 1 still has tokens after redemption');
     });
 
+    const jumpLength = 500;
 
+    it(`should jump time at least ${jumpLength} seconds`, async () => {
+        // console.log(web3.eth.getBlock(web3.eth.blockNumber).timestamp);
+        const tx1 = await web3.currentProvider.sendAsync({
+            jsonrpc: '2.0',
+            method: 'evm_increaseTime',
+            params: [jumpLength]
+        }, (err, resp) => {
+            if (!err) {
+                web3.currentProvider.send({
+                    jsonrpc: '2.0',
+                    method: 'evm_mine',
+                    params: [],
+                });
+            }
+        });
+
+        const b = await web3.eth.getBlock('latest').timestamp;
+        console.log(b);
+        // const tx1 = await timeJump(50000000);
+    });
+
+    // console.log(web3.eth.getBlock('latest').timestamp);
 
     // CONTRACT MANAGMENT
     it('should trasfer ownership of the contract from Account 1 to Account 2', async () => {

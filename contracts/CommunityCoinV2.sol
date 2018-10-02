@@ -6,7 +6,7 @@ import 'openzeppelin-solidity/contracts/math/SafeMath.sol';
 contract CommunityCoinV2 is Ownable {
     using SafeMath for uint256;
 
-    // User Mappings
+    // USER MAPPINGS
 	mapping (address => uint256) public hollowBalances;
     mapping (address => uint256) public currentSolidBalances;
     mapping (address => uint256) public unresolvedSolidBalances;
@@ -14,11 +14,11 @@ contract CommunityCoinV2 is Ownable {
     mapping (address => uint256) public lastSolidHarvests;
     mapping (address => bool) public activeStatus;
 
-    // User Rights
+    // USER RIGHTS
     mapping (address => bool) public userToAdmins;
     address public owner; // equivalent to Super Admin
 
-    // Tokens
+    // TOKENS
     uint256 public tokenCount; // needs to have minimum 1
     uint256 public tokenValue;
 
