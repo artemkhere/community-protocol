@@ -156,9 +156,9 @@ contract CommunityCoinV2 is Ownable {
 
 
     function harvestHollowCoins() external {
-        require(activeStatus[user]);
-        uint memory lastHarvest = lastHollowHarvests[msg.sender];
-        uint memory availableCoins = (now - lastHarvest).div(17280);
+        require(activeStatus[msg.sender]);
+        uint256 lastHarvest = lastHollowHarvests[msg.sender];
+        uint256 availableCoins = (now - lastHarvest).div(17280);
 
         if (availableCoins > 0) {
             lastHollowHarvests[msg.sender] = now;
@@ -174,10 +174,10 @@ contract CommunityCoinV2 is Ownable {
 
 
     function harvestSolidCoins() external {
-        require(activeStatus[user]);
-        uint memory lastHarvest = lastSolidHarvests[msg.sender];
+        require(activeStatus[msg.sender]);
+        uint256 lastHarvest = lastSolidHarvests[msg.sender];
         require((lastHarvest + 604800) <= now);
-        uint memory availableCoins = unresolvedSolidBalances[msg.sender];
+        uint256 availableCoins = unresolvedSolidBalances[msg.sender];
         require(availableCoins > 0);
 
         if (availableCoins > 0) {
@@ -191,7 +191,7 @@ contract CommunityCoinV2 is Ownable {
 
 
     function redeemTokens() external returns(bool) {
-        uint256 memory userBalance = currentSolidBalances[msg.sender];
+        uint256 userBalance = currentSolidBalances[msg.sender];
         require(userBalance > 0);
 
         currentSolidBalances[msg.sender] = 0;
