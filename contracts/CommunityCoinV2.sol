@@ -10,7 +10,8 @@ contract CommunityCoinV2 is Ownable {
 	mapping (address => uint256) public hollowBalances;
     mapping (address => uint256) public currentSolidBalances;
     mapping (address => uint256) public unresolvedSolidBalances;
-    mapping (address => uint256) public lastHarvests;
+    mapping (address => uint256) public lastHollowHarvests;
+    mapping (address => uint256) public lastSolidHarvests;
     mapping (address => bool) public activeStatus;
 
     // User Rights
@@ -36,7 +37,8 @@ contract CommunityCoinV2 is Ownable {
         // Following values are preset for testing purposes
         hollowBalances[msg.sender] = 60;
         currentSolidBalances[msg.sender] = 15;
-        lastHarvests[msg.sender] = now;
+        lastHollowHarvests[msg.sender] = now;
+        lastSolidHarvests[msg.sender] = now;
         tokenCount = 75;
         tokenValue = 0;
     }
@@ -56,8 +58,12 @@ contract CommunityCoinV2 is Ownable {
         return unresolvedSolidBalances[addr];
     }
 
-    function getLastHarvest(address addr) public view returns(uint256) {
-        return lastHarvests[addr];
+    function getLastHollowHarvest(address addr) public view returns(uint256) {
+        return lastHollowHarvests[addr];
+    }
+
+    function getLastSolidHarvest(address addr) public view returns(uint256) {
+        return lastSolidHarvests[addr];
     }
 
     function getActiveStatus(address addr) public view returns(bool) {
@@ -113,7 +119,7 @@ contract CommunityCoinV2 is Ownable {
 
 
     // USER TRANSACTIONS
-    function amountAllowedToBeSent(address _sender, address _receiver) private returns(uint256) {
+    function amountAllowedToBeSent(address _sender, address _receiver) private view returns(uint256) {
         Relationship memory relationship = userToRelationships[_sender][_receiver];
         // First interaction between users or last interaction happened over a week ago
         if (relationship.timestamp < now) { return 15; }
@@ -149,20 +155,43 @@ contract CommunityCoinV2 is Ownable {
     event Transfer(address indexed _from, address indexed _to, uint256 _amount);
 
 
-    /* function harvestHollowCoins() public {
-        uint lastHarvest = lastHarvests[msg.sender];
-        uint availableCoins = now - lastHarvest;
+    function harvestHollowCoins() external {
+        require(activeStatus[user]);
+        uint memory lastHarvest = lastHollowHarvests[msg.sender];
+        uint memory availableCoins = (now - lastHarvest).div(17280);
+
         if (availableCoins > 0) {
-            lastHarvests[msg.sender] = now;
+            lastHollowHarvests[msg.sender] = now;
             hollowBalances[msg.sender] += availableCoins;
-            emit Harvest(msg.sender, availableCoins);
+
+            tokenCount += availableCoins;
+            updateTokenValue();
+
+            emit HollowHarvest(msg.sender, availableCoins);
         }
     }
-    event Harvest(address indexed _addr, uint256 _value); */
+    event HollowHarvest(address indexed _addr, uint256 _value);
+
+
+    function harvestSolidCoins() external {
+        require(activeStatus[user]);
+        uint memory lastHarvest = lastSolidHarvests[msg.sender];
+        require((lastHarvest + 604800) <= now);
+        uint memory availableCoins = unresolvedSolidBalances[msg.sender];
+        require(availableCoins > 0);
+
+        if (availableCoins > 0) {
+            lastSolidHarvests[msg.sender] = now;
+            currentSolidBalances[msg.sender] += availableCoins;
+
+            emit SolidHarvest(msg.sender, availableCoins);
+        }
+    }
+    event SolidHarvest(address indexed _addr, uint256 _value);
 
 
     function redeemTokens() external returns(bool) {
-        uint256 userBalance = currentSolidBalances[msg.sender];
+        uint256 memory userBalance = currentSolidBalances[msg.sender];
         require(userBalance > 0);
 
         currentSolidBalances[msg.sender] = 0;
@@ -187,7 +216,6 @@ contract CommunityCoinV2 is Ownable {
 
     function makeAdmin(address newAdmin) external onlyOwner {
         require(newAdmin != address(0));
-        require(activeStatus[newAdmin]);
         userToAdmins[newAdmin] = true;
         emit NewAdmin(newAdmin);
     }
@@ -195,8 +223,8 @@ contract CommunityCoinV2 is Ownable {
 
 
     function revokeAdminRights(address admin) external onlyOwner {
-        require(newAdmin != address(0));
-        userToAdmins[newAdmin] = false;
+        require(admin != address(0));
+        userToAdmins[admin] = false;
         emit AdminRevoked(admin);
     }
     event AdminRevoked(address addr);
@@ -206,9 +234,11 @@ contract CommunityCoinV2 is Ownable {
         require(user != address(0));
         require(!activeStatus[user]);
         activeStatus[user] = true;
-        emit UserActivated(user);
+        lastHollowHarvests[user] = now;
+        lastSolidHarvests[user] = now;
+        emit UserActivated(user, now, now);
     }
-    event UserActivated(address addr);
+    event UserActivated(address addr, uint256 lastHollowHarvest, uint256 lastSolidHarvest);
 
 
     function deactivateUser(address user) external onlyAdmin {

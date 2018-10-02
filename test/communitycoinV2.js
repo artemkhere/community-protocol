@@ -6,6 +6,7 @@ const CommunityCoin = artifacts.require("./CommunityCoinV2.sol");
 **************************************/
 
 contract('CommunityCoin Tests', function(accounts) {
+    // BASE CONTRACT FUNCTIONALITY
     let coco;
 
     it('should be deployed, CommunityCoin', async () => {
@@ -15,6 +16,9 @@ contract('CommunityCoin Tests', function(accounts) {
 
     const account_1 = accounts[0];
     const account_2 = accounts[1];
+    const account_3 = accounts[2];
+    const account_4 = accounts[3];
+    const account_5 = accounts[4];
     const donation_amount = 2;
 
     it(`should donate ${donation_amount} ether from Account 1 to CommunityCoin Contract`, async () => {
@@ -34,6 +38,53 @@ contract('CommunityCoin Tests', function(accounts) {
         // console.log(tokenValue.toNumber());
     });
 
+    // USER MANAGMENT
+    it('should create new Admins', async () => {
+        try {
+            const tx1 = await coco.makeAdmin(account_5, { from: account_1 });
+            assert(true, 'Owner was able to create a new Admin');
+        } catch(e) {
+            assert(false, 'Owner was not able to create a new Admin');
+        }
+
+        try {
+            const tx2 = await coco.makeAdmin(account_2, { from: account_2 });
+            assert(false, 'Not owner was able to create a new Admin');
+        } catch(e) {
+            assert(true, 'Not owner was not able to create a new Admin');
+        }
+
+        const adminStatusAccount5 = await coco.checkIfAdmin(account_5);
+        const adminStatusAccount2 = await coco.checkIfAdmin(account_2);
+        assert.equal(adminStatusAccount5, true, 'Account 5 is not admin');
+        assert.equal(adminStatusAccount2, false, 'Account 2 is admin');
+    });
+
+    it('should revoke Admins', async () => {
+        try {
+            const tx1 = await coco.revokeAdminRights(account_5, { from: account_2 });
+            assert(false, 'Not owner was able to revoke Admin rights');
+        } catch(e) {
+            assert(true, 'Not owner was not able to revoke Admin rights');
+        }
+
+        try {
+            const tx2 = await coco.revokeAdminRights(account_5, { from: account_1 });
+            assert(true, 'Owner was able to revoke Admin rights');
+        } catch(e) {
+            assert(false, 'Owner was not able to revoke Admin rights');
+        }
+
+        const adminStatusAccount5 = await coco.checkIfAdmin(account_5);
+        assert.equal(adminStatusAccount5, false, 'Account 5 is not admin');
+    });
+
+    // it('should activate and deactivate users', async () => {
+    //
+    // });
+
+
+    // USER INTERACTIONS
     it('should redeem solid Community Coins from Account 1', async () => {
         const account_1_before = web3.eth.getBalance(account_1);
         const tx1 = await coco.redeemTokens({ from: account_1 });
@@ -44,6 +95,9 @@ contract('CommunityCoin Tests', function(accounts) {
         assert.equal(solidTokenCount.toNumber(), 0, 'Account 1 still has tokens after redemption');
     });
 
+
+
+    // CONTRACT MANAGMENT
     it('should trasfer ownership of the contract from Account 1 to Account 2', async () => {
         try {
             const tx = await coco.transferOwnership(account_2, { from: account_1 });
