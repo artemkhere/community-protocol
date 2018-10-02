@@ -79,9 +79,37 @@ contract('CommunityCoin Tests', function(accounts) {
         assert.equal(adminStatusAccount5, false, 'Account 5 is not admin');
     });
 
-    // it('should activate and deactivate users', async () => {
-    //
-    // });
+    it('should activate and deactivate users', async () => {
+        try {
+            const tx1 = await coco.activateUser(account_5, { from: account_1 });
+            assert(true, 'Admin was able to activate the user');
+        } catch(e) {
+            assert(false, 'Admin was not able to activate the user');
+        }
+
+        let account5UserStatus = await coco.getActiveStatus(account_5);
+        assert.equal(account5UserStatus, true, 'Account 5 is not active');
+
+        try {
+            const tx2 = await coco.deactivateUser(account_5, { from: account_3 });
+            assert(false, 'Not Admin was able to deactivate the user');
+        } catch(e) {
+            assert(true, 'Not Admin was not able to deactivate the user');
+        }
+
+        account5UserStatus = await coco.getActiveStatus(account_5);
+        assert.equal(account5UserStatus, true, 'Account 5 is not active');
+
+        try {
+            const tx2 = await coco.deactivateUser(account_5, { from: account_1 });
+            assert(true, 'Admin was able to deactivate the user');
+        } catch(e) {
+            assert(false, 'Admin was not able to deactivate the user');
+        }
+
+        account5UserStatus = await coco.getActiveStatus(account_5);
+        assert.equal(account5UserStatus, false, 'Account 5 is still active');
+    });
 
 
     // USER INTERACTIONS

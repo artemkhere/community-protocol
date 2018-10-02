@@ -176,7 +176,7 @@ contract CommunityCoinV2 is Ownable {
     function harvestSolidCoins() external {
         require(activeStatus[msg.sender]);
         uint256 lastHarvest = lastSolidHarvests[msg.sender];
-        require((lastHarvest + 604800) <= now);
+        require((lastHarvest + 2419200) <= now);
         uint256 availableCoins = unresolvedSolidBalances[msg.sender];
         require(availableCoins > 0);
 
