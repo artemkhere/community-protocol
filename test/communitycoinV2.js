@@ -1,10 +1,10 @@
 // contracts
 const CommunityCoin = artifacts.require("./CommunityCoinV2.sol");
 
-/**************************************
-* Tests
-**************************************/
+// helpers
+const helper = require("./helpers/truffleTestHelper");
 
+// tests
 contract('CommunityCoin Tests', function(accounts) {
     // BASE CONTRACT FUNCTIONALITY
     let coco;
@@ -37,6 +37,7 @@ contract('CommunityCoin Tests', function(accounts) {
         // const tokenValue = await coco.getTokenValue.call();
         // console.log(web3.toWei(donation_amount, "ether"))
         // console.log(tokenValue.toNumber());
+        // console.log(web3.eth.getBlock('latest').timestamp);
     });
 
     // USER MANAGMENT
@@ -124,30 +125,47 @@ contract('CommunityCoin Tests', function(accounts) {
         assert.equal(solidTokenCount.toNumber(), 0, 'Account 1 still has tokens after redemption');
     });
 
-    const jumpLength = 500;
+    it('should activate 2 users and set their timestamps', async () => {
+        const tx1 = await coco.activateUser(account_3, { from: account_1 });
+        const tx2 = await coco.activateUser(account_4, { from: account_1 });
 
-    it(`should jump time at least ${jumpLength} seconds`, async () => {
-        // console.log(web3.eth.getBlock(web3.eth.blockNumber).timestamp);
-        const tx1 = await web3.currentProvider.sendAsync({
-            jsonrpc: '2.0',
-            method: 'evm_increaseTime',
-            params: [jumpLength]
-        }, (err, resp) => {
-            if (!err) {
-                web3.currentProvider.send({
-                    jsonrpc: '2.0',
-                    method: 'evm_mine',
-                    params: [],
-                });
-            }
-        });
+        const account3UserStatus = await coco.getActiveStatus(account_3);
+        const account4UserStatus = await coco.getActiveStatus(account_4);
+        assert.equal(account3UserStatus, true, 'Account 3 is not active');
+        assert.equal(account4UserStatus, true, 'Account 4 is not active');
 
-        const b = await web3.eth.getBlock('latest').timestamp;
-        console.log(b);
-        // const tx1 = await timeJump(50000000);
+        const acct3HollowBalance = await coco.getHollowBalance(account_3);
+        const acct3SolidBalance= await coco.getCurrentSolidBalance(account_3);
+        const acct4HollowBalance = await coco.getHollowBalance(account_4);
+        const acct4SolidBalance= await coco.getCurrentSolidBalance(account_4);
+        assert.equal(acct3HollowBalance.toNumber(), 0, 'Account 3 Hollow Balance is not empty');
+        assert.equal(acct3SolidBalance.toNumber(), 0, 'Account 3 Solid Balance is not empty');
+        assert.equal(acct4HollowBalance.toNumber(), 0, 'Account 4 Hollow Balance is not empty');
+        assert.equal(acct4SolidBalance.toNumber(), 0, 'Account 4 Solid Balance is not empty');
     });
 
-    // console.log(web3.eth.getBlock('latest').timestamp);
+
+    const week = 2419200;
+
+    it(`should advance time and block together ${week} seconds`, async () => {
+        const originalBlock = web3.eth.getBlock('latest');
+        const newBlock = await helper.advanceTimeAndBlock(week);
+        const timeDiff = newBlock.timestamp - originalBlock.timestamp;
+
+        assert.isTrue(timeDiff >= week, 'time and block were not advanced');
+    });
+
+    it(`should harvest hollow coins for account 3 and 4`, async () => {
+        const tx1 = await coco.harvestHollowCoins({ from: account_3 });
+        const tx2 = await coco.harvestHollowCoins({ from: account_4 });
+
+        const acct3HollowBalance = await coco.getHollowBalance(account_3);
+        const acct4HollowBalance = await coco.getHollowBalance(account_4);
+
+        assert.isTrue(acct3HollowBalance.toNumber() > 0, 'Account 3 Hollow Balance is empty');
+        assert.isTrue(acct4HollowBalance.toNumber() > 0, 'Account 4 Hollow Balance is empty');
+    });
+
 
     // CONTRACT MANAGMENT
     it('should trasfer ownership of the contract from Account 1 to Account 2', async () => {
