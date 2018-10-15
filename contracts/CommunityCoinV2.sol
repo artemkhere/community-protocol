@@ -30,17 +30,16 @@ contract CommunityCoinV2 is Ownable {
     mapping (address => mapping (address => Relationship)) public userToRelationships;
 
     constructor() public {
+        tokenCount = 2;
+        tokenValue = 0;
+
         owner = msg.sender;
         activeStatus[msg.sender] = true;
         userToAdmins[msg.sender] = true;
-
-        // Following values are preset for testing purposes
-        hollowBalances[msg.sender] = 60;
-        currentSolidBalances[msg.sender] = 15;
+        hollowBalances[msg.sender] = 1;
+        currentSolidBalances[msg.sender] = 1;
         lastHollowHarvests[msg.sender] = now;
         lastSolidHarvests[msg.sender] = now;
-        tokenCount = 75;
-        tokenValue = 0;
     }
 
 
