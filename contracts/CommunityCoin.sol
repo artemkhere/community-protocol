@@ -1,129 +1,249 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.24;
 
-import "./ConvertLib.sol";
+import 'openzeppelin-solidity/contracts/ownership/Ownable.sol';
+import 'openzeppelin-solidity/contracts/math/SafeMath.sol';
 
-contract CommunityCoin {
-	mapping (address => uint) hollowBalances;
-    mapping (address => uint) solidBalances;
-    mapping (address => uint) lastHarvests;
-    mapping (address => uint) ownerToUser;
-    mapping (uint => address) userToOwner;
-    uint idCount = 1;
+contract CommunityCoin is Ownable {
+    using SafeMath for uint256;
 
-    struct Transaction {
-        address toAddress;
-        uint sentValue;
-        uint timestamp;
+    // USER MAPPINGS
+	mapping (address => uint256) public hollowBalances;
+    mapping (address => uint256) public currentSolidBalances;
+    mapping (address => uint256) public unresolvedSolidBalances;
+    mapping (address => uint256) public lastHollowHarvests;
+    mapping (address => uint256) public lastSolidHarvests;
+    mapping (address => bool) public activeStatus;
+
+    // USER RIGHTS
+    mapping (address => bool) public userToAdmins;
+    address public owner; // equivalent to Super Admin
+
+    // TOKENS
+    uint256 public tokenCount; // needs to have minimum 1
+    uint256 public tokenValue;
+
+    struct Relationship {
+        uint256 maxSendValue;
+        uint256 timestamp;
     }
 
-    Transaction[] transactions;
-
-    struct PrivateUser {
-        string name;
-        uint id;
-        uint[] sentTransactions;
-        // future considerations
-        // bool active;
-    }
-
-    PrivateUser[] public userList;
+    mapping (address => mapping (address => Relationship)) public userToRelationships;
 
     constructor() public {
-        hollowBalances[tx.origin] = 10000;
-        solidBalances[tx.origin] = 250;
-        lastHarvests[tx.origin] = now; // owner last hollow harvest
-        userList.push(PrivateUser("_emptyUser", 0, new uint[](0)));
+        tokenCount = 2;
+        tokenValue = 0;
+
+        owner = msg.sender;
+        activeStatus[msg.sender] = true;
+        userToAdmins[msg.sender] = true;
+        hollowBalances[msg.sender] = 1;
+        currentSolidBalances[msg.sender] = 1;
+        lastHollowHarvests[msg.sender] = now;
+        lastSolidHarvests[msg.sender] = now;
     }
 
-    event NewUserCreated(string name, uint id);
 
-    function createNewUser(string name) public {
-        require (ownerToUser[msg.sender] == 0);
-        lastHarvests[msg.sender] = now;
-        ownerToUser[msg.sender] = idCount;
-        userToOwner[idCount] = msg.sender;
-        userList.push(PrivateUser(name, idCount, new uint[](0)));
-        idCount += 1;
-        emit NewUserCreated(name, idCount);
-    }
 
-    function getUserFromOwner(address ownerAddress) public view returns(uint) {
-        return ownerToUser[ownerAddress];
-    }
-
-    event Transfer(address indexed _from, address indexed _to, uint256 _value);
-
-    function sendHollowCoins(address receiver, uint amount) public returns(bool sufficient) {
-        if (hollowBalances[msg.sender] < amount) return false;
-        if (amount > 15) return false;
-        if (valueThatCanBeSent(msg.sender, receiver) < amount) return false;
-
-        hollowBalances[msg.sender] -= amount;
-        solidBalances[receiver] += amount;
-
-        Transaction memory trns = Transaction(receiver, amount, now);
-        uint trnsID = transactions.push(trns) - 1;
-        userList[ownerToUser[msg.sender]].sentTransactions.push(trnsID);
-
-        emit Transfer(msg.sender, receiver, amount);
-        return true;
-    }
-
-    function getHollowBalance(address addr) public view returns(uint) {
+    // ACCESSORS
+    function getHollowBalance(address addr) public view returns(uint256) {
         return hollowBalances[addr];
     }
 
-    function getSolidBalance(address addr) public view returns(uint) {
-        return solidBalances[addr];
+    function getCurrentSolidBalance(address addr) public view returns(uint256) {
+        return currentSolidBalances[addr];
     }
 
-    function checkLastHarvest(address addr) public view returns(uint) {
-        return lastHarvests[addr];
+    function getUnresolvedSolidBalance(address addr) internal view returns(uint256) {
+        return unresolvedSolidBalances[addr];
     }
 
-    function checkIdCount() public view returns(uint) {
-        return idCount;
+    function getLastHollowHarvest(address addr) public view returns(uint256) {
+        return lastHollowHarvests[addr];
     }
 
-    // I want this to be view, but it forces me to use storage for my structs array
-    function valueThatCanBeSent(address sender, address reciever) public returns(uint) {
-        uint[] memory transactionIDs = getTransactionsIDs(sender);
-        Transaction[] storage filteredTrns;
-        uint maxSendValue = 15;
+    function getLastSolidHarvest(address addr) public view returns(uint256) {
+        return lastSolidHarvests[addr];
+    }
 
-        for (uint i = 0; i < transactionIDs.length; i++) {
-            filteredTrns.push(transactions[transactionIDs[i]]);
+    function getActiveStatus(address addr) public view returns(bool) {
+        return activeStatus[addr];
+    }
+
+    function checkIfAdmin(address addr) public view returns(bool) {
+        return userToAdmins[addr];
+    }
+
+
+    // NEEDS TO BE REMOVED SINCE SOLIDITY GENERATES ACCESSORS
+    function getTokenCount() public view returns(uint256) {
+        return tokenCount;
+    }
+
+    function getTokenValue() public view returns(uint256) {
+        return tokenValue;
+    }
+
+    function getContractBalance() public view returns(uint256) {
+        return address(this).balance;
+    }
+
+
+
+
+    // CONTRACT MANAGMENT
+    function transferOwnership(address _owner) public onlyOwner {
+        return super.transferOwnership(_owner);
+    }
+
+
+    function withdraw() external onlyOwner {
+        tokenValue = 0;
+        msg.sender.transfer(address(this).balance);
+        emit ContractEmptied(tokenValue);
+    }
+    event ContractEmptied(uint256 newTokenValue);
+
+
+    function updateTokenValue() internal {
+        tokenValue = address(this).balance.div(tokenCount);
+        emit TokenValueUpdated(tokenValue);
+    }
+    event TokenValueUpdated(uint256 newTokenValue);
+
+    function donateToContract() external payable {
+        updateTokenValue();
+        emit DonationToContract(msg.sender, msg.value);
+    }
+    event DonationToContract(address addr, uint256 amount);
+
+
+    // USER TRANSACTIONS
+    function amountAllowedToBeSent(address _sender, address _receiver) private view returns(uint256) {
+        Relationship memory relationship = userToRelationships[_sender][_receiver];
+        // First interaction between users or last interaction happened over a week ago
+        if (relationship.timestamp < now) { return 15; }
+        // Last interaction happened less than a week ago
+        if (relationship.timestamp >= now) { return relationship.maxSendValue; }
+
+    }
+
+    function sendHollowCoins(address receiver, uint256 amount) public {
+        require (activeStatus[msg.sender]);
+        require (activeStatus[receiver]);
+        require (amount <= 15);
+        require (amount > 0);
+        require (hollowBalances[msg.sender] >= amount);
+        require (amountAllowedToBeSent(msg.sender, receiver) > 0);
+
+        Relationship storage relationship = userToRelationships[msg.sender][receiver];
+        relationship.maxSendValue -= amount;
+
+        // Timestamp expired
+        if (relationship.timestamp < now) {
+            relationship.timestamp = now + 604800;
+            relationship.maxSendValue = 15 - amount;
         }
 
-        for (uint x = 0; x < filteredTrns.length; x++) {
-            address addrMatch = filteredTrns[x].toAddress;
-            uint timeMatch = filteredTrns[x].timestamp;
-            uint weekAgo = now - 604800;
+        if (relationship.timestamp >= now) { relationship.maxSendValue -= amount; }
 
-            if (addrMatch == reciever && timeMatch > weekAgo) {
-                maxSendValue -= filteredTrns[x].sentValue;
-            }
-        }
+        hollowBalances[msg.sender] -= amount;
+        unresolvedSolidBalances[receiver] += amount;
 
-        return maxSendValue;
+        emit Transfer(msg.sender, receiver, amount);
     }
+    event Transfer(address indexed _from, address indexed _to, uint256 _amount);
 
-    function getTransactionsIDs(address addr) public view returns(uint[]) {
-        uint userID = ownerToUser[addr];
-        uint[] memory transactionIDs = userList[userID].sentTransactions;
 
-        return transactionIDs;
-    }
+    function harvestHollowCoins() external {
+        require(activeStatus[msg.sender]);
+        uint256 lastHarvest = lastHollowHarvests[msg.sender];
+        uint256 availableCoins = (now - lastHarvest).div(17280);
 
-    event Harvest(address indexed _addr, uint256 _value);
-
-    function harvestHollowCoins() public {
-        uint lastHarvest = lastHarvests[msg.sender];
-        uint availableCoins = now - lastHarvest;
         if (availableCoins > 0) {
-            lastHarvests[msg.sender] = now;
+            lastHollowHarvests[msg.sender] = now;
             hollowBalances[msg.sender] += availableCoins;
-            emit Harvest(msg.sender, availableCoins);
+
+            tokenCount += availableCoins;
+            updateTokenValue();
+
+            emit HollowHarvest(msg.sender, availableCoins);
         }
     }
+    event HollowHarvest(address indexed _addr, uint256 _value);
+
+
+    function harvestSolidCoins() external {
+        require(activeStatus[msg.sender]);
+        uint256 lastHarvest = lastSolidHarvests[msg.sender];
+        require((lastHarvest + 2419200) <= now);
+        uint256 availableCoins = unresolvedSolidBalances[msg.sender];
+        require(availableCoins > 0);
+
+        if (availableCoins > 0) {
+            lastSolidHarvests[msg.sender] = now;
+            currentSolidBalances[msg.sender] += availableCoins;
+
+            emit SolidHarvest(msg.sender, availableCoins);
+        }
+    }
+    event SolidHarvest(address indexed _addr, uint256 _value);
+
+
+    function redeemTokens() external returns(bool) {
+        uint256 userBalance = currentSolidBalances[msg.sender];
+        require(userBalance > 0);
+
+        currentSolidBalances[msg.sender] = 0;
+        tokenCount -= userBalance;
+
+        msg.sender.transfer(userBalance.mul(tokenValue));
+
+        updateTokenValue();
+
+        emit TokensRedeemed(msg.sender, userBalance);
+        return true;
+    }
+    event TokensRedeemed(address addr, uint256 amount);
+
+
+    // USER MANAGMENT
+    modifier onlyAdmin() {
+        require(userToAdmins[msg.sender]);
+        _;
+    }
+
+
+    function makeAdmin(address newAdmin) external onlyOwner {
+        require(newAdmin != address(0));
+        userToAdmins[newAdmin] = true;
+        emit NewAdmin(newAdmin);
+    }
+    event NewAdmin(address addr);
+
+
+    function revokeAdminRights(address admin) external onlyOwner {
+        require(admin != address(0));
+        userToAdmins[admin] = false;
+        emit AdminRevoked(admin);
+    }
+    event AdminRevoked(address addr);
+
+
+    function activateUser(address user) external onlyAdmin {
+        require(user != address(0));
+        require(!activeStatus[user]);
+        activeStatus[user] = true;
+        lastHollowHarvests[user] = now;
+        lastSolidHarvests[user] = now;
+        emit UserActivated(user, now, now);
+    }
+    event UserActivated(address addr, uint256 lastHollowHarvest, uint256 lastSolidHarvest);
+
+
+    function deactivateUser(address user) external onlyAdmin {
+        require(activeStatus[user]);
+        activeStatus[user] = false;
+        emit UserDeactivated(user);
+    }
+    event UserDeactivated(address addr);
 }

@@ -11,7 +11,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "truffle test ./test/communitycoinV2.js"
+    "test": "truffle test ./test/communitycoin.js"
   },
   "author": "Metra Metra Metra",
   "license": "ISC"
