@@ -3,7 +3,7 @@ import truffleContract from "truffle-contract";
 // import getWeb3 from "./utils/getWeb3";
 
 import TopNav from "./components/navigation/TopNav/TopNav";
-import TopNav from "./components/mainContent/MainContent/MainContent";
+import MainContent from "./components/mainContent/MainContent/MainContent";
 import BottomNav from "./components/navigation/BottomNav/BottomNav";
 
 class App extends Component {

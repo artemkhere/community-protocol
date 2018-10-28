@@ -6,29 +6,29 @@ import PropTypes from 'prop-types';
 import './TopNav.css';
 
 class TopNav extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            stuff: []
-        };
+    handleAccountClick = () => {
+        this.props.navigationActions.changeView('Account Details');
     }
 
     render() {
+        const {
+            view
+        } = this.props;
+
         return (
             <div className="top-nav">
                 <div className="profile-info-container">
                     <div className="current-community">Lighthouse Labs</div>
                     <div
                         className="profile-access"
-                        onClick={() => { this.props.navigationActions.changeView('ARTEM'); }}
+                        onClick={this.handleAccountClick}
                     >
                         icon
                     </div>
                 </div>
                 <div className="header-container">
-                    <div className="header">Account Details</div>
+                    <div className="header">{view}</div>
                 </div>
-                <p>View -> {this.props.view}</p>
             </div>
         );
     }

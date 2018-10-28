@@ -1,4 +1,4 @@
 export default {
-    view: 'ACCOUNT_DETAILS',
+    view: 'Home',
     loading: false
 };
