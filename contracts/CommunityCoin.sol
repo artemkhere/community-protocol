@@ -6,13 +6,20 @@ import 'openzeppelin-solidity/contracts/math/SafeMath.sol';
 contract CommunityCoin is Ownable {
     using SafeMath for uint256;
 
-    // USER MAPPINGS
+    // USER RESOURCES
 	mapping (address => uint256) public hollowBalances;
     mapping (address => uint256) public currentSolidBalances;
     mapping (address => uint256) public unresolvedSolidBalances;
     mapping (address => uint256) public lastHollowHarvests;
     mapping (address => uint256) public lastSolidHarvests;
     mapping (address => bool) public activeStatus;
+
+    // USER DATA
+	mapping (address => string) public firstName;
+	mapping (address => string) public familyName;
+    mapping (address => string) public department;
+    mapping (address => string) public title;
+    mapping (address => uint256) public activatedTime;
 
     // USER RIGHTS
     mapping (address => bool) public userToAdmins;
@@ -44,7 +51,7 @@ contract CommunityCoin is Ownable {
 
 
 
-    // ACCESSORS
+    // BASIC ACCESSORS
     function getHollowBalance(address addr) public view returns(uint256) {
         return hollowBalances[addr];
     }
@@ -71,6 +78,31 @@ contract CommunityCoin is Ownable {
 
     function checkIfAdmin(address addr) public view returns(bool) {
         return userToAdmins[addr];
+    }
+
+    function getFirstName(address addr) public view returns(string) {
+        return firstName[addr];
+    }
+
+    function getFamilyName(address addr) public view returns(string) {
+        return familyName[addr];
+    }
+
+    function getDepartment(address addr) public view returns(string) {
+        return department[addr];
+    }
+
+    function getTitle(address addr) public view returns(string) {
+        return title[addr];
+    }
+
+    function getActivatedTime(address addr) public view returns(uint256) {
+        return activatedTime[addr];
+    }
+
+    // ACCESSORS FOR FRONTEND
+    function getUserInfo(address addr) public view returns(uint256) {
+        return activatedTime[addr];
     }
 
 
