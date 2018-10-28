@@ -1,5 +1,7 @@
-export const FETCH_STUFF = 'FETCH_STUFF';
-
-export const RECEIVE_STUFF = 'RECEIVE_STUFF';
-
+// NAVIGATION
 export const CHANGE_VIEW = 'CHANGE_VIEW';
+export const TOGGLE_LOADING = 'TOGGLE_LOADING';
+
+// USER
+export const GET_USER_INFO = 'GET_USER_INFO';
+export const CHANGE_USER_INFO = 'CHANGE_USER_INFO';

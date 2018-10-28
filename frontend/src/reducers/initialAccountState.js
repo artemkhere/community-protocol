@@ -1,4 +1,5 @@
 export default {
+    profileImage: null,
     firstName: null,
     familyName: null,
     department: null,

@@ -15,6 +15,7 @@ contract CommunityCoin is Ownable {
     mapping (address => bool) public activeStatus;
 
     // USER DATA
+	mapping (address => string) public profileImages;
 	mapping (address => string) public firstNames;
 	mapping (address => string) public familyNames;
     mapping (address => string) public departments;
@@ -102,6 +103,7 @@ contract CommunityCoin is Ownable {
 
     // ACCESSORS FOR FRONTEND
     function getUserInfo(address addr) public view returns(
+        string profileImage,
         string firstName,
         string familyName,
         string department,
@@ -112,6 +114,7 @@ contract CommunityCoin is Ownable {
         uint256 lastHollowHarvest,
         uint256 lastSolidHarvest
     ) {
+        profileImage = profileImages[addr];
         firstName = firstNames[addr];
         familyName = familyNames[addr];
         department = departments[addr];
@@ -126,11 +129,15 @@ contract CommunityCoin is Ownable {
 
     // SETTERS FOR FRONTEND
     function setUserInfo(
+        string profileImage,
         string firstName,
         string familyName,
         string department,
         string title
     ) public {
+        if (profileImages[msg.sender] != profileImage) {
+            profileImages[msg.sender] = profileImage;
+        }
         if (firstNames[msg.sender] != firstName) {
             firstNames[msg.sender] = firstName;
         }
