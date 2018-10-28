@@ -26,6 +26,10 @@ contract CommunityCoin is Ownable {
     mapping (address => bool) public userToAdmins;
     address public owner; // equivalent to Super Admin
 
+    // ADMIN RESOURCES
+    /* we need a list of all users */
+    /* a list of users waiting for activation */
+
     // TOKENS
     uint256 public tokenCount; // needs to have minimum 1
     uint256 public tokenValue;
@@ -126,6 +130,10 @@ contract CommunityCoin is Ownable {
         lastSolidHarvest = lastSolidHarvest[addr];
     }
 
+    // we need search by name, title and etc
+    function searchByName(string name) public view returns(address[]) {
+
+    }
 
     // SETTERS FOR FRONTEND
     function setUserInfo(
