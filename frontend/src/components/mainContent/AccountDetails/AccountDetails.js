@@ -4,6 +4,8 @@ import { bindActionCreators } from 'redux';
 import * as navigationActions from '../../../actions/navigationActions';
 import * as userActions from '../../../actions/userActions';
 import PropTypes from 'prop-types';
+import AccountInfo from "./AccountInfo";
+import AccountForm from "./AccountForm";
 import './AccountDetails.css';
 
 class AccountDetails extends Component {
@@ -14,141 +16,46 @@ class AccountDetails extends Component {
         };
     }
 
-    renderUserInfo = () => {
-        const {
-            profileImage,
-            firstName,
-            familyName,
-            department,
-            title,
-            activatedTime
-        } = this.props;
-
-        return (
-            <div className="user-info-container">
-                <div className="profile-img-container">
-                    <img
-                        className="profile-img"
-                        src={profileImage}
-                    />
-                </div>
-                <div className="section-container">
-                    <div className="section-name">
-                        first name
-                    </div>
-                    <div className="section-information">
-                        {firstName}
-                    </div>
-                </div>
-                <div className="section-container">
-                    <div className="section-name">
-                        family name
-                    </div>
-                    <div className="section-information">
-                        {familyName}
-                    </div>
-                </div>
-                <div className="section-container">
-                    <div className="section-name">
-                        department
-                    </div>
-                    <div className="section-information">
-                        {department}
-                    </div>
-                </div>
-                <div className="section-container">
-                    <div className="section-name">
-                        title
-                    </div>
-                    <div className="section-information">
-                        {title}
-                    </div>
-                </div>
-                <div className="section-container">
-                    <div className="section-name">
-                        active since
-                    </div>
-                    <div className="section-information">
-                        {activatedTime}
-                    </div>
-                </div>
-                <div className="actions-wrapper">
-                    <button>Edit</button>
-                </div>
-            </div>
-        );
-    }
-
-    renderUserForm = () => {
-        const {
-            profileImage,
-            firstName,
-            familyName,
-            department,
-            title,
-            activatedTime
-        } = this.props;
-
-        return (
-            <div className="user-info-container">
-                aiiiiiaiaiaiaiia
-                <div className="profile-img-container">
-                    <img
-                        className="profile-img"
-                        src={profileImage}
-                    />
-                </div>
-                <div className="section-container">
-                    <div className="section-name">
-                        first name
-                    </div>
-                    <div className="section-information">
-                        {firstName}
-                    </div>
-                </div>
-                <div className="section-container">
-                    <div className="section-name">
-                        family name
-                    </div>
-                    <div className="section-information">
-                        {familyName}
-                    </div>
-                </div>
-                <div className="section-container">
-                    <div className="section-name">
-                        department
-                    </div>
-                    <div className="section-information">
-                        {department}
-                    </div>
-                </div>
-                <div className="section-container">
-                    <div className="section-name">
-                        title
-                    </div>
-                    <div className="section-information">
-                        {title}
-                    </div>
-                </div>
-                <div className="section-container">
-                    <div className="section-name">
-                        active since
-                    </div>
-                    <div className="section-information">
-                        {activatedTime}
-                    </div>
-                </div>
-                <div className="actions-wrapper">
-                    <button>Cancel</button>
-                    <button>Save</button>
-                </div>
-            </div>
-        );
-    }
-
     render() {
-        const { editing } = this.state;
-        return editing ? this.renderUserForm() : this.renderUserInfo();
+        const {
+            editing
+        } = this.state;
+
+        const {
+            profileImage,
+            firstName,
+            familyName,
+            department,
+            title,
+            activatedTime
+        } = this.props;
+
+        let toRender;
+
+        if (editing) {
+            toRender = (
+                <AccountForm
+                    profileImage={profileImage}
+                    firstName={firstName}
+                    familyName={familyName}
+                    department={department}
+                    title={title}
+                />
+            );
+        } else {
+            toRender = (
+                <AccountInfo
+                    profileImage={profileImage}
+                    firstName={firstName}
+                    familyName={familyName}
+                    department={department}
+                    title={title}
+                    activatedTime={activatedTime}
+                />
+            );
+        }
+
+        return toRender;
     }
 }
 
