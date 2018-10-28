@@ -15,11 +15,11 @@ contract CommunityCoin is Ownable {
     mapping (address => bool) public activeStatus;
 
     // USER DATA
-	mapping (address => string) public firstName;
-	mapping (address => string) public familyName;
-    mapping (address => string) public department;
-    mapping (address => string) public title;
-    mapping (address => uint256) public activatedTime;
+	mapping (address => string) public firstNames;
+	mapping (address => string) public familyNames;
+    mapping (address => string) public departments;
+    mapping (address => string) public titles;
+    mapping (address => uint256) public activatedTimes;
 
     // USER RIGHTS
     mapping (address => bool) public userToAdmins;
@@ -81,28 +81,68 @@ contract CommunityCoin is Ownable {
     }
 
     function getFirstName(address addr) public view returns(string) {
-        return firstName[addr];
+        return firstNames[addr];
     }
 
     function getFamilyName(address addr) public view returns(string) {
-        return familyName[addr];
+        return familyNames[addr];
     }
 
     function getDepartment(address addr) public view returns(string) {
-        return department[addr];
+        return departments[addr];
     }
 
     function getTitle(address addr) public view returns(string) {
-        return title[addr];
+        return titles[addr];
     }
 
     function getActivatedTime(address addr) public view returns(uint256) {
-        return activatedTime[addr];
+        return activatedTimes[addr];
     }
 
     // ACCESSORS FOR FRONTEND
-    function getUserInfo(address addr) public view returns(uint256) {
-        return activatedTime[addr];
+    function getUserInfo(address addr) public view returns(
+        string firstName,
+        string familyName,
+        string department,
+        string title,
+        uint256 activatedTime,
+        uint256 hollowBalance,
+        uint256 currentSolidBalance,
+        uint256 lastHollowHarvest,
+        uint256 lastSolidHarvest
+    ) {
+        firstName = firstNames[addr];
+        familyName = familyNames[addr];
+        department = departments[addr];
+        title = titles[addr];
+        activatedTime = activatedTimes[addr];
+        hollowBalance = hollowBalances[addr];
+        currentSolidBalance = currentSolidBalances[addr];
+        lastHollowHarvest = lastHollowHarvests[addr];
+        lastSolidHarvest = lastSolidHarvest[addr];
+    }
+
+
+    // SETTERS FOR FRONTEND
+    function setUserInfo(
+        string firstName,
+        string familyName,
+        string department,
+        string title
+    ) public {
+        if (firstNames[msg.sender] != firstName) {
+            firstNames[msg.sender] = firstName;
+        }
+        if (familyNames[msg.sender] != familyName) {
+            familyNames[msg.sender] = familyName;
+        }
+        if (depatments[msg.sender] != department) {
+            depatments[msg.sender] = department;
+        }
+        if (titles[msg.sender] != title) {
+            titles[msg.sender] = title;
+        }
     }
 
 
