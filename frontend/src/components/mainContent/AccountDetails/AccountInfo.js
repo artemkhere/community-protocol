@@ -1,7 +1,27 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as userActions from '../../../actions/userActions';
 
 class AccountInfo extends Component {
+    switchEditingOn = () => {
+        this.props.switchEditingMode(true);
+    }
+
+    componentDidMount = async () => {
+        const {
+            userActions
+        } = this.props;
+
+        try {
+            userActions.getUserInfo(11);
+        } catch (error) {
+            alert(`Failed to get user details.`);
+            console.log(error);
+        }
+    }
+
     render() {
         const {
             profileImage,
@@ -61,7 +81,11 @@ class AccountInfo extends Component {
                     </div>
                 </div>
                 <div className="actions-wrapper">
-                    <button>Edit</button>
+                    <button
+                        onClick={this.switchEditingOn}
+                    >
+                        Edit
+                    </button>
                 </div>
             </div>
         );
@@ -69,12 +93,34 @@ class AccountInfo extends Component {
 }
 
 AccountInfo.propTypes = {
+    userActions: PropTypes.object,
     profileImage: PropTypes.string,
     firstName: PropTypes.string,
     familyName: PropTypes.string,
     department: PropTypes.string,
     title: PropTypes.string,
-    activatedTime: PropTypes.number
+    activatedTime: PropTypes.number,
+    switchEditingMode: PropTypes.func
 };
 
-export default AccountInfo;
+function mapStateToProps(state) {
+    return {
+        profileImage: state.user.profileImage,
+        firstName: state.user.firstName,
+        familyName: state.user.familyName,
+        department: state.user.department,
+        title: state.user.title,
+        activatedTime: state.user.activatedTime
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        userActions: bindActionCreators(userActions, dispatch)
+    };
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AccountInfo);
