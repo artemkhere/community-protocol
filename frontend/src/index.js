@@ -5,7 +5,6 @@ import { Provider } from 'react-redux';
 import configureStore from './store/configureStore';
 import rootReducer from './reducers/rootReducer';
 import App from './App';
-import './index.css';
 
 const store = configureStore(rootReducer);
 

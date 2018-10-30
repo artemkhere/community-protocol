@@ -19,11 +19,14 @@ class TopNav extends Component {
             <div className="top-nav">
                 <div className="profile-info-container">
                     <div className="current-community">Lighthouse Labs</div>
-                    <div
-                        className="profile-access"
-                        onClick={this.handleAccountClick}
-                    >
-                        icon
+                    <div className="account-navigation-container">
+                        {view === 'Account Details' && <div className="highlight" />}
+                        <i
+                            className="profile-access material-icons"
+                            onClick={this.handleAccountClick}
+                        >
+                            account_circle
+                        </i>
                     </div>
                 </div>
                 <div className="header-container">
