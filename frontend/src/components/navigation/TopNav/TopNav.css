@@ -40,8 +40,7 @@
 }
 
 .account-navigation-container .profile-access {
-    width: 24px;
-    height: 24px;
+    font-size: 24px;
 }
 
 .header-container {

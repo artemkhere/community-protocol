@@ -12,13 +12,17 @@ class BottomNav extends Component {
     render() {
         return (
             <div className="bottom-nav">
-                <div className="menu-item-container">
-                    <div className="menu-icon">icon</div>
-                    <div className="menu-title">balance</div>
+                <div className="menu-section">
+                    <div className="menu-item-container">
+                        <div className="menu-icon material-icons">account_balance_wallet</div>
+                        <div className="menu-title">balance</div>
+                    </div>
                 </div>
-                <div className="menu-item-container">
-                    <div className="menu-icon">icon</div>
-                    <div className="menu-title">search</div>
+                <div className="menu-section">
+                    <div className="menu-item-container">
+                        <div className="menu-icon material-icons">search</div>
+                        <div className="menu-title">search</div>
+                    </div>
                 </div>
             </div>
         );
