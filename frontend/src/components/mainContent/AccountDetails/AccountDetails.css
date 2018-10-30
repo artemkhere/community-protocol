@@ -1,9 +1,10 @@
 .user-info-container {
-    max-height: calc(100% - 128px);
-    padding: 112px 56px 32px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    height: calc(100% - 128px);
+    box-sizing: border-box;
+    padding: 32px 56px;
+    position: absolute;
+    top: 80px;
+    left: 0px;
     background-color: #FDFDFD;
     overflow-y: auto;
     overflow-x: hidden;
@@ -33,6 +34,15 @@
     font-weight: 300;
 }
 
+.section-container .section-input {
+    margin-bottom: 16px;
+}
+
 .user-info-container .actions-wrapper {
     margin-top: 24px;
+}
+
+.user-info-container .actions-wrapper.multiple {
+    display: flex;
+    justify-content: space-between;
 }

@@ -116,7 +116,7 @@ class AccountForm extends Component {
                         onChange={this.userInfoHandler('title')}
                     />
                 </div>
-                <div className="actions-wrapper">
+                <div className="actions-wrapper multiple">
                     <button
                         onClick={this.switchEditingOff}
                     >
