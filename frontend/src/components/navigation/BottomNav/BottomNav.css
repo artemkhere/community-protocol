@@ -48,3 +48,18 @@
     font-weight: 600;
     text-transform: uppercase;
 }
+
+.bottom-nav .menu-section .menu-title .highlight {
+    width: 6px;
+    height: 6px;
+    margin-right: 4px;
+    position: relative;
+    top: -1px;
+    display: inline-block;
+    background-color: white;
+    border-radius: 3px;
+}
+
+.menu-section .menu-item-container .menu-title .title {
+    display: inline-block;
+}

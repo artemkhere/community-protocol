@@ -31,6 +31,10 @@ class BottomNav extends Component {
     }
 
     render() {
+        const {
+            view
+        } = this.props;
+
         return (
             <div className={'bottom-nav' + this.getColourClass()}>
                 <div className="menu-section">
@@ -39,7 +43,10 @@ class BottomNav extends Component {
                         onClick={this.handleMenuClick('Balance')}
                     >
                         <div className="menu-icon material-icons">account_balance_wallet</div>
-                        <div className="menu-title">balance</div>
+                        <div className="menu-title">
+                            {view ==="Balance" && <div className="highlight" />}
+                            <div className="title">balance</div>
+                        </div>
                     </div>
                 </div>
                 <div className="menu-section">
@@ -48,7 +55,10 @@ class BottomNav extends Component {
                         onClick={this.handleMenuClick('Search')}
                     >
                         <div className="menu-icon material-icons">search</div>
-                        <div className="menu-title">search</div>
+                        <div className="menu-title">
+                            {view ==="Search" && <div className="highlight" />}
+                            <div className="title">search</div>
+                        </div>
                     </div>
                 </div>
             </div>
