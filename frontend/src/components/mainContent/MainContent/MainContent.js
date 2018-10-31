@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import AccountDetails from "../AccountDetails/AccountDetails";
+import Balance from "../Balance/Balance";
 import './MainContent.css';
 
 class MainContent extends Component {
@@ -11,8 +12,8 @@ class MainContent extends Component {
         } = this.props;
 
         switch (view) {
-            case 'Home':
-                return <div>Balance</div>;
+            case 'Balance':
+                return <Balance />;
             case 'Account Details':
                 return <AccountDetails />
             default:

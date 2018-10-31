@@ -1,4 +1,4 @@
 export default {
-    view: 'Home',
+    view: 'Balance',
     loading: false
 };
