@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as navigationActions from '../../../actions/navigationActions';
+import PropTypes from 'prop-types';
 import './BottomNav.css';
 
 class BottomNav extends Component {
@@ -9,17 +13,40 @@ class BottomNav extends Component {
         };
     }
 
+    handleMenuClick = (newState) => {
+        return () => {
+            this.props.navigationActions.changeView(newState);
+        }
+    }
+
+    getColourClass = () => {
+        switch (this.props.view) {
+            case 'Balance':
+                return ' blue';
+            case 'Search':
+                return ' purple';
+            default:
+                return ' grey';
+        }
+    }
+
     render() {
         return (
-            <div className="bottom-nav">
+            <div className={'bottom-nav' + this.getColourClass()}>
                 <div className="menu-section">
-                    <div className="menu-item-container">
+                    <div
+                        className="menu-item-container"
+                        onClick={this.handleMenuClick('Balance')}
+                    >
                         <div className="menu-icon material-icons">account_balance_wallet</div>
                         <div className="menu-title">balance</div>
                     </div>
                 </div>
                 <div className="menu-section">
-                    <div className="menu-item-container">
+                    <div
+                        className="menu-item-container"
+                        onClick={this.handleMenuClick('Search')}
+                    >
                         <div className="menu-icon material-icons">search</div>
                         <div className="menu-title">search</div>
                     </div>
@@ -29,4 +56,24 @@ class BottomNav extends Component {
     }
 }
 
-export default BottomNav;
+BottomNav.propTypes = {
+    navigationActions: PropTypes.object,
+    view: PropTypes.string
+};
+
+function mapStateToProps(state) {
+    return {
+        view: state.navigation.view
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        navigationActions: bindActionCreators(navigationActions, dispatch)
+    };
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(BottomNav);

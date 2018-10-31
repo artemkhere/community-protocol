@@ -14,6 +14,8 @@ class TopNav extends Component {
         switch (this.props.view) {
             case 'Balance':
                 return ' blue';
+            case 'Search':
+                return ' purple';
             default:
                 return ' grey';
         }

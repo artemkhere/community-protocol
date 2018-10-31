@@ -12,6 +12,18 @@
     box-shadow: 0 10px 20px rgba(0,0,0,0.03), 0 6px 6px rgba(0,0,0,0.05);
 }
 
+.bottom-nav.blue {
+    color: white;
+    background-color: #00ADEE;
+    box-shadow: 0 10px 20px rgba(0,173,238,0.15), 0 6px 6px rgba(0,173,238,0.15);
+}
+
+.bottom-nav.purple {
+    color: white;
+    background-color: #927AC9;
+    box-shadow: 0 10px 20px rgba(146,122,201,0.15), 0 6px 6px rgba(146,122,201,0.15);
+}
+
 .bottom-nav .menu-section {
     flex-grow: 1;
     display: flex;
