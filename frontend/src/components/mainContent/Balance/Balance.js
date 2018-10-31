@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as navigationActions from '../../../actions/navigationActions';
 import PropTypes from 'prop-types';
-import AccountInfo from "./AccountInfo";
-import AccountForm from "./AccountForm";
 import './Balance.css';
 
 class Balance extends Component {
@@ -20,27 +18,54 @@ class Balance extends Component {
     }
 
     render() {
-        const {
-            editing
-        } = this.state;
-
-        let toRender;
-
-        if (editing) {
-            toRender = (
-                <AccountForm
-                    switchEditingMode={this.switchEditingMode}
-                />
-            );
-        } else {
-            toRender = (
-                <AccountInfo
-                    switchEditingMode={this.switchEditingMode}
-                />
-            );
-        }
-
-        return toRender;
+        return (
+            <div className="balance-container">
+                <div className="hollow-coins-container">
+                    <div className="balance-container">
+                        <div className="hollow-title-container">
+                            <div className="hollow-icon">icon</div>
+                            <h3>Hollow Coins</h3>
+                        </div>
+                        <div className="hollow-container blue">
+                            <div className="balance-information-container">
+                                <div className="state-name">
+                                    Current Balance
+                                </div>
+                                <div className="state-balance">
+                                    143
+                                </div>
+                            </div>
+                            <div className="balance-action-container">
+                                <button>
+                                    harvest
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="balance-container">
+                        <div className="hollow-title-container">
+                            <div className="hollow-icon">icon</div>
+                            <h3>Hollow Coins</h3>
+                        </div>
+                        <div className="hollow-container blue">
+                            <div className="balance-information-container">
+                                <div className="state-name">
+                                    Current Balance
+                                </div>
+                                <div className="state-balance">
+                                    143
+                                </div>
+                            </div>
+                            <div className="balance-action-container">
+                                <button>
+                                    harvest
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
     }
 }
 
