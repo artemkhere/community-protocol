@@ -12,6 +12,12 @@
     box-shadow: 0 10px 20px rgba(0,0,0,0.03), 0 6px 6px rgba(0,0,0,0.05);
 }
 
+.top-nav.blue {
+    color: white;
+    background-color: #00ADEE;
+    box-shadow: 0 10px 20px rgba(0,173,238,0.15), 0 6px 6px rgba(0,173,238,0.15);
+}
+
 .top-nav .profile-info-container {
     margin-bottom: 4px;
     display: flex;

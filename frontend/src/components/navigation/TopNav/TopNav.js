@@ -10,13 +10,35 @@ class TopNav extends Component {
         this.props.navigationActions.changeView('Account Details');
     }
 
+    getColourClass = () => {
+        switch (this.props.view) {
+            case 'Balance':
+                return ' blue';
+            default:
+                return ' grey';
+        }
+    }
+
+    renderRefreshIcon = () => {
+        let toRender;
+        if (this.props.view === 'Balance') {
+            toRender = (
+                <div className="material-icons">
+                    cached
+                </div>
+            );
+        }
+
+        return toRender;
+    }
+
     render() {
         const {
             view
         } = this.props;
 
         return (
-            <div className="top-nav">
+            <div className={'top-nav' + this.getColourClass()}>
                 <div className="profile-info-container">
                     <div className="current-community">Lighthouse Labs</div>
                     <div className="account-navigation-container">
@@ -31,6 +53,7 @@ class TopNav extends Component {
                 </div>
                 <div className="header-container">
                     <div className="header">{view}</div>
+                    {this.renderRefreshIcon()}
                 </div>
             </div>
         );

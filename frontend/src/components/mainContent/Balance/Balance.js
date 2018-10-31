@@ -13,10 +13,6 @@ class Balance extends Component {
         };
     }
 
-    switchEditingMode = (editing) => {
-        this.setState({ editing });
-    }
-
     render() {
         return (
             <div className="balance-container">

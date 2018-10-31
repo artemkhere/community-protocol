@@ -1,4 +1,5 @@
 .user-info-container {
+    width: 100%;
     height: calc(100% - 128px);
     box-sizing: border-box;
     padding: 32px 56px;
