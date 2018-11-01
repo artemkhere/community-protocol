@@ -25,7 +25,7 @@ class TopNav extends Component {
         let toRender;
         if (this.props.view === 'Balance') {
             toRender = (
-                <div className="material-icons">
+                <div className="refresh-icon material-icons">
                     cached
                 </div>
             );
