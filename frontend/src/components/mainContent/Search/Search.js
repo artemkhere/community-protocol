@@ -9,42 +9,55 @@ class Search extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            editing: false,
+            name: '',
+            department: '',
+            title: '',
         };
     }
 
-    renderHollowCoins = () => {
+    searchInfoHandler = (field) => {
+        switch (field) {
+            case 'name':
+                return (e) => { this.setState({ name: e.target.value }); }
+            case 'department':
+                return (e) => { this.setState({ department: e.target.value }); }
+            case 'title':
+                return (e) => { this.setState({ title: e.target.value }); }
+            default:
+                return;
+        }
+    }
+
+    renderForm = () => {
+        const {
+            name,
+            department,
+            title,
+        } = this.state;
+
         return (
-            <div className="balance-container">
-                <div className="balance-title-container">
-                    <div className="hollow-icon" />
-                    <h2 className="coin-definition">Hollow Coins</h2>
-                </div>
-                <div className="hollow-container blue">
-                    <div className="balance-information-container">
-                        <div className="state-name">
-                            Current Balance
-                        </div>
-                    </div>
-                    <div className="state-and-action-container">
-                        <div className="state-balance">
-                            11
-                        </div>
-                    </div>
-                    <div className="balance-information-container">
-                        <div className="state-name">
-                            Available For Harvest
-                        </div>
-                    </div>
-                    <div className="state-and-action-container">
-                        <div className="state-balance">
-                            143
-                        </div>
-                        <button className="solid blue">
-                            harvest
-                        </button>
-                    </div>
-                </div>
+            <div className="search-form-container">
+                <input
+                    type="text"
+                    className="section-input"
+                    placeholder="Name"
+                    value={name}
+                    onChange={this.searchInfoHandler('name')}
+                />
+                <input
+                    type="text"
+                    className="section-input"
+                    placeholder="Department"
+                    value={department}
+                    onChange={this.searchInfoHandler('department')}
+                />
+                <input
+                    type="text"
+                    className="section-input"
+                    placeholder="Title"
+                    value={title}
+                    onChange={this.searchInfoHandler('title')}
+                />
             </div>
         );
     }
@@ -93,8 +106,17 @@ class Search extends Component {
 
     render() {
         return (
-            <div className="balance-main-container">
-                {this.renderHollowCoins()}
+            <div className="search-main-container">
+                {this.renderForm()}
+                <div
+                    className="action-container"
+                >
+                    <button
+                        className="solid purple large"
+                    >
+                        search
+                    </button>
+                </div>
                 {this.renderSolidCoins()}
             </div>
         );

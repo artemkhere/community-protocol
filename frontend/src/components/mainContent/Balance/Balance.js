@@ -65,9 +65,7 @@ class Balance extends Component {
                     <div className="state-and-action-container">
                         <div className="state-balance">
                             76
-                            <span className="translation">
-                            ~$14.8
-                            </span>
+                            <span className="translation">~$14.8</span>
                         </div>
                         <button className="solid white">
                             redeem

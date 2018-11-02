@@ -72,6 +72,21 @@ button.solid.white {
     box-shadow: 0 3px 5px rgba(255,255,255,0.2), 0 6px 6px rgba(255,255,255,0.2);
 }
 
+button.solid.purple {
+    color: white;
+    background-color: #927AC9;
+    box-shadow: 0 10px 20px rgba(146,122,201,0.15), 0 6px 6px rgba(146,122,201,0.15);
+}
+
+button.large {
+    min-width: 72px;
+    height: 48px;
+    padding: 0 16px;
+    font-size: 18px;
+    line-height: 48px;
+    border-radius: 24px;
+}
+
 input {
     width: 100%;
     box-sizing: border-box;
@@ -87,6 +102,7 @@ input {
     line-height: 28px;
     font-family: 'Open Sans', sans-serif;
     font-weight: 300;
+    border-radius: 6px;
 }
 
 input:focus {
