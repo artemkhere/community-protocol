@@ -13,53 +13,89 @@ class Balance extends Component {
         };
     }
 
-    render() {
+    renderHollowCoins = () => {
         return (
             <div className="balance-container">
-                <div className="hollow-coins-container">
-                    <div className="balance-container">
-                        <div className="hollow-title-container">
-                            <div className="hollow-icon">icon</div>
-                            <h3>Hollow Coins</h3>
-                        </div>
-                        <div className="hollow-container blue">
-                            <div className="balance-information-container">
-                                <div className="state-name">
-                                    Current Balance
-                                </div>
-                                <div className="state-balance">
-                                    143
-                                </div>
-                            </div>
-                            <div className="balance-action-container">
-                                <button>
-                                    harvest
-                                </button>
-                            </div>
+                <div className="balance-title-container">
+                    <div className="hollow-icon" />
+                    <h2 className="coin-definition">Hollow Coins</h2>
+                </div>
+                <div className="hollow-container blue">
+                    <div className="balance-information-container">
+                        <div className="state-name">
+                            Current Balance
                         </div>
                     </div>
-                    <div className="balance-container">
-                        <div className="hollow-title-container">
-                            <div className="hollow-icon">icon</div>
-                            <h3>Hollow Coins</h3>
+                    <div className="state-and-action-container">
+                        <div className="state-balance">
+                            11
                         </div>
-                        <div className="hollow-container blue">
-                            <div className="balance-information-container">
-                                <div className="state-name">
-                                    Current Balance
-                                </div>
-                                <div className="state-balance">
-                                    143
-                                </div>
-                            </div>
-                            <div className="balance-action-container">
-                                <button>
-                                    harvest
-                                </button>
-                            </div>
+                    </div>
+                    <div className="balance-information-container">
+                        <div className="state-name">
+                            Available For Harvest
                         </div>
+                    </div>
+                    <div className="state-and-action-container">
+                        <div className="state-balance">
+                            143
+                        </div>
+                        <button className="solid blue">
+                            harvest
+                        </button>
                     </div>
                 </div>
+            </div>
+        );
+    }
+
+    renderSolidCoins = () => {
+        return (
+            <div className="balance-container">
+                <div className="balance-title-container">
+                    <div className="solid-icon" />
+                    <h2 className="coin-definition">Solid Coins</h2>
+                </div>
+                <div className="solid-container blue">
+                    <div className="balance-information-container">
+                        <div className="state-name">
+                            Current Balance
+                        </div>
+                    </div>
+                    <div className="state-and-action-container">
+                        <div className="state-balance">
+                            76
+                            <span className="translation">
+                            ~$14.8
+                            </span>
+                        </div>
+                        <button className="solid white">
+                            redeem
+                        </button>
+                    </div>
+                    <div className="balance-information-container">
+                        <div className="state-name">
+                            Available For Harvest
+                        </div>
+                    </div>
+                    <div className="state-and-action-container">
+                        <div className="state-balance">
+                            5
+                        </div>
+                        <button className="solid white">
+                            harvest
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    render() {
+        return (
+            <div className="balance-main-container">
+                {this.renderHollowCoins()}
+                {this.renderSolidCoins()}
             </div>
         );
     }

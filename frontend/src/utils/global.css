@@ -61,6 +61,17 @@ button {
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
 
+button.solid.blue {
+    color: white;
+    background-color: #00ADEE;
+    box-shadow: 0 10px 20px rgba(0,173,238,0.15), 0 6px 6px rgba(0,173,238,0.15);
+}
+
+button.solid.white {
+    background-color: white;
+    box-shadow: 0 3px 5px rgba(255,255,255,0.2), 0 6px 6px rgba(255,255,255,0.2);
+}
+
 input {
     width: 100%;
     box-sizing: border-box;
