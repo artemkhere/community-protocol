@@ -62,43 +62,31 @@ class Search extends Component {
         );
     }
 
-    renderSolidCoins = () => {
+    renderUser = () => {
         return (
-            <div className="balance-container">
-                <div className="balance-title-container">
-                    <div className="solid-icon" />
-                    <h2 className="coin-definition">Solid Coins</h2>
+            <div className="person-container purple">
+                <div className="balance-information-container">
+                    <div className="state-name">
+                        Current Balance
+                    </div>
                 </div>
-                <div className="solid-container blue">
-                    <div className="balance-information-container">
-                        <div className="state-name">
-                            Current Balance
-                        </div>
+                <div className="state-and-action-container">
+                    <div className="state-balance">
+                        11
                     </div>
-                    <div className="state-and-action-container">
-                        <div className="state-balance">
-                            76
-                            <span className="translation">
-                            ~$14.8
-                            </span>
-                        </div>
-                        <button className="solid white">
-                            redeem
-                        </button>
+                </div>
+                <div className="balance-information-container">
+                    <div className="state-name">
+                        Available For Harvest
                     </div>
-                    <div className="balance-information-container">
-                        <div className="state-name">
-                            Available For Harvest
-                        </div>
+                </div>
+                <div className="state-and-action-container">
+                    <div className="state-balance">
+                        143
                     </div>
-                    <div className="state-and-action-container">
-                        <div className="state-balance">
-                            5
-                        </div>
-                        <button className="solid white">
-                            harvest
-                        </button>
-                    </div>
+                    <button className="solid blue">
+                        harvest
+                    </button>
                 </div>
             </div>
         );
@@ -118,7 +106,7 @@ class Search extends Component {
                     </button>
                 </div>
                 <h2 className="results-title">Results</h2>
-                {this.renderSolidCoins()}
+                {this.renderUser()}
             </div>
         );
     }

@@ -72,6 +72,12 @@ button.solid.white {
     box-shadow: 0 3px 5px rgba(255,255,255,0.2), 0 6px 6px rgba(255,255,255,0.2);
 }
 
+button.solid.white.blue {
+    background-color: white;
+    color: #007DAC;
+    box-shadow: 0 3px 5px rgba(255,255,255,0.2), 0 6px 6px rgba(255,255,255,0.2);
+}
+
 button.solid.purple {
     color: white;
     background-color: #927AC9;

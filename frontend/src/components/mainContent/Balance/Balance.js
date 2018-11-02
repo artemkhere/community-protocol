@@ -67,7 +67,7 @@ class Balance extends Component {
                             76
                             <span className="translation">~$14.8</span>
                         </div>
-                        <button className="solid white">
+                        <button className="solid white blue">
                             redeem
                         </button>
                     </div>
@@ -80,7 +80,7 @@ class Balance extends Component {
                         <div className="state-balance">
                             5
                         </div>
-                        <button className="solid white">
+                        <button className="solid white blue">
                             harvest
                         </button>
                     </div>

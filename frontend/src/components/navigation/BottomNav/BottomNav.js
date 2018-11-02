@@ -43,11 +43,9 @@ class BottomNav extends Component {
                         :
                             "menu-section"
                     }
+                    onClick={this.handleMenuClick('Balance')}
                 >
-                    <div
-                        className="menu-item-container"
-                        onClick={this.handleMenuClick('Balance')}
-                    >
+                    <div className="menu-item-container">
                         <div className="menu-icon material-icons">account_balance_wallet</div>
                         <div className="menu-title">
                             {view ==="Balance" && <div className="highlight" />}
@@ -61,11 +59,9 @@ class BottomNav extends Component {
                         :
                             "menu-section"
                     }
+                    onClick={this.handleMenuClick('Search')}
                 >
-                    <div
-                        className="menu-item-container"
-                        onClick={this.handleMenuClick('Search')}
-                    >
+                    <div className="menu-item-container">
                         <div className="menu-icon material-icons">search</div>
                         <div className="menu-title">
                             {view ==="Search" && <div className="highlight" />}
