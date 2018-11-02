@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import AccountDetails from "../AccountDetails/AccountDetails";
 import Balance from "../Balance/Balance";
+import Search from "../Search/Search";
 import './MainContent.css';
 
 class MainContent extends Component {
@@ -16,6 +17,8 @@ class MainContent extends Component {
                 return <Balance />;
             case 'Account Details':
                 return <AccountDetails />
+            case 'Search':
+                return <Search />
             default:
                 return <div>Something is broken</div>;
         }
