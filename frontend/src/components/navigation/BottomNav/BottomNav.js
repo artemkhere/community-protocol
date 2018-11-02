@@ -36,8 +36,14 @@ class BottomNav extends Component {
         } = this.props;
 
         return (
-            <div className={'bottom-nav' + this.getColourClass()}>
-                <div className="menu-section">
+            <div className="bottom-nav">
+                <div
+                    className={view === "Balance" ?
+                            "menu-section blue"
+                        :
+                            "menu-section"
+                    }
+                >
                     <div
                         className="menu-item-container"
                         onClick={this.handleMenuClick('Balance')}
@@ -49,7 +55,13 @@ class BottomNav extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="menu-section">
+                <div
+                    className={view === "Search" ?
+                            "menu-section purple"
+                        :
+                            "menu-section"
+                    }
+                >
                     <div
                         className="menu-item-container"
                         onClick={this.handleMenuClick('Search')}

@@ -117,6 +117,7 @@ class Search extends Component {
                         search
                     </button>
                 </div>
+                <h2 className="results-title">Results</h2>
                 {this.renderSolidCoins()}
             </div>
         );
