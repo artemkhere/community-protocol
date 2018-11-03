@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as navigationActions from '../../../actions/navigationActions';
 import PropTypes from 'prop-types';
+import * as navigationActions from '../../../actions/navigationActions';
+import UserBlock from "./UserBlock";
 import './Search.css';
 
 class Search extends Component {
@@ -62,36 +63,6 @@ class Search extends Component {
         );
     }
 
-    renderUser = () => {
-        return (
-            <div className="person-container purple">
-                <div className="balance-information-container">
-                    <div className="state-name">
-                        Current Balance
-                    </div>
-                </div>
-                <div className="state-and-action-container">
-                    <div className="state-balance">
-                        11
-                    </div>
-                </div>
-                <div className="balance-information-container">
-                    <div className="state-name">
-                        Available For Harvest
-                    </div>
-                </div>
-                <div className="state-and-action-container">
-                    <div className="state-balance">
-                        143
-                    </div>
-                    <button className="solid blue">
-                        harvest
-                    </button>
-                </div>
-            </div>
-        );
-    }
-
     render() {
         return (
             <div className="search-main-container">
@@ -106,7 +77,7 @@ class Search extends Component {
                     </button>
                 </div>
                 <h2 className="results-title">Results</h2>
-                {this.renderUser()}
+                <UserBlock />
             </div>
         );
     }

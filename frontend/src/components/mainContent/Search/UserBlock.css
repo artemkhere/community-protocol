@@ -1,0 +1,60 @@
+.user-container {
+    padding: 20px 16px 4px;
+    color: #4A4A4A;
+    border-radius: 8px;
+    border: 2px solid #927AC9;
+    box-shadow: 0 10px 20px rgba(146,122,201,0.15), 0 6px 6px rgba(146,122,201,0.15);
+}
+
+.user-container .information-container {
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+}
+
+.user-container .information-container .user-image {
+    width: 96px;
+    height: 96px;
+    margin-right: 16px;
+    display: inline-block;
+    text-align: center;
+    color: white;
+    background-color: #927AC9;
+    border-radius: 4px;
+}
+
+.information-container .user-image .no-image {
+    font-size: 56px;
+    line-height: 96px;
+}
+
+.information-container .user-information {
+    display: inline-block;
+}
+
+.information-container .user-information .user-name {
+    margin-bottom: 4px;
+    font-size: 20px;
+    line-height: 28px;
+    color: #6D5B98;
+}
+
+.information-container .user-information .user-department {
+    margin-bottom: 4px;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 300;
+}
+
+.information-container .user-information .user-title {
+    font-size: 14px;
+    line-height: 20px;
+    color: #AAAAAA;
+    font-weight: 300;
+}
+
+.user-container .actions-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
