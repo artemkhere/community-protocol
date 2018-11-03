@@ -30,13 +30,29 @@ class UserBlock extends Component {
     renderSendMenu = () => {
         return (
             <div className="send-menu">
-                <input
-                    type="number"
-                    className="section-input"
-                    placeholder={this.state.sendValue}
-                    value={this.state.sendValue}
-                    onChange={this.changeSendValue}
-                />
+                <div className="information-section">
+                    <input
+                        type="number"
+                        className="coco-input"
+                        placeholder={this.state.sendValue}
+                        value={this.state.sendValue}
+                        onChange={this.changeSendValue}
+                    />
+                </div>
+                <div className="action-section">
+                    <button
+                        className="solid"
+                        onClick={this.toggleSendMenu}
+                    >
+                        cancel
+                    </button>
+                    <button
+                        className="solid purple"
+                        onClick={this.toggleSendMenu}
+                    >
+                        send coco
+                    </button>
+                </div>
             </div>
         );
     }
@@ -46,7 +62,6 @@ class UserBlock extends Component {
     }
 
     toggleSendMenu = () => {
-        console.log(this.state.sendMenuOpen)
         this.setState({ sendMenuOpen: !this.state.sendMenuOpen });
     }
 

@@ -1,5 +1,5 @@
 .user-container {
-    padding: 20px 16px 4px;
+    padding: 20px 0 4px;
     color: #4A4A4A;
     border-radius: 8px;
     border: 2px solid #927AC9;
@@ -8,6 +8,7 @@
 
 .user-container .information-container {
     margin-bottom: 24px;
+    padding: 0 16px;
     display: flex;
     align-items: center;
 }
@@ -54,8 +55,31 @@
 }
 
 .user-container .actions-container {
+    padding: 0 16px;
     margin-bottom: 24px;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.user-container .send-menu {
+    padding: 16px 16px 0;
+    margin-bottom: 24px;
+    border-top: 2px solid #927AC9;
+}
+
+.user-container .send-menu .information-section {
+    width: 100%;
+    margin: 0 0 16px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.send-menu .information-section .coco-input {
+    max-width: 144px;
+}
+
+.user-container .send-menu .action-section {
+    display: flex;
+    justify-content: space-between;
 }
