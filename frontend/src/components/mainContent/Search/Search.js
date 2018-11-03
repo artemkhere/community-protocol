@@ -79,6 +79,18 @@ class Search extends Component {
                 <h2 className="results-title">Results</h2>
                 <UserBlock
                     colorTheme="purple"
+                    userType="owner"
+                    context="Search"
+                />
+                <UserBlock
+                    colorTheme="purple"
+                    userType="admin"
+                    context="Search"
+                />
+                <UserBlock
+                    colorTheme="purple"
+                    userType="user"
+                    context="Search"
                 />
             </div>
         );

@@ -15,18 +15,69 @@ class UserBlock extends Component {
     }
 
     renderActions = () => {
-        const colorTheme = this.props.colorTheme;
+        const {
+            colorTheme,
+            userType,
+            context
+        } = this.props;
 
-        return (
-            <div className="actions-container">
-                <button
-                    className={`solid ${colorTheme}`}
-                    onClick={this.toggleSendMenu}
-                >
-                    send coco
-                </button>
-            </div>
+        const sendButton = (
+            <button
+                className={`solid ${colorTheme}`}
+                onClick={this.toggleSendMenu}
+            >
+                send coco
+            </button>
         );
+
+        const deactivateButton = (
+            <button
+                className={`solid ${colorTheme}`}
+                // onClick={this.toggleSendMenu}
+            >
+                deactivate
+            </button>
+        );
+
+        const adminButton = (
+            <button
+                className={`solid ${colorTheme}`}
+                // onClick={this.toggleSendMenu}
+            >
+                make admin
+            </button>
+        );
+
+        const activateButton = (
+            <button
+                className={`solid ${colorTheme}`}
+                // onClick={this.toggleSendMenu}
+            >
+                activate
+            </button>
+        );
+
+        let toRender;
+
+        if (context === 'Search') {
+            toRender = (
+                <div className="actions-container">
+                    {sendButton}
+                    {(userType === 'admin' || userType === 'owner') && deactivateButton}
+                    {(userType === 'owner') && adminButton}
+                </div>
+            );
+        }
+
+        if (context === 'Activation Requests') {
+            toRender = (
+                <div className="actions-container">
+                    {activateButton}
+                </div>
+            );
+        }
+
+        return toRender;
     }
 
     renderSendMenu = () => {
@@ -61,6 +112,15 @@ class UserBlock extends Component {
         );
     }
 
+    renderUserType = () => {
+        return (
+            <div className={`user-type-container ${this.props.colorTheme}`}>
+                <div className="user-role">user</div>
+                <div className="user-active-status">active</div>
+            </div>
+        );
+    }
+
     changeSendValue = (e) => {
         this.setState({ name: e.target.value });
     }
@@ -76,11 +136,13 @@ class UserBlock extends Component {
 
         const {
             colorTheme,
-            type
+            userType,
+            context
         } = this.props;
 
         return (
             <div className={`user-container ${colorTheme}`}>
+                {(userType === 'admin' || userType === 'owner') && this.renderUserType()}
                 <div className="information-container">
                     <div className={`user-image ${colorTheme}`}>
                         <div className="material-icons no-image">face</div>
@@ -107,7 +169,8 @@ class UserBlock extends Component {
 UserBlock.propTypes = {
     navigationActions: PropTypes.object,
     colorTheme: PropTypes.string,
-    type: PropTypes.string,
+    userType: PropTypes.string,
+    context: PropTypes.string,
 };
 
 function mapDispatchToProps(dispatch) {

@@ -1,5 +1,6 @@
 .user-container {
-    padding: 20px 0 4px;
+    padding: 0;
+    margin-bottom: 16px;
     color: #4A4A4A;
     border-radius: 8px;
 }
@@ -15,7 +16,7 @@
 }
 
 .user-container .information-container {
-    margin-bottom: 24px;
+    margin: 16px 0 20px;
     padding: 0 16px;
     display: flex;
     align-items: center;
@@ -78,11 +79,16 @@
 }
 
 .user-container .actions-container {
-    padding: 0 16px;
-    margin-bottom: 24px;
+    padding: 0 8px;
+    margin-bottom: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
+}
+
+.user-container .actions-container button {
+    margin: 4px 8px;
 }
 
 .user-container .send-menu {
@@ -112,4 +118,23 @@
 .user-container .send-menu .action-section {
     display: flex;
     justify-content: space-between;
+}
+
+.user-container .user-type-container {
+    height: 36px;
+    padding: 0 36px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    line-height: 36px;
+    font-weight: 600;
+    color: white;
+}
+
+.user-container .user-type-container.purple {
+    background-color: #927AC9;
+}
+
+.user-container .user-type-container.orange {
+    background-color: #E7921A;
 }

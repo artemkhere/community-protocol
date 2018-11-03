@@ -79,6 +79,18 @@ class ActivationRequests extends Component {
                 <h2 className="results-title orange">Results</h2>
                 <UserBlock
                     colorTheme="orange"
+                    userType="owner"
+                    context="Activation Requests"
+                />
+                <UserBlock
+                    colorTheme="orange"
+                    userType="admin"
+                    context="Activation Requests"
+                />
+                <UserBlock
+                    colorTheme="orange"
+                    userType="user"
+                    context="Activation Requests"
                 />
             </div>
         );
