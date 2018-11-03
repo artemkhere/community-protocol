@@ -2,8 +2,16 @@
     padding: 20px 0 4px;
     color: #4A4A4A;
     border-radius: 8px;
+}
+
+.user-container.purple {
     border: 2px solid #927AC9;
     box-shadow: 0 10px 20px rgba(146,122,201,0.15), 0 6px 6px rgba(146,122,201,0.15);
+}
+
+.user-container.orange {
+    border: 2px solid #E7921A;
+    box-shadow: 0 10px 20px rgba(231,146,26,0.15), 0 6px 6px rgba(231,146,26,0.15);
 }
 
 .user-container .information-container {
@@ -24,6 +32,14 @@
     border-radius: 4px;
 }
 
+.information-container .user-image.purple {
+    background-color: #927AC9;
+}
+
+.information-container .user-image.orange {
+    background-color: #E7921A;
+}
+
 .information-container .user-image .no-image {
     font-size: 56px;
     line-height: 96px;
@@ -37,7 +53,14 @@
     margin-bottom: 4px;
     font-size: 20px;
     line-height: 28px;
+}
+
+.user-information .user-name.purple {
     color: #6D5B98;
+}
+
+.user-information .user-name.orange {
+    color: #C77500;
 }
 
 .information-container .user-information .user-department {
@@ -65,7 +88,14 @@
 .user-container .send-menu {
     padding: 16px 16px 0;
     margin-bottom: 24px;
+}
+
+.user-container .send-menu.purple {
     border-top: 2px solid #927AC9;
+}
+
+.user-container .send-menu.orange {
+    border-top: 2px solid #E7921A;
 }
 
 .user-container .send-menu .information-section {

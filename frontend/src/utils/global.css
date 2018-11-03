@@ -84,6 +84,12 @@ button.solid.purple {
     box-shadow: 0 10px 20px rgba(146,122,201,0.15), 0 6px 6px rgba(146,122,201,0.15);
 }
 
+button.solid.orange {
+    color: white;
+    background-color: #E7921A;
+    box-shadow: 0 10px 20px rgba(231,146,26,0.15), 0 6px 6px rgba(231,146,26,0.15);
+}
+
 button.large {
     min-width: 72px;
     height: 48px;

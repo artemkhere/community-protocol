@@ -77,7 +77,9 @@ class Search extends Component {
                     </button>
                 </div>
                 <h2 className="results-title">Results</h2>
-                <UserBlock />
+                <UserBlock
+                    colorTheme="purple"
+                />
             </div>
         );
     }

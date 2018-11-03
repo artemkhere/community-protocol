@@ -15,10 +15,12 @@ class UserBlock extends Component {
     }
 
     renderActions = () => {
+        const colorTheme = this.props.colorTheme;
+
         return (
             <div className="actions-container">
                 <button
-                    className="solid purple"
+                    className={`solid ${colorTheme}`}
                     onClick={this.toggleSendMenu}
                 >
                     send coco
@@ -28,8 +30,10 @@ class UserBlock extends Component {
     }
 
     renderSendMenu = () => {
+        const colorTheme = this.props.colorTheme;
+
         return (
-            <div className="send-menu">
+            <div className={`send-menu ${colorTheme}`}>
                 <div className="information-section">
                     <input
                         type="number"
@@ -47,7 +51,7 @@ class UserBlock extends Component {
                         cancel
                     </button>
                     <button
-                        className="solid purple"
+                        className={`solid ${colorTheme}`}
                         onClick={this.toggleSendMenu}
                     >
                         send coco
@@ -70,10 +74,15 @@ class UserBlock extends Component {
             sendMenuOpen
         } = this.state;
 
+        const {
+            colorTheme,
+            type
+        } = this.props;
+
         return (
-            <div className="user-container purple">
+            <div className={`user-container ${colorTheme}`}>
                 <div className="information-container">
-                    <div className="user-image">
+                    <div className={`user-image ${colorTheme}`}>
                         <div className="material-icons no-image">face</div>
                     </div>
                     <div className="user-information">
@@ -97,6 +106,8 @@ class UserBlock extends Component {
 
 UserBlock.propTypes = {
     navigationActions: PropTypes.object,
+    colorTheme: PropTypes.string,
+    type: PropTypes.string,
 };
 
 function mapDispatchToProps(dispatch) {

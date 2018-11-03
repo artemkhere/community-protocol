@@ -71,13 +71,15 @@ class ActivationRequests extends Component {
                     className="action-container"
                 >
                     <button
-                        className="solid purple large"
+                        className="solid orange large"
                     >
                         search
                     </button>
                 </div>
-                <h2 className="results-title">Results</h2>
-                <UserBlock />
+                <h2 className="results-title orange">Results</h2>
+                <UserBlock
+                    colorTheme="orange"
+                />
             </div>
         );
     }
