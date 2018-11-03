@@ -9,11 +9,52 @@ class UserBlock extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            sendMenuOpen: false
+            sendMenuOpen: false,
+            sendValue: 0
         };
     }
 
+    renderActions = () => {
+        return (
+            <div className="actions-container">
+                <button
+                    className="solid purple"
+                    onClick={this.toggleSendMenu}
+                >
+                    send coco
+                </button>
+            </div>
+        );
+    }
+
+    renderSendMenu = () => {
+        return (
+            <div className="send-menu">
+                <input
+                    type="number"
+                    className="section-input"
+                    placeholder={this.state.sendValue}
+                    value={this.state.sendValue}
+                    onChange={this.changeSendValue}
+                />
+            </div>
+        );
+    }
+
+    changeSendValue = (e) => {
+        this.setState({ name: e.target.value });
+    }
+
+    toggleSendMenu = () => {
+        console.log(this.state.sendMenuOpen)
+        this.setState({ sendMenuOpen: !this.state.sendMenuOpen });
+    }
+
     render() {
+        const {
+            sendMenuOpen
+        } = this.state;
+
         return (
             <div className="user-container purple">
                 <div className="information-container">
@@ -32,11 +73,8 @@ class UserBlock extends Component {
                         </h4>
                     </div>
                 </div>
-                <div className="actions-container">
-                    <button className="solid purple">
-                        harvest
-                    </button>
-                </div>
+                {!sendMenuOpen && this.renderActions()}
+                {sendMenuOpen && this.renderSendMenu()}
             </div>
         );
     }
