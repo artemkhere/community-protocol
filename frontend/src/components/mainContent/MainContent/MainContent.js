@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import AccountDetails from "../AccountDetails/AccountDetails";
 import Balance from "../Balance/Balance";
 import Search from "../Search/Search";
+import ActivationRequests from "../ActivationRequests/ActivationRequests";
 import './MainContent.css';
 
 class MainContent extends Component {
@@ -19,6 +20,8 @@ class MainContent extends Component {
                 return <AccountDetails />
             case 'Search':
                 return <Search />
+            case 'Activation Requests':
+                return <ActivationRequests />
             default:
                 return <div>Something is broken</div>;
         }

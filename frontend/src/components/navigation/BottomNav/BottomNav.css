@@ -36,6 +36,11 @@
     background-color: #927AC9;
 }
 
+.menu-section.orange {
+    color: white;
+    background-color: #E7921A;
+}
+
 .menu-section .menu-item-container .menu-icon {
     font-size: 20px;
 }

@@ -25,6 +25,8 @@ class BottomNav extends Component {
                 return ' blue';
             case 'Search':
                 return ' purple';
+            case 'Activation Requests':
+                return ' orange';
             default:
                 return ' grey';
         }
@@ -66,6 +68,22 @@ class BottomNav extends Component {
                         <div className="menu-title">
                             {view ==="Search" && <div className="highlight" />}
                             <div className="title">search</div>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    className={view === "Activation Requests" ?
+                            "menu-section orange"
+                        :
+                            "menu-section"
+                    }
+                    onClick={this.handleMenuClick('Activation Requests')}
+                >
+                    <div className="menu-item-container">
+                        <div className="menu-icon material-icons">gavel</div>
+                        <div className="menu-title">
+                            {view ==="Activation Requests" && <div className="highlight" />}
+                            <div className="title">requests</div>
                         </div>
                     </div>
                 </div>

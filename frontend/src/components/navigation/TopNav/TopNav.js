@@ -16,6 +16,8 @@ class TopNav extends Component {
                 return ' blue';
             case 'Search':
                 return ' purple';
+            case 'Activation Requests':
+                return ' orange';
             default:
                 return ' grey';
         }

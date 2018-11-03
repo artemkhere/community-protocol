@@ -4,9 +4,9 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import * as navigationActions from '../../../actions/navigationActions';
 import UserBlock from "../UserBlock/UserBlock";
-import './Search.css';
+import './ActivationRequests.css';
 
-class Search extends Component {
+class ActivationRequests extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -83,7 +83,7 @@ class Search extends Component {
     }
 }
 
-Search.propTypes = {
+ActivationRequests.propTypes = {
     navigationActions: PropTypes.object,
     loading: PropTypes.bool
 };
@@ -103,4 +103,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(Search);
+)(ActivationRequests);

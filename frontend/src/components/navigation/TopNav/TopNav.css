@@ -24,6 +24,12 @@
     box-shadow: 0 10px 20px rgba(146,122,201,0.15), 0 6px 6px rgba(146,122,201,0.15);
 }
 
+.top-nav.orange {
+    color: white;
+    background-color: #E7921A;
+    box-shadow: 0 10px 20px rgba(231,146,26,0.15), 0 6px 6px rgbargba(231,146,26,0.15);
+}
+
 .top-nav .profile-info-container {
     margin-bottom: 4px;
     display: flex;

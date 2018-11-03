@@ -1,0 +1,31 @@
+.search-main-container {
+    width: 100%;
+    height: calc(100% - 128px);
+    box-sizing: border-box;
+    padding: 32px 8px;
+    position: absolute;
+    top: 80px;
+    left: 0px;
+    background-color: #FDFDFD;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.search-main-container .search-form-container {
+    margin-bottom: 16px;
+}
+
+.search-main-container .action-container {
+    width: 100%;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
+}
+
+.search-main-container .results-title {
+    margin-bottom: 16px;
+    display: inline-block;
+    font-size: 20px;
+    line-height: 24px;
+    color: #6D5B98;
+}
