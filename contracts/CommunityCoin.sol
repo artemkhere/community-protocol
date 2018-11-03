@@ -21,6 +21,7 @@ contract CommunityCoin is Ownable {
     mapping (address => string) public departments;
     mapping (address => string) public titles;
     mapping (address => uint256) public activatedTimes;
+    mapping (address => string) public userTypes;
 
     // USER RIGHTS
     mapping (address => bool) public userToAdmins;
