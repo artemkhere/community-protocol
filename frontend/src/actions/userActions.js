@@ -13,7 +13,9 @@ export function getUserInfo(addr) {
         hollowBalance: 11,
         currentSolidBalance: 222,
         lastHollowHarvest: 3333,
-        lastSolidHarvest: 44444
+        lastSolidHarvest: 44444,
+        activationRequested: true,
+        activeStats: true
     };
     // return {
     //     type: types.GET_USER_INFO,
@@ -27,7 +29,9 @@ export function getUserInfo(addr) {
     //     hollowBalance,
     //     currentSolidBalance,
     //     lastHollowHarvest,
-    //     lastSolidHarvest
+    //     lastSolidHarvest,
+    //     activationRequested,
+    //     activeStatus,
     // };
 }
 

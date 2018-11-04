@@ -8,6 +8,9 @@ export default {
     userType: null,
     hollowBalance: null,
     currentSolidBalance: null,
+    unresolvedSolidBalance: null,
     lastHollowHarvest: null,
     lastSolidHarvest: null,
+    activationRequested: null,
+    activeStatus: null
 };

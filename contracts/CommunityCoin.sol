@@ -13,6 +13,7 @@ contract CommunityCoin is Ownable {
     mapping (address => uint256) public lastHollowHarvests;
     mapping (address => uint256) public lastSolidHarvests;
     mapping (address => bool) public activeStatus;
+    mapping (address => bool) public activationRequested;
 
     // USER DATA
 	mapping (address => string) public profileImages;
@@ -28,8 +29,10 @@ contract CommunityCoin is Ownable {
     address public owner; // equivalent to Super Admin
 
     // ADMIN RESOURCES
-    /* we need a list of all users */
-    /* a list of users waiting for activation */
+    address[] public userList;
+    address[] public activeUsers;
+    address[] public deactivatedUsers;
+    address[] public activationRequests;
 
     // TOKENS
     uint256 public tokenCount; // needs to have minimum 1
@@ -56,56 +59,6 @@ contract CommunityCoin is Ownable {
     }
 
 
-
-    // BASIC ACCESSORS
-    function getHollowBalance(address addr) public view returns(uint256) {
-        return hollowBalances[addr];
-    }
-
-    function getCurrentSolidBalance(address addr) public view returns(uint256) {
-        return currentSolidBalances[addr];
-    }
-
-    function getUnresolvedSolidBalance(address addr) internal view returns(uint256) {
-        return unresolvedSolidBalances[addr];
-    }
-
-    function getLastHollowHarvest(address addr) public view returns(uint256) {
-        return lastHollowHarvests[addr];
-    }
-
-    function getLastSolidHarvest(address addr) public view returns(uint256) {
-        return lastSolidHarvests[addr];
-    }
-
-    function getActiveStatus(address addr) public view returns(bool) {
-        return activeStatus[addr];
-    }
-
-    function checkIfAdmin(address addr) public view returns(bool) {
-        return userToAdmins[addr];
-    }
-
-    function getFirstName(address addr) public view returns(string) {
-        return firstNames[addr];
-    }
-
-    function getFamilyName(address addr) public view returns(string) {
-        return familyNames[addr];
-    }
-
-    function getDepartment(address addr) public view returns(string) {
-        return departments[addr];
-    }
-
-    function getTitle(address addr) public view returns(string) {
-        return titles[addr];
-    }
-
-    function getActivatedTime(address addr) public view returns(uint256) {
-        return activatedTimes[addr];
-    }
-
     // ACCESSORS FOR FRONTEND
     function getUserInfo(address addr) public view returns(
         string profileImage,
@@ -116,8 +69,11 @@ contract CommunityCoin is Ownable {
         uint256 activatedTime,
         uint256 hollowBalance,
         uint256 currentSolidBalance,
+        uint256 unresolvedSolidBalance,
         uint256 lastHollowHarvest,
-        uint256 lastSolidHarvest
+        uint256 lastSolidHarvest,
+        bool activationRequest,
+        bool active
     ) {
         profileImage = profileImages[addr];
         firstName = firstNames[addr];
@@ -127,11 +83,13 @@ contract CommunityCoin is Ownable {
         activatedTime = activatedTimes[addr];
         hollowBalance = hollowBalances[addr];
         currentSolidBalance = currentSolidBalances[addr];
+        unresolvedSolidBalance = unresolvedSolidBalances[addr];
         lastHollowHarvest = lastHollowHarvests[addr];
         lastSolidHarvest = lastSolidHarvest[addr];
+        activationRequest = activationRequested[addr];
+        active = activeStatus[addr];
     }
 
-    // we need search by name, title and etc
     function searchByName(string name) public view returns(address[]) {
 
     }
@@ -162,27 +120,10 @@ contract CommunityCoin is Ownable {
     }
 
 
-    // NEEDS TO BE REMOVED SINCE SOLIDITY GENERATES ACCESSORS
-    function getTokenCount() public view returns(uint256) {
-        return tokenCount;
-    }
-
-    function getTokenValue() public view returns(uint256) {
-        return tokenValue;
-    }
-
-    function getContractBalance() public view returns(uint256) {
-        return address(this).balance;
-    }
-
-
-
-
     // CONTRACT MANAGMENT
     function transferOwnership(address _owner) public onlyOwner {
         return super.transferOwnership(_owner);
     }
-
 
     function withdraw() external onlyOwner {
         tokenValue = 0;
@@ -205,14 +146,21 @@ contract CommunityCoin is Ownable {
     event DonationToContract(address addr, uint256 amount);
 
 
-    // USER TRANSACTIONS
+    // USER ACTIONS
+    function requestActivation() public {
+        require (!activationRequested);
+        activationRequested[msg.sender] = true;
+        activationRequests.push(msg.sender);
+        emit ActivationRequested(msg.sender)
+    }
+    event ActivationRequested(address addr);
+
     function amountAllowedToBeSent(address _sender, address _receiver) private view returns(uint256) {
         Relationship memory relationship = userToRelationships[_sender][_receiver];
         // First interaction between users or last interaction happened over a week ago
         if (relationship.timestamp < now) { return 15; }
         // Last interaction happened less than a week ago
         if (relationship.timestamp >= now) { return relationship.maxSendValue; }
-
     }
 
     function sendHollowCoins(address receiver, uint256 amount) public {
@@ -259,7 +207,6 @@ contract CommunityCoin is Ownable {
     }
     event HollowHarvest(address indexed _addr, uint256 _value);
 
-
     function harvestSolidCoins() external {
         require(activeStatus[msg.sender]);
         uint256 lastHarvest = lastSolidHarvests[msg.sender];
@@ -275,7 +222,6 @@ contract CommunityCoin is Ownable {
         }
     }
     event SolidHarvest(address indexed _addr, uint256 _value);
-
 
     function redeemTokens() external returns(bool) {
         uint256 userBalance = currentSolidBalances[msg.sender];
@@ -300,14 +246,12 @@ contract CommunityCoin is Ownable {
         _;
     }
 
-
     function makeAdmin(address newAdmin) external onlyOwner {
         require(newAdmin != address(0));
         userToAdmins[newAdmin] = true;
         emit NewAdmin(newAdmin);
     }
     event NewAdmin(address addr);
-
 
     function revokeAdminRights(address admin) external onlyOwner {
         require(admin != address(0));
@@ -316,22 +260,72 @@ contract CommunityCoin is Ownable {
     }
     event AdminRevoked(address addr);
 
-
     function activateUser(address user) external onlyAdmin {
         require(user != address(0));
         require(!activeStatus[user]);
+        removeRequesterFromQueu(user);
         activeStatus[user] = true;
         lastHollowHarvests[user] = now;
         lastSolidHarvests[user] = now;
+        userList.push(user);
+        activeUsers.push(user);
         emit UserActivated(user, now, now);
     }
     event UserActivated(address addr, uint256 lastHollowHarvest, uint256 lastSolidHarvest);
 
+    function removeRequesterFromQueu(address requester) internal {
+        address[] memory rq = activationRequests;
+        if (rq.length < 1) { return; }
+        for (uint16 i = 0; i < rq.length; i++) {
+            if (rq[i] == requester) {
+                removeRequesterAtIndex(i);
+                return;
+            }
+        }
+        return;
+    }
+
+    function removeRequesterAtIndex(uint16 index) internal {
+        require (index >= activationRequests.length);
+
+        for (uint16 i = index; i < activationRequests.length - 1; i++) {
+            activationRequests.length[i] = activationRequests.length[i + 1];
+        }
+
+        delete activationRequests[activationRequests.length - 1];
+        activationRequests.length--;
+    }
 
     function deactivateUser(address user) external onlyAdmin {
         require(activeStatus[user]);
         activeStatus[user] = false;
+
         emit UserDeactivated(user);
     }
     event UserDeactivated(address addr);
+
+    function removeActiveUser(address user) internal {
+        address[] memory au = activeUsers;
+        if (au.length < 1) { return; }
+        for (uint16 i = 0; i < au.length; i++) {
+            if (rq[i] == user) {
+                removeActiveUserAtIndex(i);
+                return;
+            }
+        }
+        return;
+    }
+
+    function removeActiveUserAtIndex(uint16 index) internal {
+        require (index >= activeUsers.length);
+
+        for (uint16 i = index; i < activeUsers.length - 1; i++) {
+            activeUsers.length[i] = activeUsers.length[i + 1];
+        }
+
+        delete activeUsers[activeUsers.length - 1];
+        activeUsers.length--;
+    }
+
+    // possibility of duplicated users in deactivated user list
 }
