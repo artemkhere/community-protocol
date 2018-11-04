@@ -14,7 +14,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            stuff: []
+            web3Available: false
         };
     }
 
@@ -31,23 +31,32 @@ class App extends Component {
             // const PropertyContract = truffleContract(Property);
             // PropertyContract.setProvider(web3.currentProvider);
             // const propertyInstance = await PropertyContract.deployed();
+            this.setState({ web3Available: true });
         } catch (error) {
             console.log(error);
-            this.setState({
-
-            });
         }
     }
 
     render() {
-        return (
-            <div className="app">
-                <TopNav />
-                <MainContent />
-                <BottomNav />
-                {/* <NoWeb3 /> */}
-            </div>
-        );
+        let toRender;
+
+        if (this.state.web3Available) {
+            toRender = (
+                <div className="app">
+                    <TopNav />
+                    <MainContent />
+                    <BottomNav />
+                </div>
+            );
+        } else {
+            toRender = (
+                <div className="app">
+                    <NoWeb3 />
+                </div>
+            );
+        }
+
+        return toRender;
     }
 }
 

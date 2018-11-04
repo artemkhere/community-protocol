@@ -8,10 +8,10 @@ class NoWeb3 extends Component {
                 <h1>No connection to Ethereum Blockchain</h1>
                 <p>
                     Could not connect to the Community Protocol.
-                    <br />
+                    <br /><br />
                     This app relies on connection to Ethereum blockchain to work.
-                    Please make sure you have have
-                    <a href="https://metamask.io/">MetaMask</a>
+                    Please make sure you have&nbsp;
+                    <a href="https://metamask.io/">MetaMask</a>&nbsp;
                     (or any other provider) installed and working correctly.
                 </p>
             </div>
