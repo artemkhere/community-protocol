@@ -23,12 +23,12 @@ contract('CommunityCoin Tests', function(accounts) {
 
     // CONTRACT DONATIONS
     it(`should donate ${donation_amount} ether from Account 1 to CommunityCoin Contract`, async () => {
-        const contract_before = await coco.getContractBalance.call();
+        const contract_before = web3.eth.getBalance(coco.address);
         const account_1_before = web3.eth.getBalance(account_1);
 
         const tx = await coco.donateToContract({ from: account_1, value: web3.toWei(donation_amount, "ether") });
 
-        const contract_after = await coco.getContractBalance.call();
+        const contract_after = web3.eth.getBalance(coco.address);
         const account_1_after = web3.eth.getBalance(account_1);
 
         assert.isAbove(contract_after.toNumber(), contract_before.toNumber(), 'CommunityCoin Contract did not recieve donation');
@@ -121,8 +121,8 @@ contract('CommunityCoin Tests', function(accounts) {
         const account_1_after = web3.eth.getBalance(account_1);
         assert.isAbove(account_1_after.toNumber(), account_1_before.toNumber(), 'Account 1 did not recieve the redeemed value');
 
-        const solidTokenCount = await coco.getCurrentSolidBalance.call(account_1);
-        assert.equal(solidTokenCount.toNumber(), 0, 'Account 1 still has tokens after redemption');
+        const solidTokenCount = await coco.getBalances.call({ from: account_1 });
+        assert.equal(solidTokenCount[1].toNumber(), 0, 'Account 1 still has tokens after redemption');
     });
 
     it('should activate 2 users and set their timestamps', async () => {
@@ -134,10 +134,12 @@ contract('CommunityCoin Tests', function(accounts) {
         assert.equal(account3UserStatus, true, 'Account 3 is not active');
         assert.equal(account4UserStatus, true, 'Account 4 is not active');
 
-        const acct3HollowBalance = await coco.getHollowBalance(account_3);
-        const acct3SolidBalance= await coco.getCurrentSolidBalance(account_3);
-        const acct4HollowBalance = await coco.getHollowBalance(account_4);
-        const acct4SolidBalance= await coco.getCurrentSolidBalance(account_4);
+        const acct3Balances = await coco.getBalances({ from: account_3 });
+        const acct3HollowBalance = acct3Balances[0];
+        const acct3SolidBalance = acct3Balances[1];
+        const acct4Balances = await coco.getBalances({ from: account_4 });
+        const acct4HollowBalance = acct4Balances[0];
+        const acct4SolidBalance = acct4Balances[1];
         assert.equal(acct3HollowBalance.toNumber(), 0, 'Account 3 Hollow Balance is not empty');
         assert.equal(acct3SolidBalance.toNumber(), 0, 'Account 3 Solid Balance is not empty');
         assert.equal(acct4HollowBalance.toNumber(), 0, 'Account 4 Hollow Balance is not empty');
@@ -159,11 +161,11 @@ contract('CommunityCoin Tests', function(accounts) {
         const tx1 = await coco.harvestHollowCoins({ from: account_3 });
         const tx2 = await coco.harvestHollowCoins({ from: account_4 });
 
-        const acct3HollowBalance = await coco.getHollowBalance(account_3);
-        const acct4HollowBalance = await coco.getHollowBalance(account_4);
+        const acct3Balance = await coco.getBalances({ from: account_3 });
+        const acct4Balance = await coco.getBalances({ from: account_4 });
 
-        assert.isTrue(acct3HollowBalance.toNumber() > 0, 'Account 3 Hollow Balance is empty');
-        assert.isTrue(acct4HollowBalance.toNumber() > 0, 'Account 4 Hollow Balance is empty');
+        assert.isTrue(acct3Balance[0].toNumber() > 0, 'Account 3 Hollow Balance is empty');
+        assert.isTrue(acct4Balance[0].toNumber() > 0, 'Account 4 Hollow Balance is empty');
     });
 
 

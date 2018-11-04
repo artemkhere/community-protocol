@@ -67,11 +67,6 @@ contract CommunityCoin is Ownable {
         string department,
         string title,
         uint256 activatedTime,
-        uint256 hollowBalance,
-        uint256 currentSolidBalance,
-        uint256 unresolvedSolidBalance,
-        uint256 lastHollowHarvest,
-        uint256 lastSolidHarvest,
         bool activationRequest,
         bool active
     ) {
@@ -81,13 +76,22 @@ contract CommunityCoin is Ownable {
         department = departments[addr];
         title = titles[addr];
         activatedTime = activatedTimes[addr];
-        hollowBalance = hollowBalances[addr];
-        currentSolidBalance = currentSolidBalances[addr];
-        unresolvedSolidBalance = unresolvedSolidBalances[addr];
-        lastHollowHarvest = lastHollowHarvests[addr];
-        lastSolidHarvest = lastSolidHarvest[addr];
         activationRequest = activationRequested[addr];
         active = activeStatus[addr];
+    }
+
+    function getBalances() public view returns(
+        uint256 hollowBalance,
+        uint256 currentSolidBalance,
+        uint256 unresolvedSolidBalance,
+        uint256 lastHollowHarvest,
+        uint256 lastSolidHarvest
+    ) {
+        hollowBalance = hollowBalances[msg.sender];
+        currentSolidBalance = currentSolidBalances[msg.sender];
+        unresolvedSolidBalance = unresolvedSolidBalances[msg.sender];
+        lastHollowHarvest = lastHollowHarvests[msg.sender];
+        lastSolidHarvest = lastSolidHarvests[msg.sender];
     }
 
     function getAllUsers() public view returns(address[] memory) {
@@ -106,21 +110,11 @@ contract CommunityCoin is Ownable {
         string department,
         string title
     ) public {
-        if (profileImages[msg.sender] != profileImage) {
-            profileImages[msg.sender] = profileImage;
-        }
-        if (firstNames[msg.sender] != firstName) {
-            firstNames[msg.sender] = firstName;
-        }
-        if (familyNames[msg.sender] != familyName) {
-            familyNames[msg.sender] = familyName;
-        }
-        if (depatments[msg.sender] != department) {
-            depatments[msg.sender] = department;
-        }
-        if (titles[msg.sender] != title) {
-            titles[msg.sender] = title;
-        }
+        profileImages[msg.sender] = profileImage;
+        firstNames[msg.sender] = firstName;
+        familyNames[msg.sender] = familyName;
+        departments[msg.sender] = department;
+        titles[msg.sender] = title;
     }
 
 
@@ -152,10 +146,10 @@ contract CommunityCoin is Ownable {
 
     // USER ACTIONS
     function requestActivation() public {
-        require (!activationRequested);
+        require (!activationRequested[msg.sender]);
         activationRequested[msg.sender] = true;
         activationRequests.push(msg.sender);
-        emit ActivationRequested(msg.sender)
+        emit ActivationRequested(msg.sender);
     }
     event ActivationRequested(address addr);
 
@@ -250,6 +244,14 @@ contract CommunityCoin is Ownable {
         _;
     }
 
+    function checkIfAdmin(address user) public view returns(bool) {
+        return userToAdmins[user];
+    }
+
+    function getActiveStatus(address user) public view returns(bool) {
+        return activeStatus[user];
+    }
+
     function makeAdmin(address newAdmin) external onlyOwner {
         require(newAdmin != address(0));
         userToAdmins[newAdmin] = true;
@@ -293,7 +295,7 @@ contract CommunityCoin is Ownable {
         require (index >= activationRequests.length);
 
         for (uint16 i = index; i < activationRequests.length - 1; i++) {
-            activationRequests.length[i] = activationRequests.length[i + 1];
+            activationRequests[i] = activationRequests[i + 1];
         }
 
         delete activationRequests[activationRequests.length - 1];
@@ -312,7 +314,7 @@ contract CommunityCoin is Ownable {
         address[] memory au = activeUsers;
         if (au.length < 1) { return; }
         for (uint16 i = 0; i < au.length; i++) {
-            if (rq[i] == user) {
+            if (au[i] == user) {
                 removeActiveUserAtIndex(i);
                 return;
             }
@@ -324,7 +326,7 @@ contract CommunityCoin is Ownable {
         require (index >= activeUsers.length);
 
         for (uint16 i = index; i < activeUsers.length - 1; i++) {
-            activeUsers.length[i] = activeUsers.length[i + 1];
+            activeUsers[i] = activeUsers[i + 1];
         }
 
         delete activeUsers[activeUsers.length - 1];
