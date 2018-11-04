@@ -90,8 +90,12 @@ contract CommunityCoin is Ownable {
         active = activeStatus[addr];
     }
 
-    function searchByName(string name) public view returns(address[]) {
+    function getAllUsers() public view returns(address[] memory) {
+        return userList;
+    }
 
+    function getActivationRequests() public view returns(address[] memory) {
+        return activationRequests;
     }
 
     // SETTERS FOR FRONTEND
