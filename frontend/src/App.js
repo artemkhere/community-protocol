@@ -1,5 +1,9 @@
 import React, { Component } from "react";
 import truffleContract from "truffle-contract";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as ethereumActions from '../../../actions/ethereumActions';
+import PropTypes from 'prop-types';
 import getWeb3 from "./utils/getWeb3";
 import CommunityCoin from "./contracts/CommunityCoin.json";
 
@@ -19,22 +23,27 @@ class App extends Component {
     }
 
     componentDidMount = async () => {
+        const {
+            setWeb3Instance,
+            setAccount,
+            setCommunityProtocol
+        } = this.props;
+
         try {
             // consider moving all of this into 'set up the environment' action
-            // dispatch loading
-
-
+            
             // grab web3 instance
             const web3 = await getWeb3();
-            // push it to state
-            // grab accounts
-            // const accounts = await web3.eth.getAccounts();
-            // push them to state
-            //
-            // grab the contracts and push them to state
-            // const PropertyContract = truffleContract(Property);
-            // PropertyContract.setProvider(web3.currentProvider);
-            // const propertyInstance = await PropertyContract.deployed();
+            setWeb3Instance(web3);
+            // grab account
+            const accounts = await web3.eth.getAccounts();
+            setAccount(accounts[0]);
+            // grab the contract
+            const cocoContract = truffleContract(CommunityCoin);
+            cocoContract.setProvider(web3.currentProvider);
+            const coco = await cocoContract.deployed();
+            setCommunityProtocol(coco);
+
             this.setState({ web3Available: true });
         } catch (error) {
             console.log(error);
@@ -63,5 +72,19 @@ class App extends Component {
         return toRender;
     }
 }
+
+App.propTypes = {
+    ethereumActions: PropTypes.object
+};
+
+function mapDispatchToProps(dispatch) {
+    return {
+        ethereumActions: bindActionCreators(ethereumActions, dispatch)
+    };
+}
+
+export default connect(
+    mapDispatchToProps
+)(App);
 
 export default App;
