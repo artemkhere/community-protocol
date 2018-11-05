@@ -7,9 +7,9 @@ export default {
     activatedTime: null,
     userType: null,
     hollowBalance: null,
+    lastHollowHarvest: null,
     currentSolidBalance: null,
     unresolvedSolidBalance: null,
-    lastHollowHarvest: null,
     lastSolidHarvest: null,
     activationRequested: null,
     activeStatus: null

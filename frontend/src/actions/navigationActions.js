@@ -5,5 +5,5 @@ export function changeView(view) {
 }
 
 export function toggleLoading(active) {
-    return { type: types.TOGGLE_LOADING, active };
+    return { type: types.SET_LOADING, active };
 }

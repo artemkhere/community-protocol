@@ -1,13 +1,13 @@
 import * as types from './actionTypes';
 
-export function setWeb3Instance(view) {
-    return { type: types.SET_WEB_INSTANCE, ethereum };
+export function setWeb3Instance(web3) {
+    return { type: types.SET_WEB_INSTANCE, web3 };
 }
 
-export function setAccount(view) {
-    return { type: types.SET_ACCOUNT, ethereum };
+export function setAccount(account) {
+    return { type: types.SET_ACCOUNT, account };
 }
 
-export function setCommunityProtocol(view) {
-    return { type: types.SET_COMMUNITY_PROTOCOL, ethereum };
+export function setCommunityProtocol(coco) {
+    return { type: types.SET_COMMUNITY_PROTOCOL, coco };
 }

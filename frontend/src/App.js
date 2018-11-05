@@ -20,6 +20,10 @@ class App extends Component {
 
     componentDidMount = async () => {
         try {
+            // consider moving all of this into 'set up the environment' action
+            // dispatch loading
+
+
             // grab web3 instance
             const web3 = await getWeb3();
             // push it to state

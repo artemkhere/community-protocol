@@ -35,11 +35,15 @@ export function getUserInfo(addr) {
     // };
 }
 
-export function changeUserInfo(
-    profileImage, firstName, familyName, department, title
+export function setUserInfo(
+    profileImage,
+    firstName,
+    familyName,
+    department,
+    title
 ) {
     return {
-        type: types.CHANGE_USER_INFO,
+        type: types.SET_USER_INFO,
         profileImage,
         firstName,
         familyName,
@@ -49,6 +53,22 @@ export function changeUserInfo(
 }
 
 export function fetchUserInfo(addr) {
+    // return dispatch => {
+    //     return fetch(url(), {
+    //             method: 'GET',
+    //             mode: 'cors',
+    //             credentials: 'include',
+    //             headers: {
+    //             'x-api-key': 'apiKey',
+    //             'Accept': 'application/json'
+    //         }
+    //     })
+    //     .then(response => response.json())
+    //     .then(json => dispatch(receiveStuff(json)));
+    // };
+}
+
+export function fetchUserBalances(addr) {
     // return dispatch => {
     //     return fetch(url(), {
     //             method: 'GET',
