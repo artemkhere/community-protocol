@@ -60,13 +60,32 @@ class Balance extends Component {
                         <div className="state-balance">
                             {this.calculateAvailableHarvest(lastHollowHarvest)}
                         </div>
-                        <button className="solid blue">
+                        <button
+                            className="solid blue"
+                            onClick={this.harvestHollowCoins}
+                        >
                             harvest
                         </button>
                     </div>
                 </div>
             </div>
         );
+    }
+
+    harvestHollowCoins = async () => {
+        const {
+            userActions,
+            account,
+            coco
+        } = this.props;
+
+        try {
+            await coco.harvestHollowCoins({ from: account });
+            userActions.fetchUserBalances(account, coco);
+        } catch (error) {
+            console.log('Failed to harvest Hollow Coins.');
+            console.log(error);
+        }
     }
 
     renderSolidCoins = () => {
