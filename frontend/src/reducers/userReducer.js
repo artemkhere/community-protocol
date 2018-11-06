@@ -14,11 +14,9 @@ export default function user(state = initialState, action) {
                 department: action.department,
                 title: action.title,
                 activatedTime: action.activatedTime,
-                userType: action.userType,
-                hollowBalance: action.hollowBalance,
-                currentSolidBalance: action.currentSolidBalance,
-                lastHollowHarvest: action.lastHollowHarvest,
-                lastSolidHarvest: action.lastSolidHarvest
+                activationRequest: action.activationRequest,
+                active: action.active,
+                // userType: action.userType,
             });
         case SET_USER_INFO:
             return Object.assign({}, state, {

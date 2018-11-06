@@ -1,39 +1,52 @@
 import * as types from './actionTypes';
 
+export function fetchUserInfo(account, coco) {
+    return async (dispatch) => {
+        const info = await coco.getUserInfo(account, { from: account });
+        const profileImage = info[0];
+        const firstName = info[1];
+        const familyName = info[2];
+        const department = info[3];
+        const title = info[4];
+        const activatedTime = info[5].toNumber();
+        const activationRequest = info[6];
+        const active = info[7];
+        // const userType = info[8];
+        dispatch(getUserInfo(
+            profileImage,
+            firstName,
+            familyName,
+            department,
+            title,
+            activatedTime,
+            activationRequest,
+            active,
+        ));
+    }
+}
 
-export function getUserInfo(addr) {
+export function getUserInfo(
+    profileImage,
+    firstName,
+    familyName,
+    department,
+    title,
+    activatedTime,
+    activationRequest,
+    active,
+) {
     return {
         type: types.GET_USER_INFO,
-        profileImage: 'https://i.imgur.com/eW6LMB6.jpg',
-        firstName: 'Steve',
-        familyName: 'Gomez',
-        department: 'Engineering',
-        title: 'Senior Developer',
-        activatedTime: 123456,
-        userType: 'user',
-        hollowBalance: 11,
-        currentSolidBalance: 222,
-        lastHollowHarvest: 3333,
-        lastSolidHarvest: 44444,
-        activationRequested: true,
-        activeStats: true
+        profileImage,
+        firstName,
+        familyName,
+        department,
+        title,
+        activatedTime,
+        activationRequest,
+        active,
+        // userType,
     };
-    // return {
-    //     type: types.GET_USER_INFO,
-    //     profileImage,
-    //     firstName,
-    //     familyName,
-    //     department,
-    //     title,
-    //     activatedTime,
-    //     userType,
-    //     hollowBalance,
-    //     currentSolidBalance,
-    //     lastHollowHarvest,
-    //     lastSolidHarvest,
-    //     activationRequested,
-    //     activeStatus,
-    // };
 }
 
 export function setUserInfo(
@@ -51,39 +64,6 @@ export function setUserInfo(
         department,
         title
     };
-}
-
-// export async function fetchUserInfo(addr) {
-export function fetchUserInfo(addr) {
-    // return dispatch => {
-    //     return fetch(url(), {
-    //             method: 'GET',
-    //             mode: 'cors',
-    //             credentials: 'include',
-    //             headers: {
-    //             'x-api-key': 'apiKey',
-    //             'Accept': 'application/json'
-    //         }
-    //     })
-    //     .then(response => response.json())
-    //     .then(json => dispatch(receiveStuff(json)));
-    // };
-
-    // return async (dispatch) => {
-    //     await coco.getProperties({ from: accounts[0] });
-
-        // return fetch(url(), {
-        //         method: 'GET',
-        //         mode: 'cors',
-        //         credentials: 'include',
-        //         headers: {
-        //         'x-api-key': 'apiKey',
-        //         'Accept': 'application/json'
-        //     }
-        // })
-        // .then(response => response.json())
-        // .then(json => dispatch(getUserInfo(json)));
-    // };
 }
 
 export function fetchUserBalances(account, coco) {
