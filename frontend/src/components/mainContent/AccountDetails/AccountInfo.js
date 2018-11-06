@@ -11,11 +11,17 @@ class AccountInfo extends Component {
 
     componentDidMount = async () => {
         const {
-            userActions
+            userActions,
+            account,
+            web3,
+            coco
         } = this.props;
 
         try {
             userActions.getUserInfo(11);
+            const a = await coco.getBalances({ from: account });
+            console.log("a")
+            console.log(a)
         } catch (error) {
             alert(`Failed to get user details.`);
             console.log(error);
@@ -100,7 +106,10 @@ AccountInfo.propTypes = {
     department: PropTypes.string,
     title: PropTypes.string,
     activatedTime: PropTypes.number,
-    switchEditingMode: PropTypes.func
+    switchEditingMode: PropTypes.func,
+    account: PropTypes.string,
+    web3: PropTypes.object,
+    coco: PropTypes.object
 };
 
 function mapStateToProps(state) {
@@ -110,7 +119,10 @@ function mapStateToProps(state) {
         familyName: state.user.familyName,
         department: state.user.department,
         title: state.user.title,
-        activatedTime: state.user.activatedTime
+        activatedTime: state.user.activatedTime,
+        account: state.ethereum.account,
+        web3: state.ethereum.web3,
+        coco: state.ethereum.coco
     };
 }
 

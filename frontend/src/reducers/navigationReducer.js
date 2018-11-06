@@ -1,6 +1,6 @@
 import initialState from './initialNavigationState';
 import {
-    CHANGE_VIEW, TOGGLE_LOADING
+    CHANGE_VIEW, SET_LOADING
 } from '../actions/actionTypes';
 
 export default function navigation(state = initialState, action) {

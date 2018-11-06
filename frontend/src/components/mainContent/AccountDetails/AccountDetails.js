@@ -44,24 +44,4 @@ class AccountDetails extends Component {
     }
 }
 
-AccountDetails.propTypes = {
-    navigationActions: PropTypes.object,
-    loading: PropTypes.bool
-};
-
-function mapStateToProps(state) {
-    return {
-        loading: state.navigation.loading,
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        navigationActions: bindActionCreators(navigationActions, dispatch)
-    };
-}
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(AccountDetails);
+export default AccountDetails;

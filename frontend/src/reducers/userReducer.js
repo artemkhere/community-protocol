@@ -1,6 +1,6 @@
 import initialState from './initialUserState';
 import {
-    GET_USER_INFO, FETCH_USER_INFO, CHANGE_USER_INFO
+    GET_USER_INFO, FETCH_USER_INFO, SET_USER_INFO
 } from '../actions/actionTypes';
 
 export default function navigation(state = initialState, action) {
@@ -19,7 +19,7 @@ export default function navigation(state = initialState, action) {
                 lastHollowHarvest: action.lastHollowHarvest,
                 lastSolidHarvest: action.lastSolidHarvest
             });
-        case CHANGE_USER_INFO:
+        case SET_USER_INFO:
             return Object.assign({}, state, {
                 profileImage: action.profileImage,
                 firstName: action.firstName,

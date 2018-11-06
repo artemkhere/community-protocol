@@ -1,6 +1,6 @@
 // NAVIGATION
 export const CHANGE_VIEW = 'CHANGE_VIEW';
-export const TOGGLE_LOADING = 'TOGGLE_LOADING';
+export const SET_LOADING = 'SET_LOADING';
 
 // USER
 export const GET_USER_INFO = 'GET_USER_INFO';

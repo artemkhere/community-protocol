@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import truffleContract from "truffle-contract";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as ethereumActions from '../../../actions/ethereumActions';
+import truffleContract from "truffle-contract";
+import * as ethereumActions from './actions/ethereumActions';
 import PropTypes from 'prop-types';
 import getWeb3 from "./utils/getWeb3";
 import CommunityCoin from "./contracts/CommunityCoin.json";
@@ -27,11 +27,10 @@ class App extends Component {
             setWeb3Instance,
             setAccount,
             setCommunityProtocol
-        } = this.props;
+        } = this.props.ethereumActions;
 
         try {
             // consider moving all of this into 'set up the environment' action
-            
             // grab web3 instance
             const web3 = await getWeb3();
             setWeb3Instance(web3);
@@ -77,6 +76,8 @@ App.propTypes = {
     ethereumActions: PropTypes.object
 };
 
+function mapStateToProps(state) { return {}; }
+
 function mapDispatchToProps(dispatch) {
     return {
         ethereumActions: bindActionCreators(ethereumActions, dispatch)
@@ -84,7 +85,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(
+    mapStateToProps,
     mapDispatchToProps
 )(App);
-
-export default App;
