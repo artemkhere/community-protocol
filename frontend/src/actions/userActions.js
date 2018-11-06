@@ -85,19 +85,38 @@ export function fetchUserInfo(addr) {
         // .then(json => dispatch(getUserInfo(json)));
     // };
 }
-//
-// export function fetchUserBalances(addr) {
-//     // return dispatch => {
-//     //     return fetch(url(), {
-//     //             method: 'GET',
-//     //             mode: 'cors',
-//     //             credentials: 'include',
-//     //             headers: {
-//     //             'x-api-key': 'apiKey',
-//     //             'Accept': 'application/json'
-//     //         }
-//     //     })
-//     //     .then(response => response.json())
-//     //     .then(json => dispatch(receiveStuff(json)));
-//     // };
-// }
+
+export function fetchUserBalances(account, coco) {
+    return async (dispatch) => {
+        const balances = await coco.getBalances({ from: account });
+        const hollowBalance = balances[0].toNumber();
+        const currentSolidBalance = balances[1].toNumber();
+        const unresolvedSolidBalance = balances[2].toNumber();
+        const lastHollowHarvest = balances[3].toNumber();
+        const lastSolidHarvest = balances[4].toNumber();
+        dispatch(getUserBalances(
+            hollowBalance,
+            currentSolidBalance,
+            unresolvedSolidBalance,
+            lastHollowHarvest,
+            lastSolidHarvest
+        ));
+    }
+}
+
+export function getUserBalances(
+    hollowBalance,
+    currentSolidBalance,
+    unresolvedSolidBalance,
+    lastHollowHarvest,
+    lastSolidHarvest
+) {
+    return {
+        type: types.GET_USER_BALANCES,
+        hollowBalance,
+        currentSolidBalance,
+        unresolvedSolidBalance,
+        lastHollowHarvest,
+        lastSolidHarvest
+    };
+}
