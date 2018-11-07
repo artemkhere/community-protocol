@@ -17,7 +17,7 @@ class AccountInfo extends Component {
         } = this.props;
 
         try {
-            userActions.fetchUserBalances(account, coco);
+            userActions.fetchUserInfo(account, coco);
         } catch (error) {
             console.log('Failed to get user information.');
             console.log(error);
@@ -33,6 +33,8 @@ class AccountInfo extends Component {
             title,
             activatedTime
         } = this.props;
+
+        const actTime = new Date(activatedTime * 1000);
 
         return (
             <div className="user-info-container">
@@ -79,7 +81,7 @@ class AccountInfo extends Component {
                         active since
                     </div>
                     <div className="section-information">
-                        {activatedTime}
+                        {actTime.toLocaleString('en-GB', { timeZone: 'UTC' })}
                     </div>
                 </div>
                 <div className="actions-wrapper">

@@ -7,7 +7,7 @@ contract CommunityCoin is Ownable {
     using SafeMath for uint256;
 
     // USER RESOURCES
-	mapping (address => uint256) public hollowBalances;
+    mapping (address => uint256) public hollowBalances;
     mapping (address => uint256) public currentSolidBalances;
     mapping (address => uint256) public unresolvedSolidBalances;
     mapping (address => uint256) public lastHollowHarvests;
@@ -16,9 +16,9 @@ contract CommunityCoin is Ownable {
     mapping (address => bool) public activationRequested;
 
     // USER DATA
-	mapping (address => string) public profileImages;
-	mapping (address => string) public firstNames;
-	mapping (address => string) public familyNames;
+    mapping (address => string) public profileImages;
+    mapping (address => string) public firstNames;
+    mapping (address => string) public familyNames;
     mapping (address => string) public departments;
     mapping (address => string) public titles;
     mapping (address => uint256) public activatedTimes;
@@ -52,6 +52,15 @@ contract CommunityCoin is Ownable {
         owner = msg.sender;
         activeStatus[msg.sender] = true;
         userToAdmins[msg.sender] = true;
+
+        // TESTING SET UP
+        firstNames[msg.sender] = 'Artem';
+        familyNames[msg.sender] = 'Kuznetsov';
+        departments[msg.sender] = 'Engineering';
+        titles[msg.sender] = 'Unicorn';
+        activatedTimes[msg.sender] = now;
+        userTypes[msg.sender] = 'owner';
+
         hollowBalances[msg.sender] = 1;
         currentSolidBalances[msg.sender] = 24;
         unresolvedSolidBalances[msg.sender] = 35;
