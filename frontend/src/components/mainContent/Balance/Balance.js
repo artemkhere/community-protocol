@@ -155,7 +155,14 @@ class Balance extends Component {
 
         try {
             await coco.harvestSolidCoins({ from: account });
-            // userActions.fetchUserBalances(account, coco);
+            const solidHarvest = coco.SolidHarvest();
+            solidHarvest.watch((err, result) => {
+                if (err) {
+                    console.log('Could not see Solid Harvest event.');
+                } else {
+                    userActions.fetchUserBalances(account, coco);
+                }
+            });
         } catch (error) {
             console.log('Failed to harvest Solid Coins.');
             console.log(error);
@@ -171,9 +178,16 @@ class Balance extends Component {
 
         try {
             await coco.redeemTokens({ from: account });
-            // userActions.fetchUserBalances(account, coco);
+            const tokensRedeemed = coco.TokensRedeemed();
+            tokensRedeemed.watch((err, result) => {
+                if (err) {
+                    console.log('Could not see Tokens Redeem event.');
+                } else {
+                    userActions.fetchUserBalances(account, coco);
+                }
+            });
         } catch (error) {
-            console.log('Failed to harvest reedim Solid Coins.');
+            console.log('Failed to redeem Solid Coins.');
             console.log(error);
         }
     }
