@@ -81,7 +81,14 @@ class Balance extends Component {
 
         try {
             await coco.harvestHollowCoins({ from: account });
-            userActions.fetchUserBalances(account, coco);
+            const hollowHarvest = coco.HollowHarvest();
+            hollowHarvest.watch((err, result) => {
+                if (err) {
+                    console.log('Could not see Hollow Harvest event');
+                } else {
+                    userActions.fetchUserBalances(account, coco);
+                }
+            });
         } catch (error) {
             console.log('Failed to harvest Hollow Coins.');
             console.log(error);
@@ -111,7 +118,10 @@ class Balance extends Component {
                             {currentSolidBalance}
                             <span className="translation">~$14.8</span>
                         </div>
-                        <button className="solid white blue">
+                        <button
+                            className="solid white blue"
+                            onClick={this.redeemSolidCoins}
+                        >
                             redeem
                         </button>
                     </div>
@@ -124,13 +134,48 @@ class Balance extends Component {
                         <div className="state-balance">
                             {unresolvedSolidBalance}
                         </div>
-                        <button className="solid white blue">
+                        <button
+                            className="solid white blue"
+                            onClick={this.harvestSolidCoins}
+                        >
                             harvest
                         </button>
                     </div>
                 </div>
             </div>
         );
+    }
+
+    harvestSolidCoins = async () => {
+        const {
+            userActions,
+            account,
+            coco
+        } = this.props;
+
+        try {
+            await coco.harvestSolidCoins({ from: account });
+            // userActions.fetchUserBalances(account, coco);
+        } catch (error) {
+            console.log('Failed to harvest Solid Coins.');
+            console.log(error);
+        }
+    }
+
+    redeemSolidCoins = async () => {
+        const {
+            userActions,
+            account,
+            coco
+        } = this.props;
+
+        try {
+            await coco.redeemTokens({ from: account });
+            // userActions.fetchUserBalances(account, coco);
+        } catch (error) {
+            console.log('Failed to harvest reedim Solid Coins.');
+            console.log(error);
+        }
     }
 
     render() {

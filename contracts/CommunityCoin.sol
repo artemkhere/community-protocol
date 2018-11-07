@@ -53,7 +53,8 @@ contract CommunityCoin is Ownable {
         activeStatus[msg.sender] = true;
         userToAdmins[msg.sender] = true;
         hollowBalances[msg.sender] = 1;
-        currentSolidBalances[msg.sender] = 1;
+        currentSolidBalances[msg.sender] = 24;
+        unresolvedSolidBalances[msg.sender] = 35;
         lastHollowHarvests[msg.sender] = now - 604800;
         lastSolidHarvests[msg.sender] = now - 604800;
     }
