@@ -55,14 +55,27 @@ export function setUserInfo(
     userInfo
 ) {
     return async (dispatch) => {
-        await coco.setUserInfo(
-            'empty',
-            userInfo.firstName,
-            userInfo.familyName,
-            userInfo.department,
-            userInfo.title,
-            { from: account }
-        );
+        try {
+            await coco.setUserInfo(
+                'empty',
+                userInfo.firstName,
+                userInfo.familyName,
+                userInfo.department,
+                userInfo.title,
+                { from: account }
+            );
+            const userInfoUpdated = coco.UserInfoUpdated();
+            userInfoUpdated.watch((err, result) => {
+                if (err) {
+                    console.log('Could not see userInfo update');
+                } else {
+                    dispatch(fetchUserInfo(account, coco));
+                }
+            });
+        } catch (error) {
+            console.log('Failed to push new user info.');
+            console.log(error);
+        }
     }
 }
 

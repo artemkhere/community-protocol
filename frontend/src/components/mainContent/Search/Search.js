@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import * as navigationActions from '../../../actions/navigationActions';
+import * as userActions from '../../../actions/userActions';
 import UserBlock from "../UserBlock/UserBlock";
 import './Search.css';
 
@@ -13,6 +14,7 @@ class Search extends Component {
             name: '',
             department: '',
             title: '',
+            users: []
         };
     }
 
@@ -26,6 +28,24 @@ class Search extends Component {
                 return (e) => { this.setState({ title: e.target.value }); }
             default:
                 return;
+        }
+    }
+
+    searchUsers = async () => {
+        const {
+            navigationActions,
+            userActions,
+            account,
+            coco
+        } = this.props;
+
+        try {
+            navigationActions.toggleLoading(true);
+            const users = await coco.getAllUsers({ from: account });
+            console.log(users);
+        } catch (error) {
+            navigationActions.toggleLoading(false);
+            console.log(error);
         }
     }
 
@@ -72,11 +92,13 @@ class Search extends Component {
                 >
                     <button
                         className="solid purple large"
+                        onClick={this.searchUsers}
                     >
                         search
                     </button>
                 </div>
                 <h2 className="results-title">Results</h2>
+                {this.props.loading && <h1>LOADING!</h1>}
                 <UserBlock
                     colorTheme="purple"
                     userType="owner"
@@ -99,18 +121,23 @@ class Search extends Component {
 
 Search.propTypes = {
     navigationActions: PropTypes.object,
-    loading: PropTypes.bool
+    loading: PropTypes.bool,
+    account: PropTypes.string,
+    coco: PropTypes.object
 };
 
 function mapStateToProps(state) {
     return {
         loading: state.navigation.loading,
+        account: state.ethereum.account,
+        coco: state.ethereum.coco
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        navigationActions: bindActionCreators(navigationActions, dispatch)
+        navigationActions: bindActionCreators(navigationActions, dispatch),
+        userActions: bindActionCreators(userActions, dispatch)
     };
 }
 

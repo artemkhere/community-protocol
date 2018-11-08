@@ -15,13 +15,8 @@ class AccountInfo extends Component {
             account,
             coco
         } = this.props;
-
-        try {
-            userActions.fetchUserInfo(account, coco);
-        } catch (error) {
-            console.log('Failed to get user information.');
-            console.log(error);
-        }
+        
+        userActions.fetchUserInfo(account, coco);
     }
 
     render() {

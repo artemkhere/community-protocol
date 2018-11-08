@@ -129,6 +129,8 @@ contract CommunityCoin is Ownable {
     }
     event UserInfoUpdated(address addr);
 
+    // I need to rewrite this and have user info and getUserRights
+
 
     // CONTRACT MANAGMENT
     function transferOwnership(address _owner) public onlyOwner {

@@ -35,7 +35,7 @@ class AccountForm extends Component {
         this.props.switchEditingMode(false);
     }
 
-    changeUserInfo = async () => {
+    changeUserInfo = () => {
         const {
             firstName,
             familyName,
@@ -57,36 +57,8 @@ class AccountForm extends Component {
             title
         }
 
-        // this.props.userActions.changeUserInfo(
-        //     this.state.firstName,
-        //     this.state.familyName,
-        //     this.state.department,
-        //     this.state.title,
-        // );
-
-        try {
-            userActions.setUserInfo(account, coco, userInfo);
-            // await coco.setUserInfo(
-            //     'empty',
-            //     firstName,
-            //     familyName,
-            //     department,
-            //     title,
-            //     { from: account }
-            // );
-            const userInfoUpdated = coco.UserInfoUpdated();
-            userInfoUpdated.watch((err, result) => {
-                this.switchEditingOff();
-                if (err) {
-                    console.log('Could not see userInfo update');
-                } else {
-                    userActions.fetchUserInfo(account, coco);
-                }
-            });
-        } catch (error) {
-            console.log('Failed to push new user info.');
-            console.log(error);
-        }
+        userActions.setUserInfo(account, coco, userInfo);
+        this.switchEditingOff();
     }
 
     render() {

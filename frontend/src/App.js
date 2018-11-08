@@ -18,7 +18,9 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            web3Available: false
+            web3Available: false,
+            activatedTime: 0,
+            activationRequestSubmitted: false
         };
     }
 
@@ -42,24 +44,52 @@ class App extends Component {
             cocoContract.setProvider(web3.currentProvider);
             const coco = await cocoContract.deployed();
             setCommunityProtocol(coco);
-
             this.setState({ web3Available: true });
+
+            // identify user type if they are registered
+            const userInfo = await coco.getUserInfo(accounts[0]);
+            const activatedTime = userInfo[5].toNumber();
+            const activationRequestSubmitted = userInfo[6];
+            this.setState({
+                activatedTime,
+                activationRequestSubmitted
+            });
+            // need to check user type to render different menus and user block layout
         } catch (error) {
             console.log(error);
         }
     }
 
     render() {
+        const {
+            web3Available,
+            activatedTime,
+            activationRequestSubmitted
+        } = this.state;
         let toRender;
 
-        if (this.state.web3Available) {
-            toRender = (
-                <div className="app">
-                    <TopNav />
-                    <MainContent />
-                    <BottomNav />
-                </div>
-            );
+        if (web3Available) {
+            if (activationRequestSubmitted && activatedTime !== 0) {
+                toRender = (
+                    <div className="app">
+                        <TopNav />
+                        <MainContent />
+                        <BottomNav />
+                    </div>
+                );
+            } else if (activationRequestSubmitted && activatedTime === 0) {
+                toRender = (
+                    <div className="app">
+                        LOOOOL IN PROGRESS
+                    </div>
+                );
+            } else {
+                toRender = (
+                    <div className="app">
+                        SUBMIT ACTIVATION REQUEST
+                    </div>
+                );
+            }
         } else {
             toRender = (
                 <div className="app">
