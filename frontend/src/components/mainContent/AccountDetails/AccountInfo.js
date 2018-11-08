@@ -26,7 +26,6 @@ class AccountInfo extends Component {
 
     render() {
         const {
-            profileImage,
             firstName,
             familyName,
             department,
@@ -39,10 +38,9 @@ class AccountInfo extends Component {
         return (
             <div className="user-info-container">
                 <div className="profile-img-container">
-                    <img
-                        className="profile-img"
-                        src={profileImage}
-                    />
+                    <div className="user-image">
+                        <div className="material-icons no-image">face</div>
+                    </div>
                 </div>
                 <div className="section-container">
                     <div className="section-name">
@@ -81,7 +79,7 @@ class AccountInfo extends Component {
                         active since
                     </div>
                     <div className="section-information">
-                        {actTime.toLocaleString('en-GB', { timeZone: 'UTC' })}
+                        {actTime.toLocaleString()}
                     </div>
                 </div>
                 <div className="actions-wrapper">

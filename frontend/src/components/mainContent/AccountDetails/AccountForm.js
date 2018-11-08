@@ -19,8 +19,6 @@ class AccountForm extends Component {
 
     userInfoHandler = (field) => {
         switch (field) {
-            case 'profileImage':
-                return (e) => { this.setState({ profileImage: e.target.value }); }
             case 'firstName':
                 return (e) => { this.setState({ firstName: e.target.value }); }
             case 'familyName':
@@ -51,7 +49,6 @@ class AccountForm extends Component {
 
     render() {
         const {
-            profileImage,
             firstName,
             familyName,
             department,
@@ -60,17 +57,8 @@ class AccountForm extends Component {
 
         return (
             <div className="user-info-container">
-                <div className="profile-img-container">
-                    <img
-                        className="profile-img"
-                        src={profileImage}
-                    />
-                    <input
-                        type="text"
-                        className="section-input"
-                        value={profileImage}
-                        onChange={this.userInfoHandler('profileImage')}
-                    />
+                <div className="user-image">
+                    <div className="material-icons no-image">face</div>
                 </div>
                 <div className="section-container">
                     <div className="section-name">
