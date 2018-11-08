@@ -125,7 +125,9 @@ contract CommunityCoin is Ownable {
         familyNames[msg.sender] = familyName;
         departments[msg.sender] = department;
         titles[msg.sender] = title;
+        emit UserInfoUpdated(msg.sender);
     }
+    event UserInfoUpdated(address addr);
 
 
     // CONTRACT MANAGMENT

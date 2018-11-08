@@ -18,14 +18,14 @@ export default function user(state = initialState, action) {
                 active: action.active,
                 // userType: action.userType,
             });
-        case SET_USER_INFO:
-            return Object.assign({}, state, {
-                profileImage: action.profileImage,
-                firstName: action.firstName,
-                familyName: action.familyName,
-                department: action.department,
-                title: action.title
-            });
+        // case SET_USER_INFO:
+        //     return Object.assign({}, state, {
+        //         profileImage: action.profileImage,
+        //         firstName: action.firstName,
+        //         familyName: action.familyName,
+        //         department: action.department,
+        //         title: action.title
+        //     });
         case GET_USER_BALANCES:
             return Object.assign({}, state, {
                 hollowBalance: action.hollowBalance,

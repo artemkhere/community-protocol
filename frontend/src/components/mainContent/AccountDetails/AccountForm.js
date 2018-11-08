@@ -9,7 +9,6 @@ class AccountForm extends Component {
         super(props);
         this.state = {
             editing: false,
-            profileImage: this.props.profileImage,
             firstName: this.props.firstName,
             familyName: this.props.familyName,
             department: this.props.department,
@@ -36,15 +35,57 @@ class AccountForm extends Component {
         this.props.switchEditingMode(false);
     }
 
-    changeUserInfo = () => {
-        this.props.userActions.changeUserInfo(
-            this.state.profileImage,
-            this.state.firstName,
-            this.state.familyName,
-            this.state.department,
-            this.state.title,
-        );
-        this.switchEditingOff();
+    changeUserInfo = async () => {
+        const {
+            firstName,
+            familyName,
+            department,
+            title
+        } = this.state;
+
+        const {
+            userActions,
+            account,
+            coco
+        } = this.props;
+
+        const userInfo = {
+            profileImage: 'empty',
+            firstName,
+            familyName,
+            department,
+            title
+        }
+
+        // this.props.userActions.changeUserInfo(
+        //     this.state.firstName,
+        //     this.state.familyName,
+        //     this.state.department,
+        //     this.state.title,
+        // );
+
+        try {
+            await coco.setUserInfo(
+                'empty',
+                firstName,
+                familyName,
+                department,
+                title,
+                { from: account }
+            );
+            const userInfoUpdated = coco.UserInfoUpdated();
+            userInfoUpdated.watch((err, result) => {
+                this.switchEditingOff();
+                if (err) {
+                    console.log('Could not see userInfo update');
+                } else {
+                    userActions.fetchUserInfo(account, coco);
+                }
+            });
+        } catch (error) {
+            console.log('Failed to push new user info.');
+            console.log(error);
+        }
     }
 
     render() {
@@ -128,7 +169,9 @@ AccountForm.propTypes = {
     familyName: PropTypes.string,
     department: PropTypes.string,
     title: PropTypes.string,
-    switchEditingMode: PropTypes.func
+    switchEditingMode: PropTypes.func,
+    account: PropTypes.string,
+    coco: PropTypes.object
 };
 
 function mapStateToProps(state) {
@@ -137,7 +180,9 @@ function mapStateToProps(state) {
         firstName: state.user.firstName,
         familyName: state.user.familyName,
         department: state.user.department,
-        title: state.user.title
+        title: state.user.title,
+        account: state.ethereum.account,
+        coco: state.ethereum.coco
     };
 }
 

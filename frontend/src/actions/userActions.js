@@ -50,20 +50,24 @@ export function getUserInfo(
 }
 
 export function setUserInfo(
-    profileImage,
-    firstName,
-    familyName,
-    department,
-    title
+    account,
+    coco,
+    userInfo
 ) {
-    return {
-        type: types.SET_USER_INFO,
-        profileImage,
-        firstName,
-        familyName,
-        department,
-        title
-    };
+    // firstName,
+    // familyName,
+    // department,
+    // title
+
+    return {};
+    // return {
+    //     type: types.SET_USER_INFO,
+    //     profileImage: 'empty',
+    //     firstName,
+    //     familyName,
+    //     department,
+    //     title
+    // };
 }
 
 export function fetchUserBalances(account, coco) {
