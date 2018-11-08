@@ -65,14 +65,15 @@ class AccountForm extends Component {
         // );
 
         try {
-            await coco.setUserInfo(
-                'empty',
-                firstName,
-                familyName,
-                department,
-                title,
-                { from: account }
-            );
+            userActions.setUserInfo(account, coco, userInfo);
+            // await coco.setUserInfo(
+            //     'empty',
+            //     firstName,
+            //     familyName,
+            //     department,
+            //     title,
+            //     { from: account }
+            // );
             const userInfoUpdated = coco.UserInfoUpdated();
             userInfoUpdated.watch((err, result) => {
                 this.switchEditingOff();

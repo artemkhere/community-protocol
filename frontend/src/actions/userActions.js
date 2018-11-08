@@ -54,20 +54,16 @@ export function setUserInfo(
     coco,
     userInfo
 ) {
-    // firstName,
-    // familyName,
-    // department,
-    // title
-
-    return {};
-    // return {
-    //     type: types.SET_USER_INFO,
-    //     profileImage: 'empty',
-    //     firstName,
-    //     familyName,
-    //     department,
-    //     title
-    // };
+    return async (dispatch) => {
+        await coco.setUserInfo(
+            'empty',
+            userInfo.firstName,
+            userInfo.familyName,
+            userInfo.department,
+            userInfo.title,
+            { from: account }
+        );
+    }
 }
 
 export function fetchUserBalances(account, coco) {
