@@ -16,7 +16,7 @@ export default function user(state = initialState, action) {
                 activatedTime: action.activatedTime,
                 activationRequest: action.activationRequest,
                 active: action.active,
-                // userType: action.userType,
+                userType: action.userType,
             });
         case GET_USER_BALANCES:
             return Object.assign({}, state, {

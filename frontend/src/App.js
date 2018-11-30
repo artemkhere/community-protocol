@@ -77,7 +77,7 @@ class App extends Component {
                         <BottomNav />
                     </div>
                 );
-            } else if (activationRequestSubmitted && activatedTime === 0) {
+            } else if (activatedTime === 0) {
                 toRender = (
                     <div className="app">
                         LOOOOL IN PROGRESS

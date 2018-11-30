@@ -70,24 +70,30 @@ contract CommunityCoin is Ownable {
 
 
     // ACCESSORS FOR FRONTEND
-    function getUserInfo(address addr) public view returns(
+    function getPersonalInfo(address addr) public view returns(
         string profileImage,
         string firstName,
         string familyName,
         string department,
-        string title,
-        uint256 activatedTime,
-        bool activationRequest,
-        bool active
+        string title
     ) {
         profileImage = profileImages[addr];
         firstName = firstNames[addr];
         familyName = familyNames[addr];
         department = departments[addr];
         title = titles[addr];
+    }
+
+    function getAccountInfo(address addr) public view returns(
+        uint256 activatedTime,
+        bool activationRequest,
+        bool active,
+        string userType
+    ) {
         activatedTime = activatedTimes[addr];
         activationRequest = activationRequested[addr];
         active = activeStatus[addr];
+        userType = userTypes[addr];
     }
 
     function getBalances() public view returns(
@@ -128,9 +134,6 @@ contract CommunityCoin is Ownable {
         emit UserInfoUpdated(msg.sender);
     }
     event UserInfoUpdated(address addr);
-
-    // I need to rewrite this and have user info and getUserRights
-
 
     // CONTRACT MANAGMENT
     function transferOwnership(address _owner) public onlyOwner {
@@ -269,6 +272,7 @@ contract CommunityCoin is Ownable {
     function makeAdmin(address newAdmin) external onlyOwner {
         require(newAdmin != address(0));
         userToAdmins[newAdmin] = true;
+        userTypes[newAdmin] = 'admin';
         emit NewAdmin(newAdmin);
     }
     event NewAdmin(address addr);
@@ -276,6 +280,7 @@ contract CommunityCoin is Ownable {
     function revokeAdminRights(address admin) external onlyOwner {
         require(admin != address(0));
         userToAdmins[admin] = false;
+        userTypes[admin] = 'user';
         emit AdminRevoked(admin);
     }
     event AdminRevoked(address addr);
@@ -289,6 +294,7 @@ contract CommunityCoin is Ownable {
         lastSolidHarvests[user] = now;
         userList.push(user);
         activeUsers.push(user);
+        userTypes[user] = 'user';
         emit UserActivated(user, now, now);
     }
     event UserActivated(address addr, uint256 lastHollowHarvest, uint256 lastSolidHarvest);
@@ -319,6 +325,7 @@ contract CommunityCoin is Ownable {
     function deactivateUser(address user) external onlyAdmin {
         require(activeStatus[user]);
         activeStatus[user] = false;
+        userTypes[user] = 'deactivated';
 
         emit UserDeactivated(user);
     }

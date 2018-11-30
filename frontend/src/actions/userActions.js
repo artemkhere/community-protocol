@@ -2,16 +2,17 @@ import * as types from './actionTypes';
 
 export function fetchUserInfo(account, coco) {
     return async (dispatch) => {
-        const info = await coco.getUserInfo(account, { from: account });
-        const profileImage = info[0];
-        const firstName = info[1];
-        const familyName = info[2];
-        const department = info[3];
-        const title = info[4];
-        const activatedTime = info[5].toNumber();
-        const activationRequest = info[6];
-        const active = info[7];
-        // const userType = info[8];
+        const personalInfo = await coco.getPersonalInfo(account, { from: account });
+        const accountInfo = await coco.getAccountInfo(account, { from: account });
+        const profileImage = personalInfo[0];
+        const firstName = personalInfo[1];
+        const familyName = personalInfo[2];
+        const department = personalInfo[3];
+        const title = personalInfo[4];
+        const activatedTime = accountInfo[0].toNumber();
+        const activationRequest = accountInfo[1];
+        const active = accountInfo[2];
+        const userType = accountInfo[3];
         dispatch(getUserInfo(
             profileImage,
             firstName,
@@ -21,6 +22,7 @@ export function fetchUserInfo(account, coco) {
             activatedTime,
             activationRequest,
             active,
+            userType
         ));
     }
 }
@@ -34,6 +36,7 @@ export function getUserInfo(
     activatedTime,
     activationRequest,
     active,
+    userType
 ) {
     return {
         type: types.GET_USER_INFO,
@@ -45,7 +48,7 @@ export function getUserInfo(
         activatedTime,
         activationRequest,
         active,
-        // userType,
+        userType
     };
 }
 

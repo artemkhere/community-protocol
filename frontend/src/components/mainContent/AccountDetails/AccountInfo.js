@@ -15,7 +15,7 @@ class AccountInfo extends Component {
             account,
             coco
         } = this.props;
-        
+
         userActions.fetchUserInfo(account, coco);
     }
 
@@ -25,7 +25,8 @@ class AccountInfo extends Component {
             familyName,
             department,
             title,
-            activatedTime
+            activatedTime,
+            userType
         } = this.props;
 
         const actTime = new Date(activatedTime * 1000);
@@ -77,6 +78,14 @@ class AccountInfo extends Component {
                         {actTime.toLocaleString()}
                     </div>
                 </div>
+                <div className="section-container">
+                    <div className="section-name">
+                        community role
+                    </div>
+                    <div className="section-information">
+                        {userType}
+                    </div>
+                </div>
                 <div className="actions-wrapper">
                     <button
                         onClick={this.switchEditingOn}
@@ -97,6 +106,7 @@ AccountInfo.propTypes = {
     department: PropTypes.string,
     title: PropTypes.string,
     activatedTime: PropTypes.number,
+    userType: PropTypes.string,
     switchEditingMode: PropTypes.func,
     account: PropTypes.string,
     coco: PropTypes.object
@@ -110,6 +120,7 @@ function mapStateToProps(state) {
         department: state.user.department,
         title: state.user.title,
         activatedTime: state.user.activatedTime,
+        userType: state.user.userType,
         account: state.ethereum.account,
         coco: state.ethereum.coco
     };
