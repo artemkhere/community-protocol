@@ -116,3 +116,22 @@ export function getUserBalances(
         lastSolidHarvest
     };
 }
+
+export function requestActivation(account, coco) {
+    return async (dispatch) => {
+        try {
+            await coco.requestActivation({ from: account });
+            const activationRequested = coco.ActivationRequested();
+            activationRequested.watch((err, result) => {
+                if (err) {
+                    console.log('Could not see activation request to be processed.');
+                } else {
+                    dispatch(fetchUserInfo(account, coco));
+                }
+            });
+        } catch (error) {
+            console.log('Failed to make activation request.');
+            console.log(error);
+        }
+    }
+}

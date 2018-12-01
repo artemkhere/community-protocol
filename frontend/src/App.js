@@ -11,6 +11,8 @@ import TopNav from "./components/navigation/TopNav/TopNav";
 import MainContent from "./components/mainContent/MainContent/MainContent";
 import BottomNav from "./components/navigation/BottomNav/BottomNav";
 import NoWeb3 from "./components/noWeb3Content/NoWeb3";
+import Registration from "./components/accountCreation/Registration";
+import RequestSent from "./components/accountCreation/RequestSent";
 
 import "./utils/global.css"
 
@@ -20,7 +22,10 @@ class App extends Component {
         this.state = {
             web3Available: false,
             activatedTime: 0,
-            activationRequestSubmitted: false
+            activationRequestSubmitted: false,
+            active: false,
+            userType: '',
+            firstName: ''
         };
     }
 
@@ -47,12 +52,19 @@ class App extends Component {
             this.setState({ web3Available: true });
 
             // identify user type if they are registered
-            const userInfo = await coco.getUserInfo(accounts[0]);
-            const activatedTime = userInfo[5].toNumber();
-            const activationRequestSubmitted = userInfo[6];
+            const accountInfo = await coco.getAccountInfo(accounts[0]);
+            const personalInfo = await coco.getPersonalInfo(accounts[0]);
+            const activatedTime = accountInfo[0].toNumber();
+            const activationRequestSubmitted = accountInfo[1];
+            const active = accountInfo[2];
+            const userType = accountInfo[3];
+            const firstName = personalInfo[1];
             this.setState({
                 activatedTime,
-                activationRequestSubmitted
+                activationRequestSubmitted,
+                active,
+                userType,
+                firstName
             });
             // need to check user type to render different menus and user block layout
         } catch (error) {
@@ -70,6 +82,7 @@ class App extends Component {
 
         if (web3Available) {
             if (activationRequestSubmitted && activatedTime !== 0) {
+                // approved active user
                 toRender = (
                     <div className="app">
                         <TopNav />
@@ -77,16 +90,19 @@ class App extends Component {
                         <BottomNav />
                     </div>
                 );
-            } else if (activatedTime === 0) {
+            } else if (activationRequestSubmitted && activatedTime === 0) {
+                // activation request submitted, but not approved
                 toRender = (
                     <div className="app">
-                        LOOOOL IN PROGRESS
+                        <RequestSent />
                     </div>
                 );
             } else {
+                // activation request never submitted
+                // this person needs to see a form so they can submit their info
                 toRender = (
                     <div className="app">
-                        SUBMIT ACTIVATION REQUEST
+                        <Registration />
                     </div>
                 );
             }
