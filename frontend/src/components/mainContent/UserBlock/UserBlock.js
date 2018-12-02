@@ -137,7 +137,11 @@ class UserBlock extends Component {
         const {
             colorTheme,
             userType,
-            context
+            context,
+            firstName,
+            familyName,
+            department,
+            title
         } = this.props;
 
         return (
@@ -149,13 +153,13 @@ class UserBlock extends Component {
                     </div>
                     <div className="user-information">
                         <h3 className="user-name">
-                            Kimberley Clark
+                            {firstName} {familyName}
                         </h3>
                         <h4 className="user-department">
-                            Human Hirement
+                            {department}
                         </h4>
                         <h4 className="user-title">
-                            Manager
+                            {title}
                         </h4>
                     </div>
                 </div>

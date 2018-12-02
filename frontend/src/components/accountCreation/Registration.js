@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as userActions from '../../../actions/userActions';
+import * as userActions from '../../actions/userActions';
+
+import './Registration.css';
 
 class Registration extends Component {
     constructor(props) {
@@ -52,8 +54,7 @@ class Registration extends Component {
             title
         }
 
-        userActions.setUserInfo(account, coco, userInfo);
-        userActions.requestActivation(account, coco);
+        userActions.requestActivation(account, coco, userInfo);
     }
 
     render() {
@@ -65,10 +66,10 @@ class Registration extends Component {
         } = this.state;
 
         return (
-            <div className="user-info-container">
-                <div className="user-image">
-                    <div className="material-icons no-image">face</div>
-                </div>
+            <div className="registration-container">
+                <h1 className="title">
+                    Please Register To Participate
+                </h1>
                 <div className="section-container">
                     <div className="section-name">
                         first name
@@ -113,11 +114,12 @@ class Registration extends Component {
                         onChange={this.userInfoHandler('title')}
                     />
                 </div>
-                <div className="actions-wrapper multiple">
+                <div className="actions-wrapper">
                     <button
+                        className="solid purple"
                         onClick={this.changeUserInfo}
                     >
-                        Submit Activation Request
+                        Submit Request
                     </button>
                 </div>
             </div>

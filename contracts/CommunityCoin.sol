@@ -59,6 +59,7 @@ contract CommunityCoin is Ownable {
         departments[msg.sender] = 'Engineering';
         titles[msg.sender] = 'Unicorn';
         activatedTimes[msg.sender] = now;
+        activationRequested[msg.sender] = true;
         userTypes[msg.sender] = 'owner';
 
         hollowBalances[msg.sender] = 1;
@@ -160,12 +161,23 @@ contract CommunityCoin is Ownable {
     }
     event DonationToContract(address addr, uint256 amount);
 
-
     // USER ACTIONS
-    function requestActivation() public {
+    function requestActivation(
+        string profileImage,
+        string firstName,
+        string familyName,
+        string department,
+        string title
+    ) public {
         require (!activationRequested[msg.sender]);
         activationRequested[msg.sender] = true;
         activationRequests.push(msg.sender);
+        profileImages[msg.sender] = profileImage;
+        firstNames[msg.sender] = firstName;
+        familyNames[msg.sender] = familyName;
+        departments[msg.sender] = department;
+        titles[msg.sender] = title;
+        emit UserInfoUpdated(msg.sender);
         emit ActivationRequested(msg.sender);
     }
     event ActivationRequested(address addr);

@@ -117,10 +117,17 @@ export function getUserBalances(
     };
 }
 
-export function requestActivation(account, coco) {
+export function requestActivation(account, coco, userInfo) {
     return async (dispatch) => {
         try {
-            await coco.requestActivation({ from: account });
+            await coco.requestActivation(
+                'empty',
+                userInfo.firstName,
+                userInfo.familyName,
+                userInfo.department,
+                userInfo.title,
+                { from: account }
+            );
             const activationRequested = coco.ActivationRequested();
             activationRequested.watch((err, result) => {
                 if (err) {
@@ -134,4 +141,41 @@ export function requestActivation(account, coco) {
             console.log(error);
         }
     }
+}
+
+export function fetchActivationRequests(account, coco) {
+    return async (dispatch) => {
+        try {
+            const requests = await coco.getActivationRequests({ from: account });
+
+            if (requests && requests.length > 0) {
+                const allRequests = await requests.map(async (user) => {
+                    const personalInfo = await coco.getPersonalInfo(user, { from: account });
+                    const profileImage = personalInfo[0];
+                    const firstName = personalInfo[1];
+                    const familyName = personalInfo[2];
+                    const department = personalInfo[3];
+                    const title = personalInfo[4];
+                    return {
+                        profileImage,
+                        firstName,
+                        familyName,
+                        department,
+                        title
+                    };
+                });
+
+                Promise.all(allRequests).then((results) => {
+                    dispatch(setActivationRequestList(results));
+                })
+            }
+        } catch (error) {
+            console.log('Failed to fetch activation requests.');
+            console.log(error);
+        }
+    }
+}
+
+export function setActivationRequestList(list) {
+    return { type: types.SET_REQUEST_LIST, list };
 }

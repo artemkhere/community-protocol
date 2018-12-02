@@ -12,5 +12,6 @@ export default {
     unresolvedSolidBalance: null,
     lastSolidHarvest: null,
     activationRequested: null,
-    activeStatus: null
+    activeStatus: null,
+    activationRequestList: []
 };

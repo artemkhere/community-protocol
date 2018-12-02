@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
+import * as userActions from '../../../actions/userActions';
 import * as navigationActions from '../../../actions/navigationActions';
 import UserBlock from "../UserBlock/UserBlock";
 import './ActivationRequests.css';
@@ -13,7 +14,18 @@ class ActivationRequests extends Component {
             name: '',
             department: '',
             title: '',
+            activationRequestList: this.props.activationRequestList ? this.props.activationRequestList: []
         };
+    }
+
+    componentDidMount = () => {
+        const {
+            userActions,
+            account,
+            coco
+        } = this.props;
+
+        userActions.fetchActivationRequests(account, coco);
     }
 
     searchInfoHandler = (field) => {
@@ -63,6 +75,25 @@ class ActivationRequests extends Component {
         );
     }
 
+    renderRequestList = () => {
+        const list = this.state.activationRequestList;
+
+        return list.map((user, index) => {
+            return (
+                <UserBlock
+                    colorTheme="orange"
+                    userType="user"
+                    context="Activation Requests"
+                    firstName={user.firstName}
+                    familyName={user.familyName}
+                    department={user.department}
+                    title={user.title}
+                    key={user.firstName + user.familyName + index}
+                />
+            );
+        });
+    }
+
     render() {
         return (
             <div className="search-main-container">
@@ -77,21 +108,7 @@ class ActivationRequests extends Component {
                     </button>
                 </div>
                 <h2 className="results-title orange">Results</h2>
-                <UserBlock
-                    colorTheme="orange"
-                    userType="owner"
-                    context="Activation Requests"
-                />
-                <UserBlock
-                    colorTheme="orange"
-                    userType="admin"
-                    context="Activation Requests"
-                />
-                <UserBlock
-                    colorTheme="orange"
-                    userType="user"
-                    context="Activation Requests"
-                />
+                {this.renderRequestList()}
             </div>
         );
     }
@@ -99,18 +116,26 @@ class ActivationRequests extends Component {
 
 ActivationRequests.propTypes = {
     navigationActions: PropTypes.object,
-    loading: PropTypes.bool
+    userActions: PropTypes.object,
+    loading: PropTypes.bool,
+    activationRequestList: PropTypes.array,
+    account: PropTypes.string,
+    coco: PropTypes.object
 };
 
 function mapStateToProps(state) {
     return {
         loading: state.navigation.loading,
+        activationRequestList: state.user.activationRequestList,
+        account: state.ethereum.account,
+        coco: state.ethereum.coco
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        navigationActions: bindActionCreators(navigationActions, dispatch)
+        navigationActions: bindActionCreators(navigationActions, dispatch),
+        userActions: bindActionCreators(userActions, dispatch)
     };
 }
 
