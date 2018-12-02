@@ -301,7 +301,7 @@ contract CommunityCoin is Ownable {
     function activateUser(address user) external onlyAdmin {
         require(user != address(0));
         require(!activeStatus[user]);
-        /* removeRequesterFromQueu(user); */
+        removeRequesterFromQueu(user);
         activeStatus[user] = true;
         activatedTimes[user] = now;
         lastHollowHarvests[user] = now;
@@ -317,15 +317,12 @@ contract CommunityCoin is Ownable {
         address[] memory rq = activationRequests;
         if (rq.length < 1) { return; }
         for (uint16 i = 0; i < rq.length; i++) {
-            if (rq[i] == requester) {
-                removeRequesterAtIndex(i);
-                return;
-            }
+            if (rq[i] == requester) { activationRequests[i] = 0x0; return; }
         }
         return;
     }
 
-    function removeRequesterAtIndex(uint16 index) internal {
+    /* function removeRequesterAtIndex(uint16 index) internal {
         require (index >= activationRequests.length);
 
         for (uint16 i = index; i < activationRequests.length - 1; i++) {
@@ -334,7 +331,7 @@ contract CommunityCoin is Ownable {
 
         delete activationRequests[activationRequests.length - 1];
         activationRequests.length--;
-    }
+    } */
 
     function deactivateUser(address user) external onlyAdmin {
         require(activeStatus[user]);
@@ -349,15 +346,12 @@ contract CommunityCoin is Ownable {
         address[] memory au = activeUsers;
         if (au.length < 1) { return; }
         for (uint16 i = 0; i < au.length; i++) {
-            if (au[i] == user) {
-                removeActiveUserAtIndex(i);
-                return;
-            }
+            if (au[i] == user) { activeUsers[i] = 0x0; return; }
         }
         return;
     }
 
-    function removeActiveUserAtIndex(uint16 index) internal {
+    /* function removeActiveUserAtIndex(uint16 index) internal {
         require (index >= activeUsers.length);
 
         for (uint16 i = index; i < activeUsers.length - 1; i++) {
@@ -366,7 +360,7 @@ contract CommunityCoin is Ownable {
 
         delete activeUsers[activeUsers.length - 1];
         activeUsers.length--;
-    }
+    } */
 
     // possibility of duplicated users in deactivated user list
 }

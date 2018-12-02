@@ -83,20 +83,23 @@ class ActivationRequests extends Component {
         } = this.state;
 
         const list = this.state.activationRequestList;
+
         let toRender = list.map((user, index) => {
-            return (
-                <UserBlock
-                    colorTheme="orange"
-                    userType="user"
-                    context="Activation Requests"
-                    firstName={user.firstName}
-                    familyName={user.familyName}
-                    department={user.department}
-                    title={user.title}
-                    userAccount={user.userAccount}
-                    key={user.firstName + user.familyName + index}
-                />
-            );
+            if (user.userAccount !== '0x0000000000000000000000000000000000000000') {
+                return (
+                    <UserBlock
+                        colorTheme="orange"
+                        userType="user"
+                        context="Activation Requests"
+                        firstName={user.firstName}
+                        familyName={user.familyName}
+                        department={user.department}
+                        title={user.title}
+                        userAccount={user.userAccount}
+                        key={user.firstName + user.familyName + index}
+                    />
+                );
+            }
         });
 
         if (name.length > 0 || department.length > 0 || title.length > 0) {
@@ -114,6 +117,8 @@ class ActivationRequests extends Component {
         } = this.state;
 
         const filtered = list.map((user, index) => {
+            if (user.userAccount !== '0x0000000000000000000000000000000000000000') { return; }
+
             let check = true;
             const userRender = (
                 <UserBlock
