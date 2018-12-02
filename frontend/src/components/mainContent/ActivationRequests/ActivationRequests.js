@@ -76,9 +76,14 @@ class ActivationRequests extends Component {
     }
 
     renderRequestList = () => {
-        const list = this.state.activationRequestList;
+        const {
+            name,
+            department,
+            title
+        } = this.state;
 
-        return list.map((user, index) => {
+        const list = this.state.activationRequestList;
+        let toRender = list.map((user, index) => {
             return (
                 <UserBlock
                     colorTheme="orange"
@@ -92,6 +97,45 @@ class ActivationRequests extends Component {
                 />
             );
         });
+
+        if (name.length > 0 || department.length > 0 || title.length > 0) {
+            toRender = this.filterBySearch(list);
+        }
+
+        return toRender;
+    }
+
+    filterBySearch = (list) => {
+        const {
+            name,
+            department,
+            title
+        } = this.state;
+
+        const filtered = list.map((user, index) => {
+            let check = true;
+            const userRender = (
+                <UserBlock
+                    colorTheme="orange"
+                    userType="user"
+                    context="Activation Requests"
+                    firstName={user.firstName}
+                    familyName={user.familyName}
+                    department={user.department}
+                    title={user.title}
+                    key={user.firstName + user.familyName + index}
+                />
+            );
+            const userName = user.firstName + user.familyName;
+
+            if (userName.toLowerCase().indexOf(name) === -1) { check = false; }
+            if (user.department.toLowerCase().indexOf(department) === -1) { check = false; }
+            if (user.title.toLowerCase().indexOf(title) === -1) { check = false; }
+
+            if (check) { return userRender; }
+        });
+
+        return filtered;
     }
 
     render() {
