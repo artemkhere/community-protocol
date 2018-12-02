@@ -157,6 +157,7 @@ export function fetchActivationRequests(account, coco) {
                     const department = personalInfo[3];
                     const title = personalInfo[4];
                     return {
+                        userAccount: user,
                         profileImage,
                         firstName,
                         familyName,
@@ -178,4 +179,23 @@ export function fetchActivationRequests(account, coco) {
 
 export function setActivationRequestList(list) {
     return { type: types.SET_REQUEST_LIST, list };
+}
+
+export function activateUser(account, coco, user) {
+    return async (dispatch) => {
+        try {
+            await coco.activateUser(user, { from: account });
+            const userActivated = coco.UserActivated();
+            userActivated.watch((err, result) => {
+                if (err) {
+                    console.log('Could not see user activation update');
+                } else {
+                    console.log(result, 'User succesfully activated')
+                }
+            });
+        } catch (error) {
+            console.log('Failed to activate user.');
+            console.log(error);
+        }
+    }
 }

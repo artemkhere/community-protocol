@@ -2,7 +2,7 @@ import initialState from './initialUserState';
 import {
     GET_USER_INFO, FETCH_USER_INFO, SET_USER_INFO, FETCH_USER_BALANCES,
     GET_USER_BALANCES, REQUEST_ACTIVATION, FETCH_ACTIVATION_REQUESTS,
-    SET_REQUEST_LIST, FETCH_USER_LIST
+    SET_REQUEST_LIST, ACTIVATE_USER, FETCH_USER_LIST
 } from '../actions/actionTypes';
 
 export default function user(state = initialState, action) {

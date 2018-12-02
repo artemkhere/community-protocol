@@ -46,7 +46,7 @@ contract CommunityCoin is Ownable {
     mapping (address => mapping (address => Relationship)) public userToRelationships;
 
     constructor() public {
-        tokenCount = 2;
+        tokenCount = 158;
         tokenValue = 0;
 
         owner = msg.sender;
@@ -63,7 +63,7 @@ contract CommunityCoin is Ownable {
         userTypes[msg.sender] = 'owner';
 
         hollowBalances[msg.sender] = 1;
-        currentSolidBalances[msg.sender] = 24;
+        currentSolidBalances[msg.sender] = 122;
         unresolvedSolidBalances[msg.sender] = 35;
         lastHollowHarvests[msg.sender] = now - 604800;
         lastSolidHarvests[msg.sender] = now - 604800;
@@ -237,7 +237,7 @@ contract CommunityCoin is Ownable {
     function harvestSolidCoins() external {
         require(activeStatus[msg.sender]);
         uint256 lastHarvest = lastSolidHarvests[msg.sender];
-        require((lastHarvest + 2419200) <= now);
+        /* require((lastHarvest + 2419200) <= now); */
         uint256 availableCoins = unresolvedSolidBalances[msg.sender];
         require(availableCoins > 0);
 

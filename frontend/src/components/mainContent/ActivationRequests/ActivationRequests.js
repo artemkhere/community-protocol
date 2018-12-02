@@ -93,6 +93,7 @@ class ActivationRequests extends Component {
                     familyName={user.familyName}
                     department={user.department}
                     title={user.title}
+                    userAccount={user.userAccount}
                     key={user.firstName + user.familyName + index}
                 />
             );
@@ -123,6 +124,7 @@ class ActivationRequests extends Component {
                     familyName={user.familyName}
                     department={user.department}
                     title={user.title}
+                    userAccount={user.account}
                     key={user.firstName + user.familyName + index}
                 />
             );

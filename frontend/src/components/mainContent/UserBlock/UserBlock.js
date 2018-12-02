@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as navigationActions from '../../../actions/navigationActions';
+import * as userActions from '../../../actions/userActions';
 import PropTypes from 'prop-types';
 import './UserBlock.css';
 
@@ -16,6 +17,10 @@ class UserBlock extends Component {
 
     renderActions = () => {
         const {
+            userActions,
+            account,
+            coco,
+            userAccount,
             colorTheme,
             userType,
             context
@@ -51,7 +56,7 @@ class UserBlock extends Component {
         const activateButton = (
             <button
                 className={`solid ${colorTheme}`}
-                // onClick={this.toggleSendMenu}
+                onClick={() => { userActions.activateUser(account, coco, userAccount); }}
             >
                 activate
             </button>
@@ -172,17 +177,27 @@ class UserBlock extends Component {
 
 UserBlock.propTypes = {
     navigationActions: PropTypes.object,
+    userActions: PropTypes.object,
     colorTheme: PropTypes.string,
     userType: PropTypes.string,
     context: PropTypes.string,
 };
 
+function mapStateToProps(state) {
+    return {
+        account: state.ethereum.account,
+        coco: state.ethereum.coco
+    };
+}
+
 function mapDispatchToProps(dispatch) {
     return {
-        navigationActions: bindActionCreators(navigationActions, dispatch)
+        navigationActions: bindActionCreators(navigationActions, dispatch),
+        userActions: bindActionCreators(userActions, dispatch)
     };
 }
 
 export default connect(
+    mapStateToProps,
     mapDispatchToProps
 )(UserBlock);

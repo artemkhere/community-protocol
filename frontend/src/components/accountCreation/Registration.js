@@ -53,7 +53,7 @@ class Registration extends Component {
             department,
             title
         }
-
+        
         userActions.requestActivation(account, coco, userInfo);
     }
 
