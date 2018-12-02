@@ -175,16 +175,12 @@ contract('CommunityCoin Tests', function(accounts) {
         assert.isTrue(acct4Balance[0].toNumber() > 0, 'Account 4 Hollow Balance is empty');
     });
 
-    // it('should send Community Coins from Account 3 to Account 4', async () => {
-    //     const account_1_before = web3.eth.getBalance(account_1);
-    //     const tx1 = await coco.redeemTokens({ from: account_1 });
-    //     const account_1_after = web3.eth.getBalance(account_1);
-    //     assert.isAbove(account_1_after.toNumber(), account_1_before.toNumber(), 'Account 1 did not recieve the redeemed value');
-    //
-    //     const solidTokenCount = await coco.getBalances.call({ from: account_1 });
-    //     assert.equal(solidTokenCount[1].toNumber(), 0, 'Account 1 still has tokens after redemption');
-    // });
-
+    it('should send Community Coins from Account 3 to Account 4', async () => {
+        const account_4_before = await coco.getBalances({ from: account_4 });
+        const tx1 = await coco.sendHollowCoins(account_4, 5, { from: account_3 });
+        const account_4_after = await coco.getBalances({ from: account_4 });
+        assert.isAbove(account_4_after[2].toNumber(), account_4_before[2].toNumber(), 'Account 4 did not recieve solid coins');
+    });
 
     // CONTRACT MANAGMENT
     it('should trasfer ownership of the contract from Account 1 to Account 2', async () => {

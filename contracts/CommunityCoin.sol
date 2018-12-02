@@ -236,7 +236,7 @@ contract CommunityCoin is Ownable {
 
     function harvestSolidCoins() external {
         require(activeStatus[msg.sender]);
-        uint256 lastHarvest = lastSolidHarvests[msg.sender];
+        /* uint256 lastHarvest = lastSolidHarvests[msg.sender]; */
         /* require((lastHarvest + 2419200) <= now); */
         uint256 availableCoins = unresolvedSolidBalances[msg.sender];
         require(availableCoins > 0);
@@ -244,6 +244,7 @@ contract CommunityCoin is Ownable {
         if (availableCoins > 0) {
             lastSolidHarvests[msg.sender] = now;
             currentSolidBalances[msg.sender] += availableCoins;
+            unresolvedSolidBalances[msg.sender] = 0;
 
             emit SolidHarvest(msg.sender, availableCoins);
         }
@@ -300,16 +301,17 @@ contract CommunityCoin is Ownable {
     function activateUser(address user) external onlyAdmin {
         require(user != address(0));
         require(!activeStatus[user]);
-        removeRequesterFromQueu(user);
+        /* removeRequesterFromQueu(user); */
         activeStatus[user] = true;
+        activatedTimes[user] = now;
         lastHollowHarvests[user] = now;
         lastSolidHarvests[user] = now;
         userList.push(user);
         activeUsers.push(user);
         userTypes[user] = 'user';
-        emit UserActivated(user, now, now);
+        emit UserActivated(user);
     }
-    event UserActivated(address addr, uint256 lastHollowHarvest, uint256 lastSolidHarvest);
+    event UserActivated(address addr);
 
     function removeRequesterFromQueu(address requester) internal {
         address[] memory rq = activationRequests;
