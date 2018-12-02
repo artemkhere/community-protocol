@@ -14,8 +14,18 @@ class Search extends Component {
             name: '',
             department: '',
             title: '',
-            users: []
+            userList: this.props.userList ? this.props.userList : []
         };
+    }
+
+    componentDidMount = () => {
+        const {
+            userActions,
+            account,
+            coco
+        } = this.props;
+
+        userActions.fetchUserList(account, coco);
     }
 
     searchInfoHandler = (field) => {
@@ -39,14 +49,7 @@ class Search extends Component {
             coco
         } = this.props;
 
-        try {
-            navigationActions.toggleLoading(true);
-            const users = await coco.getAllUsers({ from: account });
-            console.log(users);
-        } catch (error) {
-            navigationActions.toggleLoading(false);
-            console.log(error);
-        }
+        userActions.fetchAllUsers(account, coco);
     }
 
     renderForm = () => {
@@ -83,6 +86,76 @@ class Search extends Component {
         );
     }
 
+    renderUserList = () => {
+        const {
+            name,
+            department,
+            title
+        } = this.state;
+
+        const list = this.state.userList;
+
+        let toRender = list.map((user, index) => {
+            if (user.userAccount !== '0x0000000000000000000000000000000000000000') {
+                return (
+                    <UserBlock
+                        colorTheme="orange"
+                        userType="user"
+                        context="Activation Requests"
+                        firstName={user.firstName}
+                        familyName={user.familyName}
+                        department={user.department}
+                        title={user.title}
+                        userAccount={user.userAccount}
+                        key={user.firstName + user.familyName + index}
+                    />
+                );
+            }
+        });
+
+        if (name.length > 0 || department.length > 0 || title.length > 0) {
+            toRender = this.filterBySearch(list);
+        }
+
+        return toRender;
+    }
+
+    filterBySearch = (list) => {
+        const {
+            name,
+            department,
+            title
+        } = this.state;
+
+        const filtered = list.map((user, index) => {
+            if (user.userAccount !== '0x0000000000000000000000000000000000000000') { return; }
+
+            let check = true;
+            const userRender = (
+                <UserBlock
+                    colorTheme="orange"
+                    userType="user"
+                    context="Activation Requests"
+                    firstName={user.firstName}
+                    familyName={user.familyName}
+                    department={user.department}
+                    title={user.title}
+                    userAccount={user.account}
+                    key={user.firstName + user.familyName + index}
+                />
+            );
+            const userName = user.firstName + user.familyName;
+
+            if (userName.toLowerCase().indexOf(name) === -1) { check = false; }
+            if (user.department.toLowerCase().indexOf(department) === -1) { check = false; }
+            if (user.title.toLowerCase().indexOf(title) === -1) { check = false; }
+
+            if (check) { return userRender; }
+        });
+
+        return filtered;
+    }
+
     render() {
         return (
             <div className="search-main-container">
@@ -99,21 +172,7 @@ class Search extends Component {
                 </div>
                 <h2 className="results-title">Results</h2>
                 {this.props.loading && <h1>LOADING!</h1>}
-                <UserBlock
-                    colorTheme="purple"
-                    userType="owner"
-                    context="Search"
-                />
-                <UserBlock
-                    colorTheme="purple"
-                    userType="admin"
-                    context="Search"
-                />
-                <UserBlock
-                    colorTheme="purple"
-                    userType="user"
-                    context="Search"
-                />
+                {this.renderUserList()}
             </div>
         );
     }
@@ -123,12 +182,14 @@ Search.propTypes = {
     navigationActions: PropTypes.object,
     loading: PropTypes.bool,
     account: PropTypes.string,
+    userList: PropTypes.array,
     coco: PropTypes.object
 };
 
 function mapStateToProps(state) {
     return {
         loading: state.navigation.loading,
+        userList: state.user.userList,
         account: state.ethereum.account,
         coco: state.ethereum.coco
     };

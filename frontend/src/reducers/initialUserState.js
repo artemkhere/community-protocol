@@ -13,5 +13,6 @@ export default {
     lastSolidHarvest: null,
     activationRequested: null,
     activeStatus: null,
-    activationRequestList: []
+    activationRequestList: [],
+    userList: []
 };

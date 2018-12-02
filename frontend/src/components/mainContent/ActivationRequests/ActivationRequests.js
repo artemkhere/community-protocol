@@ -14,7 +14,7 @@ class ActivationRequests extends Component {
             name: '',
             department: '',
             title: '',
-            activationRequestList: this.props.activationRequestList ? this.props.activationRequestList: []
+            activationRequestList: this.props.activationRequestList ? this.props.activationRequestList : []
         };
     }
 

@@ -32,6 +32,34 @@ class BottomNav extends Component {
         }
     }
 
+    renderActivationRequests = () => {
+        const {
+            userType,
+            view
+        } = this.props;
+
+        if (userType === 'admin' || userType === 'owner') {
+            return (
+                <div
+                    className={view === "Activation Requests" ?
+                            "menu-section orange"
+                        :
+                            "menu-section"
+                    }
+                    onClick={this.handleMenuClick('Activation Requests')}
+                >
+                    <div className="menu-item-container">
+                        <div className="menu-icon material-icons">gavel</div>
+                        <div className="menu-title">
+                            {view ==="Activation Requests" && <div className="highlight" />}
+                            <div className="title">requests</div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+    }
+
     render() {
         const {
             view
@@ -71,22 +99,7 @@ class BottomNav extends Component {
                         </div>
                     </div>
                 </div>
-                <div
-                    className={view === "Activation Requests" ?
-                            "menu-section orange"
-                        :
-                            "menu-section"
-                    }
-                    onClick={this.handleMenuClick('Activation Requests')}
-                >
-                    <div className="menu-item-container">
-                        <div className="menu-icon material-icons">gavel</div>
-                        <div className="menu-title">
-                            {view ==="Activation Requests" && <div className="highlight" />}
-                            <div className="title">requests</div>
-                        </div>
-                    </div>
-                </div>
+                {this.renderActivationRequests()}
             </div>
         );
     }
@@ -94,12 +107,14 @@ class BottomNav extends Component {
 
 BottomNav.propTypes = {
     navigationActions: PropTypes.object,
-    view: PropTypes.string
+    view: PropTypes.string,
+    userType: PropTypes.string
 };
 
 function mapStateToProps(state) {
     return {
-        view: state.navigation.view
+        view: state.navigation.view,
+        userType: state.user.userType,
     };
 }
 
