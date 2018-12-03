@@ -38,7 +38,7 @@ class UserBlock extends Component {
         const deactivateButton = (
             <button
                 className={`solid ${colorTheme}`}
-                // onClick={this.toggleSendMenu}
+                onClick={() => { userActions.deactivateUser(account, coco, userAccount); }}
             >
                 deactivate
             </button>
@@ -47,7 +47,7 @@ class UserBlock extends Component {
         const adminButton = (
             <button
                 className={`solid ${colorTheme}`}
-                // onClick={this.toggleSendMenu}
+                // onClick={() => { userActions.makeAdmin(account, coco, userAccount); }}
             >
                 make admin
             </button>
@@ -108,7 +108,7 @@ class UserBlock extends Component {
                     </button>
                     <button
                         className={`solid ${colorTheme}`}
-                        onClick={this.toggleSendMenu}
+                        onClick={this.sendCoco}
                     >
                         send coco
                     </button>
@@ -127,11 +127,27 @@ class UserBlock extends Component {
     }
 
     changeSendValue = (e) => {
-        this.setState({ name: e.target.value });
+        this.setState({ sendValue: e.target.value });
     }
 
     toggleSendMenu = () => {
         this.setState({ sendMenuOpen: !this.state.sendMenuOpen });
+    }
+
+    sendCoco = () => {
+        const {
+            userActions,
+            account,
+            coco,
+            userAccount
+        } = this.props;
+
+        const { sendValue } = this.state;
+
+        if (sendValue <= 15) {
+            userActions.sendCoco(account, coco, userAccount, sendValue);
+            this.toggleSendMenu();
+        }
     }
 
     render() {
@@ -186,7 +202,8 @@ UserBlock.propTypes = {
 function mapStateToProps(state) {
     return {
         account: state.ethereum.account,
-        coco: state.ethereum.coco
+        coco: state.ethereum.coco,
+        userType: state.user.userType
     };
 }
 

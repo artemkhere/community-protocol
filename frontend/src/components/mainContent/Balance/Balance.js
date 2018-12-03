@@ -24,7 +24,8 @@ class Balance extends Component {
 
     calculateAvailableHarvest = (lastHollowHarvest) => {
         const currentMoment = new Date().getTime() / 1000;
-        const available = Math.round((currentMoment - lastHollowHarvest) / 17280);
+        const available = Math.round((currentMoment - lastHollowHarvest) / 10);
+        // const available = Math.round((currentMoment - lastHollowHarvest) / 17280);
         return available;
     }
 

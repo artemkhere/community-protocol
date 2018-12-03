@@ -14,18 +14,18 @@ class Search extends Component {
             name: '',
             department: '',
             title: '',
-            userList: this.props.userList ? this.props.userList : []
+            activeList: this.props.activeList.length > 0 ? this.props.activeList : []
         };
     }
 
-    componentDidMount = () => {
+    componentDidMount = async () => {
         const {
             userActions,
             account,
             coco
         } = this.props;
 
-        userActions.fetchUserList(account, coco);
+        userActions.fetchActiveList(account, coco);
     }
 
     searchInfoHandler = (field) => {
@@ -42,14 +42,14 @@ class Search extends Component {
     }
 
     searchUsers = async () => {
-        const {
-            navigationActions,
-            userActions,
-            account,
-            coco
-        } = this.props;
-
-        userActions.fetchAllUsers(account, coco);
+        // const {
+        //     navigationActions,
+        //     userActions,
+        //     account,
+        //     coco
+        // } = this.props;
+        //
+        // userActions.fetchAllUsers(account, coco);
     }
 
     renderForm = () => {
@@ -86,22 +86,21 @@ class Search extends Component {
         );
     }
 
-    renderUserList = () => {
+    renderActiveList = () => {
         const {
             name,
             department,
-            title
+            title,
+            activeList
         } = this.state;
 
-        const list = this.state.userList;
-
-        let toRender = list.map((user, index) => {
+        let toRender = activeList.map((user, index) => {
             if (user.userAccount !== '0x0000000000000000000000000000000000000000') {
                 return (
                     <UserBlock
-                        colorTheme="orange"
-                        userType="user"
-                        context="Activation Requests"
+                    colorTheme="purple"
+                    userType="user"
+                    context="Search"
                         firstName={user.firstName}
                         familyName={user.familyName}
                         department={user.department}
@@ -114,7 +113,7 @@ class Search extends Component {
         });
 
         if (name.length > 0 || department.length > 0 || title.length > 0) {
-            toRender = this.filterBySearch(list);
+            toRender = this.filterBySearch(activeList);
         }
 
         return toRender;
@@ -128,14 +127,14 @@ class Search extends Component {
         } = this.state;
 
         const filtered = list.map((user, index) => {
-            if (user.userAccount !== '0x0000000000000000000000000000000000000000') { return; }
+            if (user.userAccount === '0x0000000000000000000000000000000000000000') { return; }
 
             let check = true;
             const userRender = (
                 <UserBlock
-                    colorTheme="orange"
+                    colorTheme="purple"
                     userType="user"
-                    context="Activation Requests"
+                    context="Search"
                     firstName={user.firstName}
                     familyName={user.familyName}
                     department={user.department}
@@ -172,7 +171,7 @@ class Search extends Component {
                 </div>
                 <h2 className="results-title">Results</h2>
                 {this.props.loading && <h1>LOADING!</h1>}
-                {this.renderUserList()}
+                {this.renderActiveList()}
             </div>
         );
     }
@@ -182,14 +181,14 @@ Search.propTypes = {
     navigationActions: PropTypes.object,
     loading: PropTypes.bool,
     account: PropTypes.string,
-    userList: PropTypes.array,
+    activeList: PropTypes.array,
     coco: PropTypes.object
 };
 
 function mapStateToProps(state) {
     return {
         loading: state.navigation.loading,
-        userList: state.user.userList,
+        activeList: state.user.activeList,
         account: state.ethereum.account,
         coco: state.ethereum.coco
     };

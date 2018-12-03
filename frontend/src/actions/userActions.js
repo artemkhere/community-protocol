@@ -228,6 +228,53 @@ export function setUserList(list) {
     return { type: types.SET_USER_LIST, list };
 }
 
+export function fetchActiveList(account, coco) {
+    return async (dispatch) => {
+        try {
+            const activeList = await coco.getActiveUsers({ from: account });
+
+            if (activeList && activeList.length > 0) {
+                const allUserDetails = await activeList.map(async (user) => {
+                    const personalInfo = await coco.getPersonalInfo(user, { from: account });
+                    const accountInfo = await coco.getAccountInfo(user, { from: account });
+                    const profileImage = personalInfo[0];
+                    const firstName = personalInfo[1];
+                    const familyName = personalInfo[2];
+                    const department = personalInfo[3];
+                    const title = personalInfo[4];
+                    const activatedTime = accountInfo[0];
+                    const activationRequest = accountInfo[1];
+                    const active = accountInfo[2];
+                    const userType = accountInfo[3];
+                    return {
+                        userAccount: user,
+                        profileImage,
+                        firstName,
+                        familyName,
+                        department,
+                        title,
+                        activatedTime,
+                        activationRequest,
+                        active,
+                        userType
+                    };
+                });
+
+                Promise.all(allUserDetails).then((results) => {
+                    dispatch(setActiveList(results));
+                })
+            }
+        } catch (error) {
+            console.log('Failed to fetch activation requests.');
+            console.log(error);
+        }
+    }
+}
+
+export function setActiveList(list) {
+    return { type: types.SET_ACTIVE_LIST, list };
+}
+
 export function activateUser(account, coco, user) {
     return async (dispatch) => {
         try {
@@ -242,6 +289,44 @@ export function activateUser(account, coco, user) {
             });
         } catch (error) {
             console.log('Failed to activate user.');
+            console.log(error);
+        }
+    }
+}
+
+export function deactivateUser(account, coco, user) {
+    return async (dispatch) => {
+        try {
+            await coco.deactivateUser(user, { from: account });
+            const userDeactivated = coco.UserDeactivated();
+            userDeactivated.watch((err, result) => {
+                if (err) {
+                    console.log('Could not see user deactivation update');
+                } else {
+                    console.log(result, 'User succesfully deactivated')
+                }
+            });
+        } catch (error) {
+            console.log('Failed to deactivate user.');
+            console.log(error);
+        }
+    }
+}
+
+export function sendCoco(account, coco, user, amount) {
+    return async (dispatch) => {
+        try {
+            await coco.sendHollowCoins(user, amount, { from: account });
+            const transfer = coco.Transfer();
+            transfer.watch((err, result) => {
+                if (err) {
+                    console.log('Could not see user coco transfer');
+                } else {
+                    console.log(result, 'Succesfully sent coco')
+                }
+            });
+        } catch (error) {
+            console.log('Failed to send coco.');
             console.log(error);
         }
     }

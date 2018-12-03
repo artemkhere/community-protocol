@@ -18,7 +18,7 @@ class ActivationRequests extends Component {
         };
     }
 
-    componentDidMount = () => {
+    componentDidMount = async () => {
         const {
             userActions,
             account,
@@ -79,12 +79,11 @@ class ActivationRequests extends Component {
         const {
             name,
             department,
-            title
+            title,
+            activationRequestList
         } = this.state;
 
-        const list = this.state.activationRequestList;
-
-        let toRender = list.map((user, index) => {
+        let toRender = activationRequestList.map((user, index) => {
             if (user.userAccount !== '0x0000000000000000000000000000000000000000') {
                 return (
                     <UserBlock
@@ -103,7 +102,7 @@ class ActivationRequests extends Component {
         });
 
         if (name.length > 0 || department.length > 0 || title.length > 0) {
-            toRender = this.filterBySearch(list);
+            toRender = this.filterBySearch(activationRequestList);
         }
 
         return toRender;
@@ -117,7 +116,7 @@ class ActivationRequests extends Component {
         } = this.state;
 
         const filtered = list.map((user, index) => {
-            if (user.userAccount !== '0x0000000000000000000000000000000000000000') { return; }
+            if (user.userAccount === '0x0000000000000000000000000000000000000000') { return; }
 
             let check = true;
             const userRender = (

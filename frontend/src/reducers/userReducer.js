@@ -2,7 +2,8 @@ import initialState from './initialUserState';
 import {
     GET_USER_INFO, FETCH_USER_INFO, SET_USER_INFO, FETCH_USER_BALANCES,
     GET_USER_BALANCES, REQUEST_ACTIVATION, FETCH_ACTIVATION_REQUESTS,
-    SET_REQUEST_LIST, ACTIVATE_USER, SET_USER_LIST, FETCH_USER_LIST
+    SET_REQUEST_LIST, ACTIVATE_USER, DEACTIVATE_USER, SET_USER_LIST,
+    FETCH_USER_LIST, SEND_COCO, SET_ACTIVE_LIST, FETCH_ACTIVE_LIST
 } from '../actions/actionTypes';
 
 export default function user(state = initialState, action) {
@@ -34,6 +35,10 @@ export default function user(state = initialState, action) {
         case SET_USER_LIST:
             return Object.assign({}, state, {
                 userList: action.list,
+            });
+        case SET_ACTIVE_LIST:
+            return Object.assign({}, state, {
+                activeList: action.list,
             });
         default:
             return state;

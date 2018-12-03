@@ -14,5 +14,6 @@ export default {
     activationRequested: null,
     activeStatus: null,
     activationRequestList: [],
-    userList: []
+    userList: [],
+    activeList: []
 };

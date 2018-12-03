@@ -60,13 +60,17 @@ contract CommunityCoin is Ownable {
         titles[msg.sender] = 'Unicorn';
         activatedTimes[msg.sender] = now;
         activationRequested[msg.sender] = true;
+        activeUsers.push(msg.sender);
+        userList.push(msg.sender);
         userTypes[msg.sender] = 'owner';
 
         hollowBalances[msg.sender] = 1;
         currentSolidBalances[msg.sender] = 122;
         unresolvedSolidBalances[msg.sender] = 35;
-        lastHollowHarvests[msg.sender] = now - 604800;
-        lastSolidHarvests[msg.sender] = now - 604800;
+        lastHollowHarvests[msg.sender] = now;
+        lastSolidHarvests[msg.sender] = now;
+        /* lastHollowHarvests[msg.sender] = now - 604800;
+        lastSolidHarvests[msg.sender] = now - 604800; */
     }
 
 
@@ -113,6 +117,10 @@ contract CommunityCoin is Ownable {
 
     function getAllUsers() public view returns(address[] memory) {
         return userList;
+    }
+
+    function getActiveUsers() public view returns(address[] memory) {
+        return activeUsers;
     }
 
     function getActivationRequests() public view returns(address[] memory) {
@@ -220,7 +228,8 @@ contract CommunityCoin is Ownable {
     function harvestHollowCoins() external {
         require(activeStatus[msg.sender]);
         uint256 lastHarvest = lastHollowHarvests[msg.sender];
-        uint256 availableCoins = (now - lastHarvest).div(17280);
+        /* uint256 availableCoins = (now - lastHarvest).div(17280); */
+        uint256 availableCoins = (now - lastHarvest).div(10);
 
         if (availableCoins > 0) {
             lastHollowHarvests[msg.sender] = now;
@@ -337,6 +346,7 @@ contract CommunityCoin is Ownable {
         require(activeStatus[user]);
         activeStatus[user] = false;
         userTypes[user] = 'deactivated';
+        removeActiveUser(user);
 
         emit UserDeactivated(user);
     }
