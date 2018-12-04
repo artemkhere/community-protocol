@@ -92,19 +92,19 @@ Contract future-proofing
 * []Validate architecture against this document: https://consensys.github.io/smart-contract-best-practices/software_engineering/
 
 Frontend
-* []Initiates the trigger for account creation
-* []Creates an ethereum address
-* []Keeps track of identities mapped to addresses (via a database)
-* []Keeps profile info (via a database)
-* []Profile
-    * []Name
+* [x]Initiates the trigger for account creation
+* [x]Creates an ethereum address
+* [x]Keeps track of identities mapped to addresses (via a database)
+* [x]Keeps profile info (via a database)
+* [x]Profile
+    * [x]Name
     * []Nickname
     * []Picture
     * []Address
-* []Allows solid token spending (sending of the ether to the same address?)
-* []Let’s hollow token spending
-* []Let's harvesting of the hollow coins (updated balances check)
-* []Displays current price of the tokens for this month
-* []Serves as a searching mechanism for coworker’s profiles
-    * []Search build needed
+* [x]Allows solid token spending (sending of the ether to the same address?)
+* [x]Let’s hollow token spending
+* [x]Let's harvesting of the hollow coins (updated balances check)
+* [x]Displays current price of the tokens for this month
+* [x]Serves as a searching mechanism for coworker’s profiles
+    * [x]Search build needed
     * []Favourites
