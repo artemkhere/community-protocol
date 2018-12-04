@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import * as navigationActions from '../../../actions/navigationActions';
 import * as userActions from '../../../actions/userActions';
+// import Loader from 'react-loader-spinner';
 import UserBlock from "../UserBlock/UserBlock";
 import './Search.css';
 
@@ -205,3 +206,11 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(Search);
+
+
+// <Loader
+//     type="Puff"
+//     color="#00BFFF"
+//     height="100"
+//     width="100"
+// />

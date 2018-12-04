@@ -37,13 +37,14 @@ class App extends Component {
         } = this.props.ethereumActions;
 
         try {
+            // CURRENTLY ONLY WORKS WITH NEW WEB 3 - NEED TO WRITE LEGACY SUPPORT
             // consider moving all of this into 'set up the environment' action
             // grab web3 instance
             const web3 = await getWeb3();
             setWeb3Instance(web3);
             // grab account
-            const accounts = await web3.eth.getAccounts();
-            setAccount(accounts[0]);
+            const account = web3.eth.accounts;
+            setAccount(account[0]);
             // grab the contract
             const cocoContract = truffleContract(CommunityCoin);
             cocoContract.setProvider(web3.currentProvider);
@@ -52,8 +53,8 @@ class App extends Component {
             this.setState({ web3Available: true });
 
             // identify user type if they are registered
-            const accountInfo = await coco.getAccountInfo(accounts[0]);
-            const personalInfo = await coco.getPersonalInfo(accounts[0]);
+            const accountInfo = await coco.getAccountInfo(account[0]);
+            const personalInfo = await coco.getPersonalInfo(account[0]);
             const activatedTime = accountInfo[0].toNumber();
             const activationRequestSubmitted = accountInfo[1];
             const active = accountInfo[2];

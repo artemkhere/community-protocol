@@ -53,7 +53,7 @@ class Registration extends Component {
             department,
             title
         }
-        
+
         userActions.requestActivation(account, coco, userInfo);
     }
 
@@ -68,7 +68,7 @@ class Registration extends Component {
         return (
             <div className="registration-container">
                 <h1 className="title">
-                    Please Register To Participate
+                    Register in Lighthouse Labs Community
                 </h1>
                 <div className="section-container">
                     <div className="section-name">
