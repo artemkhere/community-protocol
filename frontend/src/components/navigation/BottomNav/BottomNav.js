@@ -8,9 +8,7 @@ import './BottomNav.css';
 class BottomNav extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            stuff: []
-        };
+        this.state = {};
     }
 
     handleMenuClick = (newState) => {
@@ -113,8 +111,7 @@ BottomNav.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        view: state.navigation.view,
-        userType: state.user.userType,
+        view: state.navigation.view
     };
 }
 

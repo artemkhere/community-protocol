@@ -29,3 +29,10 @@
     line-height: 24px;
     color: #6D5B98;
 }
+
+.search-main-container .loader-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

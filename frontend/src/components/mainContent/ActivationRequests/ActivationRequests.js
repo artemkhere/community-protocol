@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import * as userActions from '../../../actions/userActions';
 import * as navigationActions from '../../../actions/navigationActions';
+import Loader from 'react-loader-spinner';
 import UserBlock from "../UserBlock/UserBlock";
 import './ActivationRequests.css';
 
@@ -13,8 +14,7 @@ class ActivationRequests extends Component {
         this.state = {
             name: '',
             department: '',
-            title: '',
-            activationRequestList: this.props.activationRequestList ? this.props.activationRequestList : []
+            title: ''
         };
     }
 
@@ -79,30 +79,35 @@ class ActivationRequests extends Component {
         const {
             name,
             department,
-            title,
-            activationRequestList
+            title
         } = this.state;
 
-        let toRender = activationRequestList.map((user, index) => {
-            if (user.userAccount !== '0x0000000000000000000000000000000000000000') {
-                return (
-                    <UserBlock
-                        colorTheme="orange"
-                        userType="user"
-                        context="Activation Requests"
-                        firstName={user.firstName}
-                        familyName={user.familyName}
-                        department={user.department}
-                        title={user.title}
-                        userAccount={user.userAccount}
-                        key={user.firstName + user.familyName + index}
-                    />
-                );
-            }
-        });
+        const { activationRequestList } = this.props;
 
-        if (name.length > 0 || department.length > 0 || title.length > 0) {
-            toRender = this.filterBySearch(activationRequestList);
+        let toRender = false;
+
+        if (activationRequestList && activationRequestList.length > 0) {
+            toRender = activationRequestList.map((user, index) => {
+                if (user.userAccount !== '0x0000000000000000000000000000000000000000') {
+                    return (
+                        <UserBlock
+                            colorTheme="orange"
+                            userType="user"
+                            context="Activation Requests"
+                            firstName={user.firstName}
+                            familyName={user.familyName}
+                            department={user.department}
+                            title={user.title}
+                            userAccount={user.userAccount}
+                            key={user.firstName + user.familyName + index}
+                        />
+                    );
+                }
+            });
+
+            if (name.length > 0 || department.length > 0 || title.length > 0) {
+                toRender = this.filterBySearch(activationRequestList);
+            }
         }
 
         return toRender;
@@ -144,6 +149,17 @@ class ActivationRequests extends Component {
         return filtered;
     }
 
+    loading = () => {
+        const { activationRequestList } = this.props;
+        let result = true;
+
+        if (activationRequestList && activationRequestList.length > 0) {
+            result = false;
+        }
+
+        return result;
+    }
+
     render() {
         return (
             <div className="search-main-container">
@@ -157,8 +173,18 @@ class ActivationRequests extends Component {
                         search
                     </button>
                 </div>
-                <h2 className="results-title orange">Results</h2>
-                {this.renderRequestList()}
+                {this.loading() &&
+                    <div className="loader-container">
+                        <Loader
+                            type="Puff"
+                            color="#E7921A"
+                            height="60"
+                            width="60"
+                        />
+                    </div>
+                }
+                {!this.loading() && <h2 className="results-title orange">Results</h2>}
+                {!this.loading() && this.renderRequestList()}
             </div>
         );
     }
@@ -167,7 +193,6 @@ class ActivationRequests extends Component {
 ActivationRequests.propTypes = {
     navigationActions: PropTypes.object,
     userActions: PropTypes.object,
-    loading: PropTypes.bool,
     activationRequestList: PropTypes.array,
     account: PropTypes.string,
     coco: PropTypes.object
@@ -175,7 +200,6 @@ ActivationRequests.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        loading: state.navigation.loading,
         activationRequestList: state.user.activationRequestList,
         account: state.ethereum.account,
         coco: state.ethereum.coco

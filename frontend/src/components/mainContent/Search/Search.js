@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import * as navigationActions from '../../../actions/navigationActions';
 import * as userActions from '../../../actions/userActions';
-// import Loader from 'react-loader-spinner';
+import Loader from 'react-loader-spinner';
 import UserBlock from "../UserBlock/UserBlock";
 import './Search.css';
 
@@ -14,8 +14,7 @@ class Search extends Component {
         this.state = {
             name: '',
             department: '',
-            title: '',
-            activeList: this.props.activeList.length > 0 ? this.props.activeList : []
+            title: ''
         };
     }
 
@@ -91,30 +90,38 @@ class Search extends Component {
         const {
             name,
             department,
-            title,
-            activeList
+            title
         } = this.state;
 
-        let toRender = activeList.map((user, index) => {
-            if (user.userAccount !== '0x0000000000000000000000000000000000000000') {
-                return (
-                    <UserBlock
-                    colorTheme="purple"
-                    userType="user"
-                    context="Search"
-                        firstName={user.firstName}
-                        familyName={user.familyName}
-                        department={user.department}
-                        title={user.title}
-                        userAccount={user.userAccount}
-                        key={user.firstName + user.familyName + index}
-                    />
-                );
-            }
-        });
+        const { activeList } = this.props;
 
-        if (name.length > 0 || department.length > 0 || title.length > 0) {
-            toRender = this.filterBySearch(activeList);
+        let toRender = false;
+
+        if (activeList && activeList.length > 0) {
+            toRender = this.props.activeList.map((user, index) => {
+                if (
+                    user.userAccount !== '0x0000000000000000000000000000000000000000'
+                    && user.userAccount !== this.props.account
+                ) {
+                    return (
+                        <UserBlock
+                        colorTheme="purple"
+                        userType="user"
+                        context="Search"
+                            firstName={user.firstName}
+                            familyName={user.familyName}
+                            department={user.department}
+                            title={user.title}
+                            userAccount={user.userAccount}
+                            key={user.firstName + user.familyName + index}
+                        />
+                    );
+                }
+            });
+
+            if (name.length > 0 || department.length > 0 || title.length > 0) {
+                toRender = this.filterBySearch(activeList);
+            }
         }
 
         return toRender;
@@ -156,6 +163,17 @@ class Search extends Component {
         return filtered;
     }
 
+    loading = () => {
+        const { activeList } = this.props;
+        let result = true;
+
+        if (activeList && activeList.length > 0) {
+            result = false;
+        }
+
+        return result;
+    }
+
     render() {
         return (
             <div className="search-main-container">
@@ -170,9 +188,18 @@ class Search extends Component {
                         search
                     </button>
                 </div>
-                <h2 className="results-title">Results</h2>
-                {this.props.loading && <h1>LOADING!</h1>}
-                {this.renderActiveList()}
+                {this.loading() &&
+                    <div className="loader-container">
+                        <Loader
+                            type="Puff"
+                            color="#927AC9"
+                            height="60"
+                            width="60"
+                        />
+                    </div>
+                }
+                {!this.loading() && <h2 className="results-title">Results</h2>}
+                {!this.loading() && this.renderActiveList()}
             </div>
         );
     }
@@ -180,7 +207,6 @@ class Search extends Component {
 
 Search.propTypes = {
     navigationActions: PropTypes.object,
-    loading: PropTypes.bool,
     account: PropTypes.string,
     activeList: PropTypes.array,
     coco: PropTypes.object
@@ -188,7 +214,6 @@ Search.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        loading: state.navigation.loading,
         activeList: state.user.activeList,
         account: state.ethereum.account,
         coco: state.ethereum.coco
@@ -206,11 +231,3 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(Search);
-
-
-// <Loader
-//     type="Puff"
-//     color="#00BFFF"
-//     height="100"
-//     width="100"
-// />

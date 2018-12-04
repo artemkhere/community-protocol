@@ -56,8 +56,8 @@ contract CommunityCoin is Ownable {
         // TESTING SET UP
         firstNames[msg.sender] = 'Artem';
         familyNames[msg.sender] = 'Kuznetsov';
-        departments[msg.sender] = 'Engineering';
-        titles[msg.sender] = 'Unicorn';
+        departments[msg.sender] = 'Human Resources';
+        titles[msg.sender] = 'General Manager';
         activatedTimes[msg.sender] = now;
         activationRequested[msg.sender] = true;
         activeUsers.push(msg.sender);

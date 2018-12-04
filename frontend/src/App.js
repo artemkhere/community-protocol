@@ -37,13 +37,17 @@ class App extends Component {
         } = this.props.ethereumActions;
 
         try {
-            // CURRENTLY ONLY WORKS WITH NEW WEB 3 - NEED TO WRITE LEGACY SUPPORT
             // consider moving all of this into 'set up the environment' action
             // grab web3 instance
             const web3 = await getWeb3();
             setWeb3Instance(web3);
             // grab account
-            const account = web3.eth.accounts;
+            let account;
+            // if (typeof web3.eth.getAccounts() !== "undefined") {
+            //     account = web3.eth.getAccounts();
+            // }
+            account = web3.eth.accounts;
+
             setAccount(account[0]);
             // grab the contract
             const cocoContract = truffleContract(CommunityCoin);
@@ -88,7 +92,9 @@ class App extends Component {
                     <div className="app">
                         <TopNav />
                         <MainContent />
-                        <BottomNav />
+                        <BottomNav
+                            userType={this.state.userType}
+                        />
                     </div>
                 );
             } else if (activationRequestSubmitted && activatedTime === 0) {
