@@ -96,6 +96,19 @@ class Balance extends Component {
         }
     }
 
+    renderRealBalance = () => {
+        const { currentSolidBalance } = this.props;
+        let dollarValue;
+
+        if (currentSolidBalance <= 0) {
+            dollarValue = 0;
+        } else {
+            dollarValue = currentSolidBalance * 0.25;
+        }
+
+        return dollarValue;
+    }
+
     renderSolidCoins = () => {
         const {
             currentSolidBalance,
@@ -117,7 +130,7 @@ class Balance extends Component {
                     <div className="state-and-action-container">
                         <div className="state-balance">
                             {currentSolidBalance}
-                            <span className="translation">~$14.8</span>
+                            <span className="translation">~${this.renderRealBalance()}</span>
                         </div>
                         <button
                             className="solid white blue"

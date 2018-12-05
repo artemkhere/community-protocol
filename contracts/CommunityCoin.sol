@@ -69,8 +69,8 @@ contract CommunityCoin is Ownable {
         unresolvedSolidBalances[msg.sender] = 35;
         lastHollowHarvests[msg.sender] = now;
         lastSolidHarvests[msg.sender] = now;
-        /* lastHollowHarvests[msg.sender] = now - 604800;
-        lastSolidHarvests[msg.sender] = now - 604800; */
+        lastHollowHarvests[msg.sender] = now - 604800;
+        lastSolidHarvests[msg.sender] = now - 604800;
     }
 
 
@@ -228,8 +228,8 @@ contract CommunityCoin is Ownable {
     function harvestHollowCoins() external {
         require(activeStatus[msg.sender]);
         uint256 lastHarvest = lastHollowHarvests[msg.sender];
-        /* uint256 availableCoins = (now - lastHarvest).div(17280); */
-        uint256 availableCoins = (now - lastHarvest).div(10);
+        uint256 availableCoins = (now - lastHarvest).div(17280);
+        /* uint256 availableCoins = (now - lastHarvest).div(10); */
 
         if (availableCoins > 0) {
             lastHollowHarvests[msg.sender] = now;
@@ -245,8 +245,8 @@ contract CommunityCoin is Ownable {
 
     function harvestSolidCoins() external {
         require(activeStatus[msg.sender]);
-        /* uint256 lastHarvest = lastSolidHarvests[msg.sender]; */
-        /* require((lastHarvest + 2419200) <= now); */
+        uint256 lastHarvest = lastSolidHarvests[msg.sender];
+        require((lastHarvest + 2419200) <= now);
         uint256 availableCoins = unresolvedSolidBalances[msg.sender];
         require(availableCoins > 0);
 
@@ -331,17 +331,6 @@ contract CommunityCoin is Ownable {
         return;
     }
 
-    /* function removeRequesterAtIndex(uint16 index) internal {
-        require (index >= activationRequests.length);
-
-        for (uint16 i = index; i < activationRequests.length - 1; i++) {
-            activationRequests[i] = activationRequests[i + 1];
-        }
-
-        delete activationRequests[activationRequests.length - 1];
-        activationRequests.length--;
-    } */
-
     function deactivateUser(address user) external onlyAdmin {
         require(activeStatus[user]);
         activeStatus[user] = false;
@@ -360,17 +349,4 @@ contract CommunityCoin is Ownable {
         }
         return;
     }
-
-    /* function removeActiveUserAtIndex(uint16 index) internal {
-        require (index >= activeUsers.length);
-
-        for (uint16 i = index; i < activeUsers.length - 1; i++) {
-            activeUsers[i] = activeUsers[i + 1];
-        }
-
-        delete activeUsers[activeUsers.length - 1];
-        activeUsers.length--;
-    } */
-
-    // possibility of duplicated users in deactivated user list
 }
