@@ -95,18 +95,19 @@ React UI in `frontend/` directory.
 
 
 **Prerequisites**
-[Metamask](https://metamask.io/)
-Truffle
+- [Metamask](https://metamask.io/)
+- Truffle
 ```
 npm install -g truffle
 ```
-[Ganache](https://truffleframework.com/ganache)
+- [Ganache](https://truffleframework.com/ganache)
 
 
 
 
 **Run Smart Contract Tests**
 Open Ganache
+
 Run Tests:
 ```
 truffle test ./test/communitycoin.js
@@ -148,6 +149,6 @@ WARNING: App was meant to be viewed on mobile screen, so recommended resolution 
 
 
 ## Built With
-[React.js](https://reactjs.org/)
-[Truffle](https://www.truffleframework.com/)
-[Ganache](https://truffleframework.com/ganache)
+- [React.js](https://reactjs.org/)
+- [Truffle](https://www.truffleframework.com/)
+- [Ganache](https://truffleframework.com/ganache)
