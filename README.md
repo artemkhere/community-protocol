@@ -87,14 +87,13 @@ Because this app is made of two projects, there are two places to run npm (or ya
 Smart contracts at the root `./`
 React UI in `frontend/` directory.
 
+
 ###### Prerequisites
 [Metamask](https://metamask.io/)
-
 Truffle
 ```
 npm install -g truffle
 ```
-
 [Ganache](https://truffleframework.com/ganache)
 
 
@@ -104,6 +103,7 @@ Run Tests:
 ```
 truffle test ./test/communitycoin.js
 ```
+
 
 ###### Run The App
 At the root
