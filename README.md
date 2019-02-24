@@ -94,7 +94,7 @@ React UI in `frontend/` directory.
 
 
 
-###### Prerequisites
+**Prerequisites**
 [Metamask](https://metamask.io/)
 Truffle
 ```
@@ -105,7 +105,7 @@ npm install -g truffle
 
 
 
-###### Run Smart Contract Tests
+**Run Smart Contract Tests**
 Open Ganache
 Run Tests:
 ```
@@ -149,7 +149,5 @@ WARNING: App was meant to be viewed on mobile screen, so recommended resolution 
 
 ## Built With
 [React.js](https://reactjs.org/)
-
 [Truffle](https://www.truffleframework.com/)
-
 [Ganache](https://truffleframework.com/ganache)
