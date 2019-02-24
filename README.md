@@ -1,15 +1,11 @@
-Goal:
+# Community Protocol (CoCo)
+This project was built for Lighthouse Labs Vancouver as a proof of concept. Community Protocol was ideated and constructed over a course of 3 month and served as a graduation project for me (Artem Kuznetsov) during Lighthouse Labs Blockchain Developer program.
+
+## Desctiption
+
+###### Project Goal
 To reward and incentivize kindness / community building without triggering political shortcomings.
 All participants start at the base line and only get rewards on top, but never fall short. Transaction anonymity and forced lack of favouritism is built directly into the system.
-
-Social Experiment:
-Small community of 20-50 participants.
-
-Plan:
-1. Manifest and summary
-2. System Architecture
-3. Back End Build (+ Tests at the build)
-4. Front End Mock
 
 Summary v0.5
 The reason for creation of CommunityProtocol and CommunityCoin is in the pragmatical incentive and reward system for each individual members to participate in the growth of the community. The CoCo protocol can be customized and deployed for any company / organization (/ community). The reward system is directly reliant on monetary injections / donations towards the contract from the participants and company leadership. With the current implementation of the system it can only be done via Ethereum (will change in the future).Coco is meant to engage and reward every member, even if they don’t participate directly.
@@ -32,12 +28,9 @@ In order for each participant to feel the permanence of those rewards - CoProtoc
 * Current unspent Hollow CoCo burn rate: all unspent coins are burned once a month
 * CoPo only manages tokens, but not identities. Identities are stored and mapped to the wallet addresses by the company private directory
 * Hollow CoCo cannot be harvested for the first month (full harvest allowed after first month), but later it can be harvested at will
-// Note
-// Better angle: actual communities like reddit or forums
 
-System Architecture v0.2
-Backend
-Users / addresses
+Short System Description Architecture
+User's rights
 * User
     * [x]Create new user by yourself (comes with a little ether, not shown - for token harvest)
         * [x]Not active by default
@@ -84,27 +77,3 @@ Token management
 * [x]Transfers must check conditions - less than or equal to 15 tokens from one user in one week (tell why we failed if happens)
 * [x]Token transfer from user to user
 * [x]Token harvest with timestamp update
-
-Contract future-proofing
-* []Split the contract into future-upgradable one
-* []Audit security
-* []Introduce methods to shut down the contract
-* []Validate architecture against this document: https://consensys.github.io/smart-contract-best-practices/software_engineering/
-
-Frontend
-* [x]Initiates the trigger for account creation
-* [x]Creates an ethereum address
-* [x]Keeps track of identities mapped to addresses (via a database)
-* [x]Keeps profile info (via a database)
-* [x]Profile
-    * [x]Name
-    * []Nickname
-    * []Picture
-    * []Address
-* [x]Allows solid token spending (sending of the ether to the same address?)
-* [x]Let’s hollow token spending
-* [x]Let's harvesting of the hollow coins (updated balances check)
-* [x]Displays current price of the tokens for this month
-* [x]Serves as a searching mechanism for coworker’s profiles
-    * [x]Search build needed
-    * []Favourites
