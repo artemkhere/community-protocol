@@ -49,6 +49,7 @@ In order for each participant to feel the permanence of those rewards - CoProtoc
     - [x] Can deactivate anyone
     - [x] Can withdraw ether from the contract
 
+
 **Smart Contract**
 - [x] Stores all the mappings
     - [x] User to Hollow Balances
@@ -67,11 +68,13 @@ In order for each participant to feel the permanence of those rewards - CoProtoc
 - [x] isOwnable from OpenZeppelin
 - [x] Anyone can donate to the contract
 
+
 **Transactions**
 - [x] Mapped in the contract (User to transactions)
 - [x] Timestamped
 - [x] From source
 - [x] Value transferred
+
 
 **Token management**
 - [x] All hollow tokens are burned once each month pt. 2 from Super Admin trigger (currently no time restriction on that pull)
@@ -81,11 +84,14 @@ In order for each participant to feel the permanence of those rewards - CoProtoc
 - [x] Token harvest with timestamp update
 
 
+
+
 ## Getting Started
 Because this app is made of two projects, there are two places to run npm (or yarn) commands:
 
 Smart contracts at the root `./`
 React UI in `frontend/` directory.
+
 
 
 ###### Prerequisites
@@ -97,12 +103,16 @@ npm install -g truffle
 [Ganache](https://truffleframework.com/ganache)
 
 
+
+
 ###### Run Smart Contract Tests
 Open Ganache
 Run Tests:
 ```
 truffle test ./test/communitycoin.js
 ```
+
+
 
 
 ###### Run The App
@@ -121,8 +131,8 @@ compile
 migrate
 ```
 
-Let truffle spin
-Open another terminal tab
+Let truffle spin,
+open another terminal tab
 ```
 cd frontend/
 yarn run start
@@ -135,7 +145,11 @@ Play around with the app.
 WARNING: App was meant to be viewed on mobile screen, so recommended resolution to set your browser to is `width 400px` or less.
 
 
+
+
 ## Built With
 [React.js](https://reactjs.org/)
+
 [Truffle](https://www.truffleframework.com/)
+
 [Ganache](https://truffleframework.com/ganache)
