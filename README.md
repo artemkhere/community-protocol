@@ -89,8 +89,8 @@ In order for each participant to feel the permanence of those rewards - CoProtoc
 ## Getting Started
 Because this app is made of two projects, there are two places to run npm (or yarn) commands:
 
-Smart contracts at the root `./`
-React UI in `frontend/` directory.
+1. Smart contracts at the root `./`
+2. React UI in `frontend/` directory.
 
 
 
