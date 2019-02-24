@@ -106,6 +106,7 @@ npm install -g truffle
 
 
 **Run Smart Contract Tests**
+
 Open Ganache
 
 Run Tests:
@@ -116,7 +117,8 @@ truffle test ./test/communitycoin.js
 
 
 
-###### Run The App
+**Run The App**
+
 At the root
 ```
 truffle develop
